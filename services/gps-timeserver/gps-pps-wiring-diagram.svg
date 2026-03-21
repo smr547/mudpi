@@ -1,0 +1,50 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500">
+<style>
+.box { fill:#f5f5f5; stroke:#333; stroke-width:2; }
+.pin { font-family:monospace; font-size:14px; }
+.title { font-family:sans-serif; font-size:20px; font-weight:bold; }
+.label { font-family:sans-serif; font-size:14px; }
+.wire { stroke-width:3; fill:none; }
+</style>
+
+<text x="450" y="40" text-anchor="middle" class="title">
+MudPi GPS PPS Wiring — Keyestudio GPS → Raspberry Pi 5
+</text>
+
+<!-- GPS Module -->
+<rect x="80" y="120" width="220" height="220" class="box"/>
+<text x="190" y="150" text-anchor="middle" class="label">Keyestudio GPS Module</text>
+
+<text x="110" y="200" class="pin">VCC</text>
+<text x="110" y="230" class="pin">GND</text>
+<text x="110" y="260" class="pin">TX</text>
+<text x="110" y="290" class="pin">PPS</text>
+
+<!-- Raspberry Pi -->
+<rect x="600" y="120" width="220" height="220" class="box"/>
+<text x="710" y="150" text-anchor="middle" class="label">Raspberry Pi 5 GPIO</text>
+
+<text x="620" y="200" class="pin">5V (Pin 2)</text>
+<text x="620" y="230" class="pin">GND (Pin 6)</text>
+<text x="620" y="260" class="pin">GPIO15 / RXD (Pin 10)</text>
+<text x="620" y="290" class="pin">GPIO18 (Pin 12)</text>
+
+<!-- Wires -->
+<line x1="300" y1="195" x2="600" y2="195" class="wire" stroke="#cc0000"/>
+<text x="450" y="185" text-anchor="middle" class="label">VCC</text>
+
+<line x1="300" y1="225" x2="600" y2="225" class="wire" stroke="#000000"/>
+<text x="450" y="215" text-anchor="middle" class="label">GND</text>
+
+<line x1="300" y1="255" x2="600" y2="255" class="wire" stroke="#0077cc"/>
+<text x="450" y="245" text-anchor="middle" class="label">UART TX → RX</text>
+
+<line x1="300" y1="285" x2="600" y2="285" class="wire" stroke="#009933"/>
+<text x="450" y="275" text-anchor="middle" class="label">PPS Signal</text>
+
+<!-- Notes -->
+<text x="450" y="420" text-anchor="middle" class="label">
+GPS NMEA data via UART provides coarse time. PPS provides precise second boundary for chrony.
+</text>
+</svg>

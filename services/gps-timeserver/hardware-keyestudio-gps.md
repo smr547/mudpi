@@ -46,6 +46,11 @@ TX | GPS serial data → Raspberry Pi RX
 PPS | Precision timing pulse → GPIO interrupt
 
 ---
+## Wiring Diagram
+
+![Keyestudio GPS PPS wiring](gps-pps-wiring-diagram.svg)
+
+---
 
 # Typical Wiring (Keyestudio → Raspberry Pi 5)
 
