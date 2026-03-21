@@ -202,7 +202,7 @@ The MudPi GPS time server provides:
 
 # Operational status
 
-``
+```
 smr@mudpi:~/projects/ddns $ chronyc tracking
 Reference ID    : CB1DF17F (ntp-mel.mansfield.id.au)
 Stratum         : 3
@@ -241,7 +241,6 @@ Root dispersion : 0.000015150 seconds
 Update interval : 16.0 seconds
 Leap status     : Normal
 smr@mudpi:~/projects/ddns $ 
-
 ```
 
 
