@@ -1,0 +1,14 @@
+Contents of file ``/etc/default/gpsd``
+
+```
+# Devices gpsd should collect to at boot time.
+# They need to be read/writeable, either by user gpsd or the group dialout.
+DEVICES="/dev/ttyAMA0"
+
+# Other options you want to pass to gpsd
+GPSD_OPTIONS="-n"
+
+# Automatically hot add/remove USB GPS devices via gpsdctl
+USBAUTO="true"
+
+```
