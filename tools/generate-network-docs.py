@@ -596,6 +596,53 @@ def generate_zone_previews(registry: Dict[str, Any], output_dir: Path) -> None:
         write_text(output_dir / f"{zone_name}.zone.preview", "\n".join(lines))
 
 
+def generate_reverse_address_index(registry, output_root):
+    """
+    Generate a human-readable reverse address index.
+
+    This is NOT DNS PTR data — it is documentation for operators.
+    """
+
+    entries = []
+
+    for host in registry.get("hosts", []):
+        name = host["name"]
+        site = host["site"]
+        roles = ", ".join(host.get("roles", []))
+
+        fqdn_site = f"{name}.{site}.home.arpa"
+        fqdn_vpn = f"{name}.vpn.home.arpa"
+
+        addresses = host.get("addresses", {})
+
+        if "lan" in addresses:
+            entries.append({
+                "ip": addresses["lan"],
+                "fqdn": fqdn_site,
+                "roles": roles
+            })
+
+        if "vpn" in addresses:
+            entries.append({
+                "ip": addresses["vpn"],
+                "fqdn": fqdn_vpn,
+                "roles": roles
+            })
+
+    # Sort by IP address
+    entries.sort(key=lambda e: tuple(int(x) for x in e["ip"].split(".")))
+
+    lines = []
+    lines.append("# Reverse Address Index\n")
+    lines.append("| Address | Hostname | Roles |")
+    lines.append("|--------|----------|------|")
+
+    for e in entries:
+        lines.append(f"| {e['ip']} | {e['fqdn']} | {e['roles']} |")
+
+    out = output_root / "reverse-address-index.md"
+    out.write_text("\n".join(lines))
+
 def validate_registry(registry: Dict[str, Any]) -> List[str]:
     errors: List[str] = []
 
@@ -664,6 +711,7 @@ def main() -> int:
     generate_site_summary_md(registry, output_root / "site-summary.md")
     generate_addressing_plan_md(registry, output_root / "addressing-plan.md")
     generate_network_inventory_md(registry, output_root / "network-inventory.md")
+    generate_reverse_address_index(registry, output_root)
 
     generate_dnsmasq_hosts(registry, output_root / "dnsmasq" / "hosts.conf")
     generate_dnsmasq_ptr(registry, output_root / "dnsmasq" / "reverse-ptr.conf")
