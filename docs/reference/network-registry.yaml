@@ -15,12 +15,6 @@
 #       .100-.199 = dynamic DHCP pool
 #       .200-.239 = temporary / lab / manual
 #       .240-.254 = admin reserve
-#
-# Address policy:
-#   - Infrastructure hosts use static addresses configured on-host where practical
-#   - Semi-permanent appliances use DHCP reservations on the site DHCP server
-#   - Mobile/visitor devices use dynamic DHCP
-#   - Consumer routers should gradually lose their embedded DHCP reservations
 
 meta:
   project: mudpi
@@ -28,7 +22,7 @@ meta:
   naming_pattern: host.site.home.arpa
   owner: Steven Ring
   status: draft
-  version: 2
+  version: 3
 
 defaults:
   ttl: 300
@@ -78,12 +72,6 @@ sites:
       dynamic_pool:
         start: 10.1.1.100
         end: 10.1.1.199
-      notes:
-        - Router should become gateway-only over time
-        - Existing router reservations should be migrated here
-    notes:
-      - MudPi is the infrastructure/control-plane node for the estate
-      - ShorePi is expected to become an application host or be retired later
 
   barkingowl:
     zone: barkingowl.home.arpa
@@ -112,12 +100,6 @@ sites:
       dynamic_pool:
         start: 192.168.0.100
         end: 192.168.0.199
-      notes:
-        - Local users should be able to use short names such as weatherstation
-        - Site should continue operating without VPN or internet
-        - Existing router reservations should be migrated here
-    notes:
-      - ShedPi is the local infrastructure node for Barking Owl
 
   trilogy:
     zone: trilogy.home.arpa
@@ -146,10 +128,6 @@ sites:
       dynamic_pool:
         start: 192.168.98.100
         end: 192.168.98.199
-      notes:
-        - Placeholder DNS/DHCP host; update when final onboard target is chosen
-    notes:
-      - Standardised site pattern adopted
 
   testboat:
     zone: testboat.home.arpa
@@ -178,10 +156,6 @@ sites:
       dynamic_pool:
         start: 192.168.97.100
         end: 192.168.97.199
-      notes:
-        - Placeholder subnet and host values; confirm later
-    notes:
-      - Standardised site pattern adopted
 
   vpn:
     zone: vpn.home.arpa
@@ -195,11 +169,6 @@ sites:
       server_ip: 10.8.1.1
     dhcp:
       mode: none
-      notes:
-        - Overlay addresses are managed by WireGuard configuration, not DHCP
-    notes:
-      - Roaming clients should use MudPi VPN address for DNS
-      - Avoid using site-LAN DNS addresses in WireGuard client configs
 
 hosts:
   - name: mudpi
@@ -208,37 +177,67 @@ hosts:
     addresses:
       lan: 10.1.1.10
       vpn: 10.8.1.1
-    roles:
-      - wireguard-hub
-      - dns
-      - dhcp
-      - ntp-stratum1
-      - dynamic-dns
+    roles: [wireguard-hub, dns, dhcp, ntp-stratum1, dynamic-dns]
     aliases: []
     notes: Infrastructure control-plane node
-
-  - name: shorepi
-    site: reid
-    addressing: static-on-host
-    addresses:
-      lan: 10.1.1.20
-    roles:
-      - signalk
-      - influxdb
-      - grafana
-      - app-host
-    aliases: []
-    notes: Legacy services host
+    diagram:
+      importance: primary
 
   - name: router
     site: reid
     addressing: static-on-host
     addresses:
       lan: 10.1.1.1
-    roles:
-      - gateway
+    roles: [gateway]
     aliases: []
     notes: Site gateway
+    diagram:
+      importance: primary
+
+  - name: shorepi
+    site: reid
+    addressing: static-on-host
+    addresses:
+      lan: 10.1.1.20
+    roles: [signalk, influxdb, grafana, app-host]
+    aliases: []
+    notes: Legacy services host
+    diagram:
+      importance: secondary
+
+  - name: printserver
+    site: reid
+    addressing: static-on-host
+    mac: "D8:3A:DD:59:0A:0A"
+    addresses:
+      lan: 10.1.1.30
+    roles: [print-server, utility]
+    aliases: []
+    notes: Raspberry Pi 5 used as 3D print server
+    diagram:
+      importance: secondary
+
+  - name: abbhub
+    site: reid
+    addressing: dhcp-reservation
+    mac: "00:0F:73:52:0A:20"
+    addresses:
+      lan: 10.1.1.6
+    roles: [solar-monitor, appliance]
+    aliases: []
+    notes: ABB solar monitor hub for RF communication with rooftop panels; queried for plant.xml to monitor solar energy production
+    diagram:
+      importance: secondary
+
+  - name: printer
+    site: reid
+    addressing: dhcp-dynamic
+    mac: "88:A2:9E:19:07:69"
+    roles: [printer, appliance]
+    aliases: []
+    notes: Brother HL-L2460DW network printer
+    diagram:
+      importance: tertiary
 
   - name: shedpi
     site: barkingowl
@@ -246,12 +245,11 @@ hosts:
     addresses:
       lan: 192.168.0.10
       vpn: 10.8.1.30
-    roles:
-      - dns
-      - dhcp
-      - farm-server
+    roles: [dns, dhcp, farm-server]
     aliases: []
     notes: Local DNS/DHCP authority for Barking Owl
+    diagram:
+      importance: primary
 
   - name: weatherstation
     site: barkingowl
@@ -259,10 +257,11 @@ hosts:
     mac: "TBD"
     addresses:
       lan: 192.168.0.50
-    roles:
-      - weather
+    roles: [weather]
     aliases: []
     notes: Example farm service for Bubs and local users
+    diagram:
+      importance: secondary
 
   - name: boatdns
     site: trilogy
@@ -270,21 +269,22 @@ hosts:
     addresses:
       lan: 192.168.98.10
       vpn: 10.8.1.40
-    roles:
-      - dns
-      - dhcp
+    roles: [dns, dhcp]
     aliases: []
     notes: Placeholder onboard DNS/DHCP host
+    diagram:
+      importance: primary
 
   - name: signalk
     site: trilogy
     addressing: static-on-host
     addresses:
       lan: 192.168.98.20
-    roles:
-      - signalk
+    roles: [signalk]
     aliases: []
     notes: Placeholder onboard Signal K service
+    diagram:
+      importance: secondary
 
   - name: labdns
     site: testboat
@@ -292,42 +292,35 @@ hosts:
     addresses:
       lan: 192.168.97.10
       vpn: 10.8.1.50
-    roles:
-      - dns
-      - dhcp
+    roles: [dns, dhcp]
     aliases: []
     notes: Placeholder lab DNS/DHCP host
+    diagram:
+      importance: primary
 
   - name: laptop
     site: vpn
     addressing: wireguard-static
     addresses:
       vpn: 10.8.1.20
-    roles:
-      - roaming-client
+    roles: [roaming-client]
     aliases: []
     notes: Sten's roaming laptop
+    diagram:
+      importance: secondary
 
 forwarding:
   mudpi:
-    authoritative_zones:
-      - reid.home.arpa
-      - vpn.home.arpa
+    authoritative_zones: [reid.home.arpa, vpn.home.arpa]
     conditional_forwarders:
       barkingowl.home.arpa: 192.168.0.10
       trilogy.home.arpa: 10.8.1.40
       testboat.home.arpa: 10.8.1.50
-    upstream_resolvers:
-      - 1.1.1.1
-      - 8.8.8.8
+    upstream_resolvers: [1.1.1.1, 8.8.8.8]
 
   shedpi:
-    authoritative_zones:
-      - barkingowl.home.arpa
-    upstream_resolvers:
-      - 192.168.0.1
-    notes:
-      - May optionally forward reid/trilogy/testboat/vpn zones to MudPi over VPN
+    authoritative_zones: [barkingowl.home.arpa]
+    upstream_resolvers: [192.168.0.1]
 
 reverse_dns:
   - cidr: 10.1.1.0/24

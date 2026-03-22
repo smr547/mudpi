@@ -1,381 +1,182 @@
-\
 #!/usr/bin/env python3
-"""
-generate-network-diagram.py
-
-Generate Graphviz DOT and SVG network diagrams from docs/reference/network-registry.yaml.
-
-Outputs into ./generated/diagrams by default:
-
-- generated/diagrams/mudpi-network.dot
-- generated/diagrams/mudpi-network.svg   (if Graphviz `dot` is installed)
-
-This version adds:
-- HTML-style node labels for a cleaner engineering look
-- role-based node styling
-- clearer site cluster labels
-- selective inclusion of hosts (default: all current hosts)
-- more deliberate control-plane / data-plane visual separation
-
-Usage:
-    python tools/generate-network-diagram.py
-    python tools/generate-network-diagram.py \
-        --registry docs/reference/network-registry.yaml \
-        --output generated/diagrams
-"""
-
 from __future__ import annotations
-
-import argparse
-import html
-import shutil
-import subprocess
+import argparse, html, shutil, subprocess
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
-
 import yaml
-
 
 def load_registry(path: Path) -> Dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
-
 def ensure_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
-
 
 def q(value: str) -> str:
     return '"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'
 
-
-def html_escape(value: str) -> str:
+def esc(value: str) -> str:
     return html.escape(str(value), quote=True)
 
-
 def site_sort_key(site_name: str) -> Tuple[int, str]:
-    order = {
-        "reid": 10,
-        "barkingowl": 20,
-        "trilogy": 30,
-        "testboat": 40,
-        "vpn": 50,
-    }
+    order = {"reid": 10, "barkingowl": 20, "trilogy": 30, "testboat": 40, "vpn": 50}
     return (order.get(site_name, 999), site_name)
 
+def host_fqdn(host: Dict[str, Any], root: str) -> str:
+    return f'{host["name"]}.{host["site"]}.{root}'
 
-def node_id_for_site(site_name: str) -> str:
-    return f"site_{site_name}"
+def host_vpn_fqdn(host: Dict[str, Any], root: str) -> str:
+    return f'{host["name"]}.vpn.{root}'
 
-
-def node_id_for_host(host: Dict[str, Any]) -> str:
-    return f'host_{host["site"]}_{host["name"]}'
-
-
-def host_fqdn(host: Dict[str, Any], registry: Dict[str, Any]) -> str:
-    private_root = registry["meta"]["private_root"]
-    return f'{host["name"]}.{host["site"]}.{private_root}'
-
-
-def host_vpn_fqdn(host: Dict[str, Any], registry: Dict[str, Any]) -> str:
-    private_root = registry["meta"]["private_root"]
-    return f'{host["name"]}.vpn.{private_root}'
-
-
-def classify_host(host: Dict[str, Any]) -> str:
+def classify(host: Dict[str, Any]) -> str:
     roles = set(host.get("roles", []))
-    name = host.get("name", "")
-
     if "gateway" in roles:
         return "gateway"
     if {"dns", "dhcp", "wireguard-hub"} & roles:
         return "infra"
-    if "app-host" in roles or {"grafana", "influxdb", "signalk"} & roles:
+    if {"grafana", "influxdb", "signalk", "app-host", "print-server"} & roles:
         return "app"
-    if {"weather", "sensor"} & roles:
+    if {"weather", "appliance", "printer", "solar-monitor"} & roles:
         return "appliance"
-    if "roaming-client" in roles or name in {"laptop", "phone", "tablet"}:
+    if "roaming-client" in roles:
         return "client"
     return "host"
 
+def importance(host: Dict[str, Any]) -> str:
+    return host.get("diagram", {}).get("importance", "secondary")
 
-def node_style(host: Dict[str, Any]) -> Dict[str, str]:
-    cls = classify_host(host)
+def include(host: Dict[str, Any], view: str) -> bool:
+    if host.get("diagram", {}).get("include") is False:
+        return False
+    if view == "full":
+        return importance(host) != "hidden"
+    return importance(host) in {"primary", "secondary"}
 
-    if cls == "gateway":
-        return {
-            "shape": "box3d",
-            "style": '"rounded,filled"',
-            "fillcolor": "white",
-            "penwidth": "1.6",
-        }
-    if cls == "infra":
-        return {
-            "shape": "plain",
-            "style": '"filled"',
-            "fillcolor": "white",
-            "penwidth": "2.0",
-        }
-    if cls == "app":
-        return {
-            "shape": "plain",
-            "style": '"filled"',
-            "fillcolor": "white",
-            "penwidth": "1.4",
-        }
-    if cls == "appliance":
-        return {
-            "shape": "plain",
-            "style": '"filled"',
-            "fillcolor": "white",
-            "penwidth": "1.2",
-        }
-    if cls == "client":
-        return {
-            "shape": "plain",
-            "style": '"filled"',
-            "fillcolor": "white",
-            "penwidth": "1.0",
-        }
-    return {
-        "shape": "plain",
-        "style": '"filled"',
-        "fillcolor": "white",
-        "penwidth": "1.0",
-    }
+def node_id_for_host(host: Dict[str, Any]) -> str:
+    return f'host_{host["site"]}_{host["name"]}'
 
+def node_id_for_site(site: str) -> str:
+    return f"site_{site}"
 
-def build_host_label(host: Dict[str, Any], registry: Dict[str, Any]) -> str:
-    cls = classify_host(host)
-    addresses = host.get("addresses", {})
-    roles = host.get("roles", [])
-    role_text = " • ".join(roles) if roles else "host"
+def style_for(host: Dict[str, Any]) -> Dict[str, str]:
+    c = classify(host)
+    if c == "gateway":
+        return {"shape":"box3d","style":'"rounded,filled"',"fillcolor":"white","penwidth":"1.8"}
+    if c == "infra":
+        return {"shape":"plain","style":'"filled"',"fillcolor":"white","penwidth":"2.1"}
+    if c == "app":
+        return {"shape":"plain","style":'"filled"',"fillcolor":"white","penwidth":"1.5"}
+    if c == "appliance":
+        return {"shape":"plain","style":'"filled"',"fillcolor":"white","penwidth":"1.2"}
+    return {"shape":"plain","style":'"filled"',"fillcolor":"white","penwidth":"1.0"}
 
-    title = host.get("diagram", {}).get("label", host["name"])
-    fqdn = host_fqdn(host, registry)
+def host_label(host: Dict[str, Any], root: str) -> str:
+    addrs = host.get("addresses", {})
+    roles = " • ".join(host.get("roles", [])) if host.get("roles") else "host"
+    rows = [
+        f'<TR><TD ALIGN="CENTER"><B>{esc(host["name"])}</B></TD></TR>',
+        f'<TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">{esc(host_fqdn(host, root))}</FONT></TD></TR>',
+    ]
+    if "lan" in addrs:
+        rows.append(f'<TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">LAN {esc(addrs["lan"])}</FONT></TD></TR>')
+    if "vpn" in addrs:
+        rows.append(f'<TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">VPN {esc(addrs["vpn"])} ({esc(host_vpn_fqdn(host, root))})</FONT></TD></TR>')
+    rows.append(f'<TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">{esc(roles)}</FONT></TD></TR>')
+    if importance(host) == "tertiary":
+        rows.append('<TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">overview: hidden</FONT></TD></TR>')
+    border = "2" if classify(host) in {"infra","gateway"} else "1"
+    return f'<<TABLE BORDER="{border}" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5">{"".join(rows)}</TABLE>>'
 
-    rows: List[str] = []
-    rows.append(
-        f'<TR><TD ALIGN="CENTER"><B>{html_escape(title)}</B></TD></TR>'
-    )
-    rows.append(
-        f'<TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">{html_escape(fqdn)}</FONT></TD></TR>'
-    )
-
-    if "lan" in addresses:
-        rows.append(
-            f'<TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">LAN {html_escape(addresses["lan"])}</FONT></TD></TR>'
-        )
-    if "vpn" in addresses:
-        vpn_name = host_vpn_fqdn(host, registry)
-        rows.append(
-            f'<TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">VPN {html_escape(addresses["vpn"])} ({html_escape(vpn_name)})</FONT></TD></TR>'
-        )
-
-    rows.append(
-        f'<TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">{html_escape(role_text)}</FONT></TD></TR>'
-    )
-
-    border = "1"
-    cellborder = "1"
-    cellpadding = "5"
-
-    if cls == "infra":
-        border = "2"
-        cellborder = "1"
-    elif cls == "gateway":
-        border = "2"
-    elif cls == "appliance":
-        cellpadding = "4"
-
-    return (
-        "<<TABLE BORDER=\"{border}\" CELLBORDER=\"{cellborder}\" "
-        "CELLSPACING=\"0\" CELLPADDING=\"{cellpadding}\">"
-        "{rows}"
-        "</TABLE>>"
-    ).format(border=border, cellborder=cellborder, cellpadding=cellpadding, rows="".join(rows))
-
-
-def build_site_cluster_label(site_name: str, site: Dict[str, Any]) -> str:
-    lines = [f"<B>{html_escape(site_name)}</B>"]
-
-    zone = site.get("zone")
-    if zone:
-        lines.append(html_escape(zone))
-
+def site_label(name: str, site: Dict[str, Any]) -> str:
+    lines = [f"<B>{esc(name)}</B>"]
+    if site.get("zone"):
+        lines.append(esc(site["zone"]))
     if "lan" in site:
-        lan = site["lan"]
-        if lan.get("cidr"):
-            lines.append(html_escape(f'LAN {lan["cidr"]}'))
-        if lan.get("gateway"):
-            lines.append(html_escape(f'GW {lan["gateway"]}'))
+        if site["lan"].get("cidr"):
+            lines.append(esc(f'LAN {site["lan"]["cidr"]}'))
+        if site["lan"].get("gateway"):
+            lines.append(esc(f'GW {site["lan"]["gateway"]}'))
     if "overlay" in site:
-        overlay = site["overlay"]
-        if overlay.get("cidr"):
-            lines.append(html_escape(f'Overlay {overlay["cidr"]}'))
-        if overlay.get("hub"):
-            lines.append(html_escape(f'Hub {overlay["hub"]}'))
-
-    dns = site.get("dns", {})
-    if dns.get("server_host"):
-        lines.append(html_escape(f'DNS {dns["server_host"]}'))
-    dhcp = site.get("dhcp", {})
-    if dhcp.get("authority"):
-        lines.append(html_escape(f'DHCP {dhcp["authority"]}'))
-
+        if site["overlay"].get("cidr"):
+            lines.append(esc(f'Overlay {site["overlay"]["cidr"]}'))
+        if site["overlay"].get("hub"):
+            lines.append(esc(f'Hub {site["overlay"]["hub"]}'))
+    if site.get("dns", {}).get("server_host"):
+        lines.append(esc(f'DNS {site["dns"]["server_host"]}'))
+    if site.get("dhcp", {}).get("authority"):
+        lines.append(esc(f'DHCP {site["dhcp"]["authority"]}'))
     return "<" + "<BR/>".join(lines) + ">"
 
-
-def include_host_in_diagram(host: Dict[str, Any]) -> bool:
-    diagram_cfg = host.get("diagram", {})
-    if "include" in diagram_cfg:
-        return bool(diagram_cfg["include"])
-    return True
-
-
-def choose_site_anchor(site_name: str, hosts: List[Dict[str, Any]], sites: Dict[str, Any]) -> str | None:
-    site = sites.get(site_name, {})
-    dns_server_host = site.get("dns", {}).get("server_host")
-    if dns_server_host:
+def choose_anchor(site_name: str, hosts: List[Dict[str, Any]], sites: Dict[str, Any]) -> str | None:
+    server_host = sites.get(site_name, {}).get("dns", {}).get("server_host")
+    if server_host:
         for host in hosts:
-            if host["name"] == dns_server_host:
+            if host["name"] == server_host:
                 return node_id_for_host(host)
     for host in hosts:
         if "vpn" in host.get("addresses", {}):
             return node_id_for_host(host)
     return None
 
-
-def generate_dot(registry: Dict[str, Any]) -> str:
+def generate_dot(registry: Dict[str, Any], view: str) -> str:
+    root = registry["meta"]["private_root"]
     sites = registry.get("sites", {})
-    all_hosts = [h for h in registry.get("hosts", []) if include_host_in_diagram(h)]
-
+    hosts = [h for h in registry.get("hosts", []) if include(h, view)]
     hosts_by_site: Dict[str, List[Dict[str, Any]]] = {}
-    for host in all_hosts:
+    for host in hosts:
         hosts_by_site.setdefault(host["site"], []).append(host)
-
-    lines: List[str] = []
-    lines.append("digraph mudpi_network {")
-    lines.append("  graph [")
-    lines.append('    rankdir="TB",')
-    lines.append('    splines="polyline",')
-    lines.append('    overlap=false,')
-    lines.append('    nodesep=0.5,')
-    lines.append('    ranksep=1.0,')
-    lines.append('    pad=0.25,')
-    lines.append('    labelloc="t",')
-    lines.append('    label="MudPi Distributed Network",')
-    lines.append('    fontsize=20,')
-    lines.append('    fontname="Helvetica"')
-    lines.append("  ];")
-    lines.append('  node [fontname="Helvetica", fontsize=10, margin=0.12];')
-    lines.append('  edge [fontname="Helvetica", fontsize=9];')
-    lines.append("")
-
-    # VPN cluster
+    title = "MudPi Distributed Network" if view == "overview" else "MudPi Distributed Network (Full)"
+    out = [
+        "digraph mudpi_network {",
+        "  graph [rankdir=\"TB\", splines=\"polyline\", overlap=false, nodesep=0.5, ranksep=1.0, pad=0.25, labelloc=\"t\", label=" + q(title) + ", fontsize=20, fontname=\"Helvetica\"];",
+        '  node [fontname="Helvetica", fontsize=10, margin=0.12];',
+        '  edge [fontname="Helvetica", fontsize=9];',
+        "",
+    ]
     vpn_site = sites.get("vpn", {})
-    lines.append("  subgraph cluster_vpn {")
-    lines.append("    label=" + build_site_cluster_label("vpn", vpn_site) + ";")
-    lines.append('    style="rounded,dashed";')
-    lines.append('    penwidth=1.5;')
-    lines.append('    fontsize=12;')
-
-    vpn_hosts = sorted(hosts_by_site.get("vpn", []), key=lambda h: h["name"])
-    reid_hosts = sorted(hosts_by_site.get("reid", []), key=lambda h: h["name"])
-
-    for host in vpn_hosts:
-        nid = node_id_for_host(host)
-        style = node_style(host)
-        lines.append(
-            f"    {nid} [label={build_host_label(host, registry)}, shape={style['shape']}, "
-            f"style={style['style']}, fillcolor={q(style['fillcolor'])}, penwidth={style['penwidth']}];"
-        )
-
-    # Also show MudPi in VPN cluster if it has a VPN identity.
-    for host in reid_hosts:
+    out += ["  subgraph cluster_vpn {", "    label=" + site_label("vpn", vpn_site) + ";", '    style="rounded,dashed";', '    penwidth=1.5;']
+    for host in sorted(hosts_by_site.get("vpn", []), key=lambda h: h["name"]):
+        s = style_for(host)
+        out.append(f"    {node_id_for_host(host)} [label={host_label(host, root)}, shape={s['shape']}, style={s['style']}, fillcolor={q(s['fillcolor'])}, penwidth={s['penwidth']}];")
+    for host in sorted(hosts_by_site.get("reid", []), key=lambda h: h["name"]):
         if host["name"] == "mudpi" and "vpn" in host.get("addresses", {}):
-            nid = node_id_for_host(host)
-            style = node_style(host)
-            lines.append(
-                f"    {nid} [label={build_host_label(host, registry)}, shape={style['shape']}, "
-                f"style={style['style']}, fillcolor={q(style['fillcolor'])}, penwidth={style['penwidth']}];"
-            )
-    lines.append("  }")
-    lines.append("")
-
-    # Site clusters
-    for site_name in sorted((s for s in sites.keys() if s != "vpn"), key=site_sort_key):
+            s = style_for(host)
+            out.append(f"    {node_id_for_host(host)} [label={host_label(host, root)}, shape={s['shape']}, style={s['style']}, fillcolor={q(s['fillcolor'])}, penwidth={s['penwidth']}];")
+    out += ["  }", ""]
+    for site_name in sorted((s for s in sites if s != "vpn"), key=site_sort_key):
         site = sites[site_name]
-        lines.append(f"  subgraph cluster_{site_name} {{")
-        lines.append("    label=" + build_site_cluster_label(site_name, site) + ";")
-        lines.append('    style="rounded";')
-        lines.append('    penwidth=1.5;')
-        lines.append('    fontsize=12;')
-
-        site_hosts = sorted(hosts_by_site.get(site_name, []), key=lambda h: h["name"])
-        for host in site_hosts:
-            nid = node_id_for_host(host)
-            style = node_style(host)
-            lines.append(
-                f"    {nid} [label={build_host_label(host, registry)}, shape={style['shape']}, "
-                f"style={style['style']}, fillcolor={q(style['fillcolor'])}, penwidth={style['penwidth']}];"
-            )
-
-        # local LAN backbone
+        out += [f"  subgraph cluster_{site_name} {{", "    label=" + site_label(site_name, site) + ";", '    style="rounded";', '    penwidth=1.5;']
+        shosts = sorted(hosts_by_site.get(site_name, []), key=lambda h: h["name"])
+        for host in shosts:
+            s = style_for(host)
+            out.append(f"    {node_id_for_host(host)} [label={host_label(host, root)}, shape={s['shape']}, style={s['style']}, fillcolor={q(s['fillcolor'])}, penwidth={s['penwidth']}];")
         if "lan" in site:
-            lan_node = node_id_for_site(site_name)
-            cidr = site["lan"].get("cidr", "LAN")
-            lines.append(
-                f"    {lan_node} [label={q(cidr)}, shape=ellipse, style=\"dashed\", penwidth=1.0];"
-            )
-            for host in site_hosts:
+            out.append(f'    {node_id_for_site(site_name)} [label={q(site["lan"].get("cidr","LAN"))}, shape=ellipse, style="dashed", penwidth=1.0];')
+            for host in shosts:
                 if "lan" in host.get("addresses", {}):
-                    lines.append(
-                        f"    {lan_node} -> {node_id_for_host(host)} [arrowhead=none, penwidth=1.0];"
-                    )
-        lines.append("  }")
-        lines.append("")
-
-    # Cross-site WG links
+                    out.append(f"    {node_id_for_site(site_name)} -> {node_id_for_host(host)} [arrowhead=none, penwidth=1.0];")
+        out += ["  }", ""]
     mudpi_node = None
     for host in hosts_by_site.get("reid", []):
         if host["name"] == "mudpi" and "vpn" in host.get("addresses", {}):
             mudpi_node = node_id_for_host(host)
             break
-
     if mudpi_node:
-        for site_name in sorted((s for s in sites.keys() if s not in {"reid", "vpn"}), key=site_sort_key):
-            anchor = choose_site_anchor(site_name, hosts_by_site.get(site_name, []), sites)
+        for site_name in sorted((s for s in sites if s not in {"reid", "vpn"}), key=site_sort_key):
+            anchor = choose_anchor(site_name, hosts_by_site.get(site_name, []), sites)
             if anchor:
-                lines.append(
-                    f"  {mudpi_node} -> {anchor} [dir=both, style=dashed, penwidth=1.4, label=\"WireGuard\"];"
-                )
+                out.append(f'  {mudpi_node} -> {anchor} [dir=both, style=dashed, penwidth=1.4, label="WireGuard"];')
         for host in hosts_by_site.get("vpn", []):
             if "vpn" in host.get("addresses", {}) and host["name"] != "mudpi":
-                lines.append(
-                    f"  {mudpi_node} -> {node_id_for_host(host)} [dir=both, style=dashed, penwidth=1.4, label=\"WireGuard\"];"
-                )
-
-    # DNS forwarding hints
-    mudpi_forward = registry.get("forwarding", {}).get("mudpi", {}).get("conditional_forwarders", {})
-    if mudpi_forward and mudpi_node:
-        zone_to_anchor: Dict[str, str] = {}
-        for site_name, site in sites.items():
-            zone = site.get("zone")
-            anchor = choose_site_anchor(site_name, hosts_by_site.get(site_name, []), sites)
-            if zone and anchor:
-                zone_to_anchor[zone] = anchor
-
-        for zone, _server_ip in sorted(mudpi_forward.items()):
-            anchor = zone_to_anchor.get(zone)
-            if anchor:
-                lines.append(
-                    f"  {mudpi_node} -> {anchor} [style=dotted, penwidth=1.0, label={q('DNS forward ' + zone)}];"
-                )
-
-    lines.append("}")
-    return "\n".join(lines) + "\n"
-
+                out.append(f'  {mudpi_node} -> {node_id_for_host(host)} [dir=both, style=dashed, penwidth=1.4, label="WireGuard"];')
+        for zone, _ip in sorted(registry.get("forwarding", {}).get("mudpi", {}).get("conditional_forwarders", {}).items()):
+            for site_name, site in sites.items():
+                if site.get("zone") == zone:
+                    anchor = choose_anchor(site_name, hosts_by_site.get(site_name, []), sites)
+                    if anchor:
+                        out.append(f'  {mudpi_node} -> {anchor} [style=dotted, penwidth=1.0, label={q("DNS forward " + zone)}];')
+    out.append("}")
+    return "\n".join(out) + "\n"
 
 def render_svg(dot_path: Path, svg_path: Path) -> bool:
     dot_bin = shutil.which("dot")
@@ -384,57 +185,25 @@ def render_svg(dot_path: Path, svg_path: Path) -> bool:
     subprocess.run([dot_bin, "-Tsvg", str(dot_path), "-o", str(svg_path)], check=True)
     return True
 
-
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Generate Graphviz network diagram from YAML registry")
-    parser.add_argument(
-        "--registry",
-        default="docs/reference/network-registry.yaml",
-        help="Path to YAML registry (default: docs/reference/network-registry.yaml)",
-    )
-    parser.add_argument(
-        "--output",
-        default="generated/diagrams",
-        help="Output directory (default: generated/diagrams)",
-    )
-    parser.add_argument(
-        "--name",
-        default="mudpi-network",
-        help="Base name for output files (default: mudpi-network)",
-    )
-    return parser.parse_args()
-
-
 def main() -> int:
-    args = parse_args()
-    registry_path = Path(args.registry)
-    output_dir = Path(args.output)
-
-    ensure_dir(output_dir)
-    registry = load_registry(registry_path)
-
-    dot_text = generate_dot(registry)
-
-    dot_path = output_dir / f"{args.name}.dot"
-    svg_path = output_dir / f"{args.name}.svg"
-
-    dot_path.write_text(dot_text, encoding="utf-8")
-    print(f"Wrote {dot_path}")
-
-    try:
-        rendered = render_svg(dot_path, svg_path)
-    except subprocess.CalledProcessError as exc:
-        print(f"Graphviz failed while rendering SVG: {exc}")
-        return 1
-
-    if rendered:
-        print(f"Wrote {svg_path}")
-    else:
-        print("Graphviz 'dot' not found; DOT file was generated but SVG was not rendered.")
-        print("Install graphviz to enable SVG output.")
-
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--registry", default="docs/reference/network-registry.yaml")
+    ap.add_argument("--output", default="generated/diagrams")
+    args = ap.parse_args()
+    registry = load_registry(Path(args.registry))
+    outdir = Path(args.output)
+    ensure_dir(outdir)
+    for view, base in [("overview", "mudpi-network"), ("full", "mudpi-network-full")]:
+        dot_path = outdir / f"{base}.dot"
+        svg_path = outdir / f"{base}.svg"
+        dot_path.write_text(generate_dot(registry, view), encoding="utf-8")
+        print(f"Wrote {dot_path}")
+        if render_svg(dot_path, svg_path):
+            print(f"Wrote {svg_path}")
+        else:
+            print("Graphviz 'dot' not found; generated DOT files only.")
+            break
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())
