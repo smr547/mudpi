@@ -309,6 +309,17 @@ hosts:
     diagram:
       importance: secondary
 
+- name: zappi
+  site: reid
+  addressing: dhcp-reservation
+  mac: "C0:49:EF:64:E9:A8"
+  addresses:
+    lan: 10.1.1.50
+  roles:
+    - ev-charger
+    - energy-device
+  notes: MyEnergi Zappi EV charger
+
 forwarding:
   mudpi:
     authoritative_zones: [reid.home.arpa, vpn.home.arpa]
