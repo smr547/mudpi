@@ -1,0 +1,347 @@
+# MudPi network registry
+# Purpose:
+#   Single source of truth for sites, subnets, DNS zones, key hosts,
+#   DHCP policy, and forwarding rules across the Home–Farm–Boat–VPN estate.
+#
+# Design conventions adopted:
+#   - Private DNS root: home.arpa
+#   - FQDN pattern: host.site.home.arpa
+#   - Standard host-role numbering at each site:
+#       .1   = gateway/router
+#       .10  = primary infrastructure node (DNS/DHCP)
+#       .20  = secondary/app host
+#       .30  = utility host
+#       .50-.69   = important appliances/sensors/reservations
+#       .100-.199 = dynamic DHCP pool
+#       .200-.239 = temporary / lab / manual
+#       .240-.254 = admin reserve
+#
+# Address policy:
+#   - Infrastructure hosts use static addresses configured on-host where practical
+#   - Semi-permanent appliances use DHCP reservations on the site DHCP server
+#   - Mobile/visitor devices use dynamic DHCP
+#   - Consumer routers should gradually lose their embedded DHCP reservations
+
+meta:
+  project: mudpi
+  private_root: home.arpa
+  naming_pattern: host.site.home.arpa
+  owner: Steven Ring
+  status: draft
+  version: 2
+
+defaults:
+  ttl: 300
+  addressing_convention:
+    gateway: 1
+    infra_primary: 10
+    app_secondary: 20
+    utility: 30
+    reservations_start: 50
+    reservations_end: 69
+    dynamic_start: 100
+    dynamic_end: 199
+    temporary_start: 200
+    temporary_end: 239
+    admin_reserve_start: 240
+    admin_reserve_end: 254
+  dhcp_policy:
+    infrastructure: static-on-host
+    appliances: dhcp-reservation
+    mobile_clients: dhcp-dynamic
+
+sites:
+  reid:
+    zone: reid.home.arpa
+    description: Canberra home site
+    lan:
+      cidr: 10.1.1.0/24
+      gateway: 10.1.1.1
+      ranges:
+        static_infrastructure: 10.1.1.2-10.1.1.49
+        reserved_appliances: 10.1.1.50-10.1.1.69
+        dynamic_pool: 10.1.1.100-10.1.1.199
+        temporary_manual: 10.1.1.200-10.1.1.239
+        admin_reserve: 10.1.1.240-10.1.1.254
+    dns:
+      mode: local-authoritative
+      server_host: mudpi
+      server_ip: 10.1.1.10
+      search_domain: reid.home.arpa
+    dhcp:
+      authority: mudpi
+      mode: authoritative
+      search_domain: reid.home.arpa
+      default_gateway: 10.1.1.1
+      dns_servers:
+        - 10.1.1.10
+      dynamic_pool:
+        start: 10.1.1.100
+        end: 10.1.1.199
+      notes:
+        - Router should become gateway-only over time
+        - Existing router reservations should be migrated here
+    notes:
+      - MudPi is the infrastructure/control-plane node for the estate
+      - ShorePi is expected to become an application host or be retired later
+
+  barkingowl:
+    zone: barkingowl.home.arpa
+    description: Barking Owl Farm
+    lan:
+      cidr: 192.168.0.0/24
+      gateway: 192.168.0.1
+      ranges:
+        static_infrastructure: 192.168.0.2-192.168.0.49
+        reserved_appliances: 192.168.0.50-192.168.0.69
+        dynamic_pool: 192.168.0.100-192.168.0.199
+        temporary_manual: 192.168.0.200-192.168.0.239
+        admin_reserve: 192.168.0.240-192.168.0.254
+    dns:
+      mode: local-authoritative
+      server_host: shedpi
+      server_ip: 192.168.0.10
+      search_domain: barkingowl.home.arpa
+    dhcp:
+      authority: shedpi
+      mode: authoritative
+      search_domain: barkingowl.home.arpa
+      default_gateway: 192.168.0.1
+      dns_servers:
+        - 192.168.0.10
+      dynamic_pool:
+        start: 192.168.0.100
+        end: 192.168.0.199
+      notes:
+        - Local users should be able to use short names such as weatherstation
+        - Site should continue operating without VPN or internet
+        - Existing router reservations should be migrated here
+    notes:
+      - ShedPi is the local infrastructure node for Barking Owl
+
+  trilogy:
+    zone: trilogy.home.arpa
+    description: Yacht Trilogy
+    lan:
+      cidr: 192.168.98.0/24
+      gateway: 192.168.98.1
+      ranges:
+        static_infrastructure: 192.168.98.2-192.168.98.49
+        reserved_appliances: 192.168.98.50-192.168.98.69
+        dynamic_pool: 192.168.98.100-192.168.98.199
+        temporary_manual: 192.168.98.200-192.168.98.239
+        admin_reserve: 192.168.98.240-192.168.98.254
+    dns:
+      mode: local-authoritative
+      server_host: boatdns
+      server_ip: 192.168.98.10
+      search_domain: trilogy.home.arpa
+    dhcp:
+      authority: boatdns
+      mode: authoritative
+      search_domain: trilogy.home.arpa
+      default_gateway: 192.168.98.1
+      dns_servers:
+        - 192.168.98.10
+      dynamic_pool:
+        start: 192.168.98.100
+        end: 192.168.98.199
+      notes:
+        - Placeholder DNS/DHCP host; update when final onboard target is chosen
+    notes:
+      - Standardised site pattern adopted
+
+  testboat:
+    zone: testboat.home.arpa
+    description: Canberra yacht test system with Starlink test connection
+    lan:
+      cidr: 192.168.97.0/24
+      gateway: 192.168.97.1
+      ranges:
+        static_infrastructure: 192.168.97.2-192.168.97.49
+        reserved_appliances: 192.168.97.50-192.168.97.69
+        dynamic_pool: 192.168.97.100-192.168.97.199
+        temporary_manual: 192.168.97.200-192.168.97.239
+        admin_reserve: 192.168.97.240-192.168.97.254
+    dns:
+      mode: local-authoritative
+      server_host: labdns
+      server_ip: 192.168.97.10
+      search_domain: testboat.home.arpa
+    dhcp:
+      authority: labdns
+      mode: authoritative
+      search_domain: testboat.home.arpa
+      default_gateway: 192.168.97.1
+      dns_servers:
+        - 192.168.97.10
+      dynamic_pool:
+        start: 192.168.97.100
+        end: 192.168.97.199
+      notes:
+        - Placeholder subnet and host values; confirm later
+    notes:
+      - Standardised site pattern adopted
+
+  vpn:
+    zone: vpn.home.arpa
+    description: WireGuard overlay network
+    overlay:
+      cidr: 10.8.1.0/24
+      hub: 10.8.1.1
+    dns:
+      mode: authoritative-on-mudpi
+      server_host: mudpi
+      server_ip: 10.8.1.1
+    dhcp:
+      mode: none
+      notes:
+        - Overlay addresses are managed by WireGuard configuration, not DHCP
+    notes:
+      - Roaming clients should use MudPi VPN address for DNS
+      - Avoid using site-LAN DNS addresses in WireGuard client configs
+
+hosts:
+  - name: mudpi
+    site: reid
+    addressing: static-on-host
+    addresses:
+      lan: 10.1.1.10
+      vpn: 10.8.1.1
+    roles:
+      - wireguard-hub
+      - dns
+      - dhcp
+      - ntp-stratum1
+      - dynamic-dns
+    aliases: []
+    notes: Infrastructure control-plane node
+
+  - name: shorepi
+    site: reid
+    addressing: static-on-host
+    addresses:
+      lan: 10.1.1.20
+    roles:
+      - signalk
+      - influxdb
+      - grafana
+      - app-host
+    aliases: []
+    notes: Legacy services host
+
+  - name: router
+    site: reid
+    addressing: static-on-host
+    addresses:
+      lan: 10.1.1.1
+    roles:
+      - gateway
+    aliases: []
+    notes: Site gateway
+
+  - name: shedpi
+    site: barkingowl
+    addressing: static-on-host
+    addresses:
+      lan: 192.168.0.10
+      vpn: 10.8.1.30
+    roles:
+      - dns
+      - dhcp
+      - farm-server
+    aliases: []
+    notes: Local DNS/DHCP authority for Barking Owl
+
+  - name: weatherstation
+    site: barkingowl
+    addressing: dhcp-reservation
+    mac: "TBD"
+    addresses:
+      lan: 192.168.0.50
+    roles:
+      - weather
+    aliases: []
+    notes: Example farm service for Bubs and local users
+
+  - name: boatdns
+    site: trilogy
+    addressing: static-on-host
+    addresses:
+      lan: 192.168.98.10
+      vpn: 10.8.1.40
+    roles:
+      - dns
+      - dhcp
+    aliases: []
+    notes: Placeholder onboard DNS/DHCP host
+
+  - name: signalk
+    site: trilogy
+    addressing: static-on-host
+    addresses:
+      lan: 192.168.98.20
+    roles:
+      - signalk
+    aliases: []
+    notes: Placeholder onboard Signal K service
+
+  - name: labdns
+    site: testboat
+    addressing: static-on-host
+    addresses:
+      lan: 192.168.97.10
+      vpn: 10.8.1.50
+    roles:
+      - dns
+      - dhcp
+    aliases: []
+    notes: Placeholder lab DNS/DHCP host
+
+  - name: laptop
+    site: vpn
+    addressing: wireguard-static
+    addresses:
+      vpn: 10.8.1.20
+    roles:
+      - roaming-client
+    aliases: []
+    notes: Sten's roaming laptop
+
+forwarding:
+  mudpi:
+    authoritative_zones:
+      - reid.home.arpa
+      - vpn.home.arpa
+    conditional_forwarders:
+      barkingowl.home.arpa: 192.168.0.10
+      trilogy.home.arpa: 10.8.1.40
+      testboat.home.arpa: 10.8.1.50
+    upstream_resolvers:
+      - 1.1.1.1
+      - 8.8.8.8
+
+  shedpi:
+    authoritative_zones:
+      - barkingowl.home.arpa
+    upstream_resolvers:
+      - 192.168.0.1
+    notes:
+      - May optionally forward reid/trilogy/testboat/vpn zones to MudPi over VPN
+
+reverse_dns:
+  - cidr: 10.1.1.0/24
+    zone: 1.1.10.in-addr.arpa
+    authority: mudpi.reid.home.arpa
+  - cidr: 10.8.1.0/24
+    zone: 1.8.10.in-addr.arpa
+    authority: mudpi.vpn.home.arpa
+  - cidr: 192.168.0.0/24
+    zone: 0.168.192.in-addr.arpa
+    authority: shedpi.barkingowl.home.arpa
+  - cidr: 192.168.98.0/24
+    zone: 98.168.192.in-addr.arpa
+    authority: boatdns.trilogy.home.arpa
+  - cidr: 192.168.97.0/24
+    zone: 97.168.192.in-addr.arpa
+    authority: labdns.testboat.home.arpa
