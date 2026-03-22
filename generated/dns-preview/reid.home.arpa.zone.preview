@@ -1,0 +1,23 @@
+$ORIGIN reid.home.arpa.
+$TTL 300
+
+@   IN SOA mudpi.reid.home.arpa. admin.home.arpa. (
+        2026032201
+        1h
+        15m
+        1w
+        300
+    )
+
+    IN NS mudpi.reid.home.arpa.
+
+abbhub               IN A 10.1.1.6
+mudpi                IN A 10.1.1.10
+printserver          IN A 10.1.1.30
+router               IN A 10.1.1.1
+shorepi              IN A 10.1.1.20
+
+; Notes
+; - This is a preview artifact generated from the registry.
+; - Dynamic DHCP clients are not included unless they have explicit fixed addresses.
+; - The dnsmasq runtime configuration remains the operational source for active DNS service.

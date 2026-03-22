@@ -1,0 +1,19 @@
+$ORIGIN testboat.home.arpa.
+$TTL 300
+
+@   IN SOA labdns.testboat.home.arpa. admin.home.arpa. (
+        2026032201
+        1h
+        15m
+        1w
+        300
+    )
+
+    IN NS labdns.testboat.home.arpa.
+
+labdns               IN A 192.168.97.10
+
+; Notes
+; - This is a preview artifact generated from the registry.
+; - Dynamic DHCP clients are not included unless they have explicit fixed addresses.
+; - The dnsmasq runtime configuration remains the operational source for active DNS service.
