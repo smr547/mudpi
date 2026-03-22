@@ -28,11 +28,16 @@ digraph mudpi_network {
     style="rounded";
     penwidth=1.5;
     fontsize=12;
+    host_reid_abbhub [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="CENTER"><B>abbhub</B></TD></TR><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">abbhub.reid.home.arpa</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">LAN 10.1.1.6</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">solar-monitor • appliance</FONT></TD></TR></TABLE>>, shape=plain, style="filled", fillcolor="white", penwidth=1.0];
     host_reid_mudpi [label=<<TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="CENTER"><B>mudpi</B></TD></TR><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">mudpi.reid.home.arpa</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">LAN 10.1.1.10</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">VPN 10.8.1.1 (mudpi.vpn.home.arpa)</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">wireguard-hub • dns • dhcp • ntp-stratum1 • dynamic-dns</FONT></TD></TR></TABLE>>, shape=plain, style="filled", fillcolor="white", penwidth=2.0];
+    host_reid_printer [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="CENTER"><B>printer</B></TD></TR><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">printer.reid.home.arpa</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">printer • appliance</FONT></TD></TR></TABLE>>, shape=plain, style="filled", fillcolor="white", penwidth=1.0];
+    host_reid_printserver [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="CENTER"><B>printserver</B></TD></TR><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">printserver.reid.home.arpa</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">LAN 10.1.1.30</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">print-server • utility</FONT></TD></TR></TABLE>>, shape=plain, style="filled", fillcolor="white", penwidth=1.0];
     host_reid_router [label=<<TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="CENTER"><B>router</B></TD></TR><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">router.reid.home.arpa</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">LAN 10.1.1.1</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">gateway</FONT></TD></TR></TABLE>>, shape=box3d, style="rounded,filled", fillcolor="white", penwidth=1.6];
     host_reid_shorepi [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="CENTER"><B>shorepi</B></TD></TR><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">shorepi.reid.home.arpa</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">LAN 10.1.1.20</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">signalk • influxdb • grafana • app-host</FONT></TD></TR></TABLE>>, shape=plain, style="filled", fillcolor="white", penwidth=1.4];
     site_reid [label="10.1.1.0/24", shape=ellipse, style="dashed", penwidth=1.0];
+    site_reid -> host_reid_abbhub [arrowhead=none, penwidth=1.0];
     site_reid -> host_reid_mudpi [arrowhead=none, penwidth=1.0];
+    site_reid -> host_reid_printserver [arrowhead=none, penwidth=1.0];
     site_reid -> host_reid_router [arrowhead=none, penwidth=1.0];
     site_reid -> host_reid_shorepi [arrowhead=none, penwidth=1.0];
   }

@@ -49,8 +49,11 @@ troubleshooting, and continuity of operations.
 | Host | FQDN | LAN IP | VPN IP | Addressing | Roles | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
 | router | router.reid.home.arpa | 10.1.1.1 | — | static-on-host | gateway | Site gateway |
+| abbhub | abbhub.reid.home.arpa | 10.1.1.6 | — | dhcp-reservation | solar-monitor, appliance | ABB solar monitor hub for RF communication with rooftop panels; queried for plant.xml to monitor solar energy production |
 | mudpi | mudpi.reid.home.arpa | 10.1.1.10 | 10.8.1.1 | static-on-host | wireguard-hub, dns, dhcp, ntp-stratum1, dynamic-dns | Infrastructure control-plane node |
 | shorepi | shorepi.reid.home.arpa | 10.1.1.20 | — | static-on-host | signalk, influxdb, grafana, app-host | Legacy services host |
+| printserver | printserver.reid.home.arpa | 10.1.1.30 | — | static-on-host | print-server, utility | Raspberry Pi 5 used as 3D print server |
+| printer | printer.reid.home.arpa | — | — | dhcp-dynamic | printer, appliance | Brother HL-L2460DW network printer |
 
 ## Site Inventory: barkingowl
 
