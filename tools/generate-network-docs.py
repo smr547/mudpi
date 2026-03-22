@@ -598,9 +598,7 @@ def generate_zone_previews(registry: Dict[str, Any], output_dir: Path) -> None:
 
 def generate_reverse_address_index(registry, output_root):
     """
-    Generate a human-readable reverse address index.
-
-    This is NOT DNS PTR data — it is documentation for operators.
+    Generate a human-readable reverse address index sorted globally by IP.
     """
 
     entries = []
@@ -608,40 +606,109 @@ def generate_reverse_address_index(registry, output_root):
     for host in registry.get("hosts", []):
         name = host["name"]
         site = host["site"]
-        roles = ", ".join(host.get("roles", []))
-
-        fqdn_site = f"{name}.{site}.home.arpa"
-        fqdn_vpn = f"{name}.vpn.home.arpa"
-
+        roles = ", ".join(host.get("roles", [])) or "—"
         addresses = host.get("addresses", {})
 
         if "lan" in addresses:
             entries.append({
                 "ip": addresses["lan"],
-                "fqdn": fqdn_site,
-                "roles": roles
+                "fqdn": f"{name}.{site}.home.arpa",
+                "scope": "LAN",
+                "roles": roles,
             })
 
         if "vpn" in addresses:
             entries.append({
                 "ip": addresses["vpn"],
-                "fqdn": fqdn_vpn,
-                "roles": roles
+                "fqdn": f"{name}.vpn.home.arpa",
+                "scope": "VPN",
+                "roles": roles,
             })
 
-    # Sort by IP address
-    entries.sort(key=lambda e: tuple(int(x) for x in e["ip"].split(".")))
+    def ip_sort_key(ip):
+        try:
+            return tuple(int(part) for part in ip.split("."))
+        except Exception:
+            return (999, 999, 999, 999)
+
+    entries.sort(key=lambda e: ip_sort_key(e["ip"]))
 
     lines = []
-    lines.append("# Reverse Address Index\n")
-    lines.append("| Address | Hostname | Roles |")
-    lines.append("|--------|----------|------|")
+    lines.append("# Reverse Address Index")
+    lines.append("")
+    lines.append("Generated from `docs/reference/network-registry.yaml`.")
+    lines.append("")
+    lines.append("| Address | Hostname | Scope | Roles |")
+    lines.append("|---|---|---|---|")
 
     for e in entries:
-        lines.append(f"| {e['ip']} | {e['fqdn']} | {e['roles']} |")
+        lines.append(f"| {e['ip']} | {e['fqdn']} | {e['scope']} | {e['roles']} |")
 
     out = output_root / "reverse-address-index.md"
-    out.write_text("\n".join(lines))
+    out.write_text("\n".join(lines), encoding="utf-8")
+
+def generate_reverse_address_index_by_site(registry, output_root):
+    """
+    Generate a human-readable reverse address index grouped by site.
+    """
+
+    grouped = {}
+
+    for host in registry.get("hosts", []):
+        name = host["name"]
+        site = host["site"]
+        roles = ", ".join(host.get("roles", [])) or "—"
+        addresses = host.get("addresses", {})
+
+        grouped.setdefault(site, [])
+
+        if "lan" in addresses:
+            grouped[site].append({
+                "address": addresses["lan"],
+                "hostname": f"{name}.{site}.home.arpa",
+                "scope": "LAN",
+                "roles": roles,
+            })
+
+        if "vpn" in addresses:
+            grouped[site].append({
+                "address": addresses["vpn"],
+                "hostname": f"{name}.vpn.home.arpa",
+                "scope": "VPN",
+                "roles": roles,
+            })
+
+    def ip_sort_key(ip):
+        try:
+            return tuple(int(part) for part in ip.split("."))
+        except Exception:
+            return (999, 999, 999, 999)
+
+    lines = []
+    lines.append("# Reverse Address Index by Site")
+    lines.append("")
+    lines.append("Generated from `docs/reference/network-registry.yaml`.")
+    lines.append("")
+
+    for site_name in sorted(grouped.keys()):
+        lines.append(f"## {site_name}")
+        lines.append("")
+        lines.append("| Address | Hostname | Scope | Roles |")
+        lines.append("|---|---|---|---|")
+
+        entries = sorted(grouped[site_name], key=lambda e: ip_sort_key(e["address"]))
+        for entry in entries:
+            lines.append(
+                f"| {entry['address']} | {entry['hostname']} | {entry['scope']} | {entry['roles']} |"
+            )
+
+        if not entries:
+            lines.append("| — | — | — | — |")
+
+        lines.append("")
+
+    out = output_root / "reverse-address-index-by-site.md"
+    out.write_text("\n".join(lines), encoding="utf-8")
 
 def validate_registry(registry: Dict[str, Any]) -> List[str]:
     errors: List[str] = []
