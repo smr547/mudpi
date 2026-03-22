@@ -53,6 +53,7 @@ troubleshooting, and continuity of operations.
 | mudpi | mudpi.reid.home.arpa | 10.1.1.10 | 10.8.1.1 | static-on-host | wireguard-hub, dns, dhcp, ntp-stratum1, dynamic-dns | Infrastructure control-plane node |
 | shorepi | shorepi.reid.home.arpa | 10.1.1.20 | — | static-on-host | signalk, influxdb, grafana, app-host | Legacy services host |
 | printserver | printserver.reid.home.arpa | 10.1.1.30 | — | static-on-host | print-server, utility | Raspberry Pi 5 used as 3D print server |
+| zappi | zappi.reid.home.arpa | 10.1.1.50 | — | dhcp-reservation | ev-charger, energy-device | MyEnergi Zappi EV charger |
 | printer | printer.reid.home.arpa | — | — | dhcp-dynamic | printer, appliance | Brother HL-L2460DW network printer |
 
 ## Site Inventory: barkingowl

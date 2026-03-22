@@ -325,3 +325,57 @@ This registry drives generation of:
 - host documentation
 
 Future tooling may automatically generate configuration from this registry.
+
+
+## And one further development
+
+This was just recently decided...
+
+## Addressing Policy
+
+The Reid LAN uses broad address bands for operational hygiene only.
+
+- Low addresses are preferred for core fixed infrastructure.
+- Reserved and static devices must remain outside the dynamic DHCP pool.
+- Dynamic clients use the DHCP pool.
+- Detailed device classification is not inferred from IP address ranges.
+
+## Classification Policy
+
+Device type, role, and grouping are defined explicitly in
+`docs/reference/network-registry.yaml`.
+
+The registry is the authoritative source for:
+- host classification
+- generated documentation
+- generated DNS/DHCP artifacts
+- diagram grouping and filtering
+
+
+
+## Host Categories
+
+The `category` field in `network-registry.yaml` provides a high-level classification
+for hosts across the MudPi Home–Farm–Boat–VPN estate.
+
+Categories are intentionally **broad and stable**.  
+Detailed behaviour and function are captured in the `roles` field.
+
+| Category | Description | Typical Examples |
+|---------|-------------|------------------|
+| **infrastructure** | Core network control-plane components responsible for DNS, DHCP, routing, or VPN services. These are critical systems required for the network to function. | `mudpi`, `router`, `shedpi`, `boatdns`, `labdns` |
+| **server** | Application or service hosts providing higher-level functionality to users or devices. | `shorepi`, `printserver`, `signalk` |
+| **energy** | Energy monitoring or control systems related to solar generation, EV charging, or energy management. | `abbhub`, `zappi` |
+| **appliance** | Stand-alone network appliances providing a single service. Typically managed through their own embedded interface and not administered as general-purpose hosts. | `printer` |
+| **sensor** | Devices that primarily collect environmental or operational data. | `weatherstation` |
+| **client** | Mobile or user-operated devices that connect to the network but are not part of the infrastructure. | `laptop` |
+
+### Design Principles
+
+- Categories provide **human-readable classification** and documentation grouping.
+- They do **not influence IP address allocation**.
+- Categories may be used by documentation generators and diagrams to group or filter hosts.
+- Detailed operational behaviour should be captured in the `roles` field rather than expanding the category set.
+
+
+See [host-classification-model](host-classification-model.md]

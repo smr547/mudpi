@@ -22,6 +22,7 @@ Generated from `docs/reference/network-registry.yaml`.
 | mudpi | 10.1.1.10 | 10.8.1.1 | static-on-host | wireguard-hub, dns, dhcp, ntp-stratum1, dynamic-dns |
 | shorepi | 10.1.1.20 | — | static-on-host | signalk, influxdb, grafana, app-host |
 | printserver | 10.1.1.30 | — | static-on-host | print-server, utility |
+| zappi | 10.1.1.50 | — | dhcp-reservation | ev-charger, energy-device |
 | printer | — | — | dhcp-dynamic | printer, appliance |
 
 ## barkingowl

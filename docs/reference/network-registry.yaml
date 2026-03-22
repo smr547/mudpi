@@ -22,7 +22,7 @@ meta:
   naming_pattern: host.site.home.arpa
   owner: Steven Ring
   status: draft
-  version: 3
+  version: 4
 
 defaults:
   ttl: 300
@@ -173,6 +173,7 @@ sites:
 hosts:
   - name: mudpi
     site: reid
+    category: infrastructure
     addressing: static-on-host
     addresses:
       lan: 10.1.1.10
@@ -185,6 +186,7 @@ hosts:
 
   - name: router
     site: reid
+    category: infrastructure
     addressing: static-on-host
     addresses:
       lan: 10.1.1.1
@@ -196,6 +198,7 @@ hosts:
 
   - name: shorepi
     site: reid
+    category: server
     addressing: static-on-host
     addresses:
       lan: 10.1.1.20
@@ -207,8 +210,9 @@ hosts:
 
   - name: printserver
     site: reid
+    category: server
     addressing: static-on-host
-    mac: "D8:3A:DD:59:0A:0A"
+    mac: "88:A2:9E:19:07:69"
     addresses:
       lan: 10.1.1.30
     roles: [print-server, utility]
@@ -219,6 +223,7 @@ hosts:
 
   - name: abbhub
     site: reid
+    category: energy
     addressing: dhcp-reservation
     mac: "00:0F:73:52:0A:20"
     addresses:
@@ -229,10 +234,24 @@ hosts:
     diagram:
       importance: secondary
 
+  - name: zappi
+    site: reid
+    category: energy
+    addressing: dhcp-reservation
+    mac: "C0:49:EF:64:E9:A8"
+    addresses:
+      lan: 10.1.1.50
+    roles: [ev-charger, energy-device]
+    aliases: []
+    notes: MyEnergi Zappi EV charger
+    diagram:
+      importance: secondary
+
   - name: printer
     site: reid
+    category: appliance
     addressing: dhcp-dynamic
-    mac: "88:A2:9E:19:07:69"
+    mac: "00:41:0E:FE:B0:84"
     roles: [printer, appliance]
     aliases: []
     notes: Brother HL-L2460DW network printer
@@ -241,6 +260,7 @@ hosts:
 
   - name: shedpi
     site: barkingowl
+    category: infrastructure
     addressing: static-on-host
     addresses:
       lan: 192.168.0.10
@@ -253,6 +273,7 @@ hosts:
 
   - name: weatherstation
     site: barkingowl
+    category: sensor
     addressing: dhcp-reservation
     mac: "TBD"
     addresses:
@@ -265,6 +286,7 @@ hosts:
 
   - name: boatdns
     site: trilogy
+    category: infrastructure
     addressing: static-on-host
     addresses:
       lan: 192.168.98.10
@@ -277,6 +299,7 @@ hosts:
 
   - name: signalk
     site: trilogy
+    category: server
     addressing: static-on-host
     addresses:
       lan: 192.168.98.20
@@ -288,6 +311,7 @@ hosts:
 
   - name: labdns
     site: testboat
+    category: infrastructure
     addressing: static-on-host
     addresses:
       lan: 192.168.97.10
@@ -300,6 +324,7 @@ hosts:
 
   - name: laptop
     site: vpn
+    category: client
     addressing: wireguard-static
     addresses:
       vpn: 10.8.1.20
@@ -308,17 +333,6 @@ hosts:
     notes: Sten's roaming laptop
     diagram:
       importance: secondary
-
-- name: zappi
-  site: reid
-  addressing: dhcp-reservation
-  mac: "C0:49:EF:64:E9:A8"
-  addresses:
-    lan: 10.1.1.50
-  roles:
-    - ev-charger
-    - energy-device
-  notes: MyEnergi Zappi EV charger
 
 forwarding:
   mudpi:

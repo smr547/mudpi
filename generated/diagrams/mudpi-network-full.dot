@@ -21,12 +21,14 @@ digraph mudpi_network {
     host_reid_printserver [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="CENTER"><B>printserver</B></TD></TR><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">printserver.reid.home.arpa</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">LAN 10.1.1.30</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">print-server • utility</FONT></TD></TR></TABLE>>, shape=plain, style="filled", fillcolor="white", penwidth=1.5];
     host_reid_router [label=<<TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="CENTER"><B>router</B></TD></TR><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">router.reid.home.arpa</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">LAN 10.1.1.1</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">gateway</FONT></TD></TR></TABLE>>, shape=box3d, style="rounded,filled", fillcolor="white", penwidth=1.8];
     host_reid_shorepi [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="CENTER"><B>shorepi</B></TD></TR><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">shorepi.reid.home.arpa</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">LAN 10.1.1.20</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">signalk • influxdb • grafana • app-host</FONT></TD></TR></TABLE>>, shape=plain, style="filled", fillcolor="white", penwidth=1.5];
+    host_reid_zappi [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="CENTER"><B>zappi</B></TD></TR><TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">zappi.reid.home.arpa</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">LAN 10.1.1.50</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">ev-charger • energy-device</FONT></TD></TR></TABLE>>, shape=plain, style="filled", fillcolor="white", penwidth=1.0];
     site_reid [label="10.1.1.0/24", shape=ellipse, style="dashed", penwidth=1.0];
     site_reid -> host_reid_abbhub [arrowhead=none, penwidth=1.0];
     site_reid -> host_reid_mudpi [arrowhead=none, penwidth=1.0];
     site_reid -> host_reid_printserver [arrowhead=none, penwidth=1.0];
     site_reid -> host_reid_router [arrowhead=none, penwidth=1.0];
     site_reid -> host_reid_shorepi [arrowhead=none, penwidth=1.0];
+    site_reid -> host_reid_zappi [arrowhead=none, penwidth=1.0];
   }
 
   subgraph cluster_barkingowl {

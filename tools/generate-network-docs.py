@@ -138,6 +138,7 @@ def generate_host_registry_md(registry: Dict[str, Any], out_path: Path) -> None:
         rows.append([
             host["name"],
             host["site"],
+            host["category"],
             addresses.get("lan", "—"),
             addresses.get("vpn", "—"),
             host.get("addressing", "—"),
@@ -150,7 +151,7 @@ def generate_host_registry_md(registry: Dict[str, Any], out_path: Path) -> None:
 Generated from `docs/reference/network-registry.yaml`.
 
 {markdown_table(
-    ["Host", "Site", "LAN IP", "VPN IP", "Addressing", "Roles", "Notes"],
+    ["Host", "Site", "Category", "LAN IP", "VPN IP", "Addressing", "Roles", "Notes"],
     rows,
 )}
 """

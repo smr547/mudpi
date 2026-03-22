@@ -9,6 +9,7 @@ Generated from `docs/reference/network-registry.yaml`.
 | 10.1.1.10 | mudpi.reid.home.arpa | LAN | wireguard-hub, dns, dhcp, ntp-stratum1, dynamic-dns |
 | 10.1.1.20 | shorepi.reid.home.arpa | LAN | signalk, influxdb, grafana, app-host |
 | 10.1.1.30 | printserver.reid.home.arpa | LAN | print-server, utility |
+| 10.1.1.50 | zappi.reid.home.arpa | LAN | ev-charger, energy-device |
 | 10.8.1.1 | mudpi.vpn.home.arpa | VPN | wireguard-hub, dns, dhcp, ntp-stratum1, dynamic-dns |
 | 10.8.1.20 | laptop.vpn.home.arpa | VPN | roaming-client |
 | 10.8.1.30 | shedpi.vpn.home.arpa | VPN | dns, dhcp, farm-server |

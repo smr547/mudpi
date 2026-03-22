@@ -16,6 +16,7 @@ mudpi                IN A 10.1.1.10
 printserver          IN A 10.1.1.30
 router               IN A 10.1.1.1
 shorepi              IN A 10.1.1.20
+zappi                IN A 10.1.1.50
 
 ; Notes
 ; - This is a preview artifact generated from the registry.
