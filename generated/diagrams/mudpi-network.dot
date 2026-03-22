@@ -1,0 +1,75 @@
+digraph mudpi_network {
+  graph [
+    rankdir="TB",
+    splines="ortho",
+    overlap=false,
+    nodesep=0.5,
+    ranksep=0.9,
+    pad=0.2,
+    labelloc="t",
+    label="MudPi Distributed Network",
+    fontsize=20
+  ];
+  node [shape=box, style=rounded, fontsize=10, margin=0.15];
+  edge [fontsize=9];
+
+  subgraph cluster_vpn {
+    label="vpn\\nvpn.home.arpa\\nOverlay 10.8.1.0/24\\nHub 10.8.1.1";
+    style="rounded,dashed";
+    fontsize=12;
+    host_vpn_laptop [label="laptop\\nVPN 10.8.1.20\\nroaming-client"];
+    host_reid_mudpi [label="mudpi\\nLAN 10.1.1.10\\nVPN 10.8.1.1\\nwireguard-hub, dns, dhcp, ntp-stratum1, dynamic-dns"];
+  }
+
+  subgraph cluster_reid {
+    label="reid\\nreid.home.arpa\\nLAN 10.1.1.0/24\\nGW 10.1.1.1";
+    style="rounded";
+    fontsize=12;
+    host_reid_mudpi [label="mudpi\\nLAN 10.1.1.10\\nVPN 10.8.1.1\\nwireguard-hub, dns, dhcp, ntp-stratum1, dynamic-dns"];
+    host_reid_router [label="router\\nLAN 10.1.1.1\\ngateway", shape=box3d];
+    host_reid_shorepi [label="shorepi\\nLAN 10.1.1.20\\nsignalk, influxdb, grafana, app-host"];
+    site_reid [label="10.1.1.0/24", shape=ellipse];
+    site_reid -> host_reid_mudpi [arrowhead=none];
+    site_reid -> host_reid_router [arrowhead=none];
+    site_reid -> host_reid_shorepi [arrowhead=none];
+  }
+
+  subgraph cluster_barkingowl {
+    label="barkingowl\\nbarkingowl.home.arpa\\nLAN 192.168.0.0/24\\nGW 192.168.0.1";
+    style="rounded";
+    fontsize=12;
+    host_barkingowl_shedpi [label="shedpi\\nLAN 192.168.0.10\\nVPN 10.8.1.30\\ndns, dhcp, farm-server"];
+    host_barkingowl_weatherstation [label="weatherstation\\nLAN 192.168.0.50\\nweather"];
+    site_barkingowl [label="192.168.0.0/24", shape=ellipse];
+    site_barkingowl -> host_barkingowl_shedpi [arrowhead=none];
+    site_barkingowl -> host_barkingowl_weatherstation [arrowhead=none];
+  }
+
+  subgraph cluster_trilogy {
+    label="trilogy\\ntrilogy.home.arpa\\nLAN 192.168.98.0/24\\nGW 192.168.98.1";
+    style="rounded";
+    fontsize=12;
+    host_trilogy_boatdns [label="boatdns\\nLAN 192.168.98.10\\nVPN 10.8.1.40\\ndns, dhcp"];
+    host_trilogy_signalk [label="signalk\\nLAN 192.168.98.20\\nsignalk"];
+    site_trilogy [label="192.168.98.0/24", shape=ellipse];
+    site_trilogy -> host_trilogy_boatdns [arrowhead=none];
+    site_trilogy -> host_trilogy_signalk [arrowhead=none];
+  }
+
+  subgraph cluster_testboat {
+    label="testboat\\ntestboat.home.arpa\\nLAN 192.168.97.0/24\\nGW 192.168.97.1";
+    style="rounded";
+    fontsize=12;
+    host_testboat_labdns [label="labdns\\nLAN 192.168.97.10\\nVPN 10.8.1.50\\ndns, dhcp"];
+    site_testboat [label="192.168.97.0/24", shape=ellipse];
+    site_testboat -> host_testboat_labdns [arrowhead=none];
+  }
+
+  host_reid_mudpi -> host_barkingowl_shedpi [dir=both, style=dashed, label="WireGuard"];
+  host_reid_mudpi -> host_trilogy_boatdns [dir=both, style=dashed, label="WireGuard"];
+  host_reid_mudpi -> host_testboat_labdns [dir=both, style=dashed, label="WireGuard"];
+  host_reid_mudpi -> host_vpn_laptop [dir=both, style=dashed, label="WireGuard"];
+  host_reid_mudpi -> host_barkingowl_shedpi [style=dotted, label="DNS forward barkingowl.home.arpa"];
+  host_reid_mudpi -> host_testboat_labdns [style=dotted, label="DNS forward testboat.home.arpa"];
+  host_reid_mudpi -> host_trilogy_boatdns [style=dotted, label="DNS forward trilogy.home.arpa"];
+}

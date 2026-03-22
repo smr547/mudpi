@@ -33,3 +33,16 @@ clean:
 	@echo "Removing generated artifacts..."
 	rm -rf $(OUTPUT)
 	@echo "Clean complete."
+
+# Diagram targets
+.PHONY: diagram all
+
+DIAGRAM_GENERATOR := tools/generate-network-diagram.py
+DIAGRAM_OUTPUT := generated/diagrams
+
+diagram:
+	@echo "Generating network diagram..."
+	$(PYTHON) $(DIAGRAM_GENERATOR) --registry $(REGISTRY) --output $(DIAGRAM_OUTPUT)
+	@echo "Done. Diagram written to $(DIAGRAM_OUTPUT)/"
+
+all: network diagram
