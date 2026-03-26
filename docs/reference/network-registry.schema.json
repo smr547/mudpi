@@ -1,0 +1,132 @@
+/*
+STATUS: Draft
+
+This schema is not yet authoritative.
+
+The Python validator (validate_registry.py) is the source of truth
+for registry validation. The schema is being developed to eventually
+provide structural linting and editor support.
+
+Do not rely on this schema for enforcement until it is aligned with
+the live registry format and generator model.
+*/
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://southsky.example/schemas/network-registry.schema.json",
+  "title": "Network Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "sites": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/site" }
+    },
+    "hosts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/host" }
+    },
+    "reverse_dns": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/reverseDnsEntry" }
+    }
+  },
+  "required": ["hosts"],
+
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+
+    "fqdn": {
+      "type": "string",
+      "pattern": "^(?=.{1,253}$)(?!-)[A-Za-z0-9-]+(\\.(?!-)[A-Za-z0-9-]+)+\\.?$"
+    },
+
+    "hostnameLabel": {
+      "type": "string",
+      "pattern": "^(?!-)[a-z0-9-]{1,63}(?<!-)$"
+    },
+
+    "macAddress": {
+      "type": "string",
+      "pattern": "^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$"
+    },
+
+    "ipv4Address": {
+      "type": "string",
+      "format": "ipv4"
+    },
+
+    "site": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/hostnameLabel" },
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "domain": { "$ref": "#/$defs/fqdn" }
+      },
+      "required": ["id"]
+    },
+
+    "dnsConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "canonical": { "$ref": "#/$defs/fqdn" },
+        "aliases": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/fqdn" },
+          "uniqueItems": true,
+          "default": []
+        }
+      },
+      "required": ["canonical"]
+    },
+
+    "hostAddresses": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lan": { "$ref": "#/$defs/ipv4Address" },
+        "vpn": { "$ref": "#/$defs/ipv4Address" },
+        "wlan": { "$ref": "#/$defs/ipv4Address" },
+        "management": { "$ref": "#/$defs/ipv4Address" }
+      }
+    },
+
+    "host": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "name": { "$ref": "#/$defs/hostnameLabel" },
+        "hostname": { "$ref": "#/$defs/hostnameLabel" },
+        "site": { "$ref": "#/$defs/hostnameLabel" },
+        "category": { "$ref": "#/$defs/nonEmptyString" },
+        "mac": { "$ref": "#/$defs/macAddress" },
+        "addresses": { "$ref": "#/$defs/hostAddresses" },
+        "dns": { "$ref": "#/$defs/dnsConfig" }
+      },
+      "required": ["site"],
+      "allOf": [
+        {
+          "anyOf": [
+            { "required": ["name"] },
+            { "required": ["hostname"] }
+          ]
+        }
+      ]
+    },
+
+    "reverseDnsEntry": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "network": { "$ref": "#/$defs/nonEmptyString" },
+        "authority": { "$ref": "#/$defs/fqdn" },
+        "zone": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "required": ["authority"]
+    }
+  }
+}

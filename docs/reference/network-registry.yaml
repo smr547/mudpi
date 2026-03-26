@@ -179,7 +179,10 @@ hosts:
       lan: 10.1.1.10
       vpn: 10.8.1.1
     roles: [wireguard-hub, dns, dhcp, ntp-stratum1, dynamic-dns]
-    aliases: []
+    dns:
+      canonical: mudpi.reid.home.arpa
+      aliases: 
+        - mudpi.vpn.home.arpa
     notes: Infrastructure control-plane node
     diagram:
       importance: primary
