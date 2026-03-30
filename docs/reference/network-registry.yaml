@@ -60,7 +60,7 @@ sites:
     dns:
       mode: local-authoritative
       server_host: mudpi
-      server_ip: 10.1.1.10
+      server_ip: 10.1.1.3
       search_domain: reid.home.arpa
     dhcp:
       authority: mudpi
@@ -176,7 +176,7 @@ hosts:
     category: infrastructure
     addressing: static-on-host
     addresses:
-      lan: 10.1.1.10
+      lan: 10.1.1.3
       vpn: 10.8.1.1
     roles: [wireguard-hub, dns, dhcp, ntp-stratum1, dynamic-dns]
     dns:
