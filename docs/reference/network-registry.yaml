@@ -68,7 +68,7 @@ sites:
       search_domain: reid.home.arpa
       default_gateway: 10.1.1.1
       dns_servers:
-        - 10.1.1.10
+        - 10.1.1.3
       dynamic_pool:
         start: 10.1.1.100
         end: 10.1.1.199
@@ -175,6 +175,7 @@ hosts:
     site: reid
     category: infrastructure
     addressing: static-on-host
+    mac: "88:A2:9E:6E:8C:D4"
     addresses:
       lan: 10.1.1.3
       vpn: 10.8.1.1
@@ -187,22 +188,22 @@ hosts:
     diagram:
       importance: primary
 
-  - name: router
+
+  - name: printer
     site: reid
-    category: infrastructure
-    addressing: static-on-host
+    category: appliance
+    addressing: dhcp-reservation
+    mac: "00:41:0E:FE:B0:84"
     addresses:
-      lan: 10.1.1.1
-    roles: [gateway]
-    aliases: []
-    notes: Site gateway
-    diagram:
-      importance: primary
+      lan: 10.1.1.60   # pick from your reserved_appliances range
+    roles: [printer, appliance]
+    notes: Brother HL-L2460DW network printer
 
   - name: shorepi
     site: reid
     category: server
     addressing: static-on-host
+    mac: "D8:3A:DD:2A:25:3F"
     addresses:
       lan: 10.1.1.20
     roles: [signalk, influxdb, grafana, app-host]
@@ -228,7 +229,7 @@ hosts:
     site: reid
     category: energy
     addressing: dhcp-reservation
-    mac: "00:0F:73:52:0A:20"
+    mac: "00:04:a3:f3:2d:fe"
     addresses:
       lan: 10.1.1.6
     roles: [solar-monitor, appliance]
@@ -250,16 +251,152 @@ hosts:
     diagram:
       importance: secondary
 
-  - name: printer
+
+  # --- IP Cameras (Dahua) ---
+  - name: cam-01
     site: reid
-    category: appliance
-    addressing: dhcp-dynamic
-    mac: "00:41:0E:FE:B0:84"
-    roles: [printer, appliance]
-    aliases: []
-    notes: Brother HL-L2460DW network printer
-    diagram:
-      importance: tertiary
+    category: camera
+    addressing: dhcp-reservation
+    mac: "24:52:6A:34:6A:36"
+    addresses:
+      lan: 10.1.1.41
+    roles: [camera]
+    notes: Dahua IP camera
+    physical:
+      patch_panel: mudroom-main
+      port: "01"
+
+  - name: cam-02
+    site: reid
+    category: camera
+    addressing: dhcp-reservation
+    mac: "24:52:6A:34:69:F5"
+    addresses:
+      lan: 10.1.1.42
+    roles: [camera]
+    notes: Dahua IP camera
+    physical:
+      patch_panel: mudroom-main
+      port: "02"
+
+  - name: cam-03
+    site: reid
+    category: camera
+    addressing: dhcp-reservation
+    mac: "24:52:6A:34:69:C9"
+    addresses:
+      lan: 10.1.1.43
+    roles: [camera]
+    notes: Dahua IP camera
+    physical:
+      patch_panel: mudroom-main
+      port: "03"
+
+  - name: cam-04
+    site: reid
+    category: camera
+    addressing: dhcp-reservation
+    mac: "24:52:6A:34:6D:13"
+    addresses:
+      lan: 10.1.1.44
+    roles: [camera]
+    notes: Dahua IP camera
+    physical:
+      patch_panel: mudroom-main
+      port: "04"
+
+  - name: cam-05
+    site: reid
+    category: camera
+    addressing: dhcp-reservation
+    mac: "24:52:6A:34:69:73"
+    addresses:
+      lan: 10.1.1.45
+    roles: [camera]
+    notes: Dahua IP camera
+    physical:
+      patch_panel: mudroom-main
+      port: "05"
+
+  - name: cam-06
+    site: reid
+    category: camera
+    addressing: dhcp-reservation
+    mac: "FC:B6:9D:9E:D1:E5"
+    addresses:
+      lan: 10.1.1.46
+    roles: [camera]
+    notes: Dahua IP camera
+    physical:
+      patch_panel: mudroom-main
+      port: "06"
+
+  - name: cam-07
+    site: reid
+    category: camera
+    addressing: dhcp-reservation
+    mac: "24:52:6A:34:6D:18"
+    addresses:
+      lan: 10.1.1.47
+    roles: [camera]
+    notes: Dahua IP camera
+    physical:
+      patch_panel: mudroom-main
+      port: "07"
+
+
+  # --- Wi-Fi Access Points / Ubiquiti infrastructure ---
+  - name: ap-01
+    site: reid
+    category: network
+    addressing: dhcp-reservation
+    mac: "74:AC:B9:69:80:42"
+    addresses:
+      lan: 10.1.1.123
+    roles: [wifi-ap]
+    notes: Ubiquiti Wi-Fi access point
+    physical:
+      patch_panel: mudroom-main
+      port: "09"
+
+  - name: ap-02
+    site: reid
+    category: network
+    addressing: dhcp-reservation
+    mac: "74:AC:B9:69:7E:6E"
+    addresses:
+      lan: 10.1.1.117
+    roles: [wifi-ap]
+    notes: Ubiquiti Wi-Fi access point
+    physical:
+      patch_panel: mudroom-main
+      port: "17"
+
+  - name: ap-03
+    site: reid
+    category: network
+    addressing: dhcp-reservation
+    mac: "74:AC:B9:69:7C:62"
+    addresses:
+      lan: 10.1.1.118
+    roles: [wifi-ap]
+    notes: Ubiquiti Wi-Fi access point
+    physical:
+      patch_panel: mudroom-main
+      port: "18"
+
+  - name: ubiquiti-unknown
+    site: reid
+    category: network
+    addressing: dhcp-reservation
+    mac: "F4:92:BF:C3:40:24"
+    addresses:
+      lan: 10.1.1.113
+    roles: [network-device]
+    notes: Ubiquiti network device; exact role not yet confirmed
+    physical:
+      patch_panel: mudroom-main
+      port: "19"
 
   - name: shedpi
     site: barkingowl
@@ -366,3 +503,34 @@ reverse_dns:
   - cidr: 192.168.97.0/24
     zone: 97.168.192.in-addr.arpa
     authority: labdns.testboat.home.arpa
+
+
+patch_panels:
+  mudroom-main:
+    description: 24-port patch panel in mudroom comms cupboard
+    location: mudroom
+    ports:
+      "01": { kind: fixed-device, location: driveway eaves, connected_host: cam-01 }
+      "02": { kind: fixed-device, location: backyard, connected_host: cam-02 }
+      "03": { kind: fixed-device, location: workshop exterior, connected_host: cam-03 }
+      "04": { kind: fixed-device, location: side yard, connected_host: cam-04 }
+      "05": { kind: fixed-device, location: garage, connected_host: cam-05 }
+      "06": { kind: fixed-device, location: entryway, connected_host: cam-06 }
+      "07": { kind: fixed-device, location: rear fence, connected_host: cam-07 }
+      "08": { kind: spare }
+      "09": { kind: fixed-device, location: roof east, connected_host: ap-01 }
+      "10": { kind: fixed-device, location: roof west, connected_host: ap-02 }
+      "11": { kind: fixed-device, location: roof centre, connected_host: ap-03 }
+      "12": { kind: wall-socket, location: study }
+      "13": { kind: wall-socket, location: lounge }
+      "14": { kind: wall-socket, location: workshop }
+      "15": { kind: spare }
+      "16": { kind: spare }
+      "17": { kind: spare }
+      "18": { kind: spare }
+      "19": { kind: spare }
+      "20": { kind: spare }
+      "21": { kind: spare }
+      "22": { kind: spare }
+      "23": { kind: spare }
+      "24": { kind: spare }

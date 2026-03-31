@@ -1,0 +1,381 @@
+generated_at: '2026-03-31T12:01:28+11:00'
+site: reid
+candidates:
+  unknown-10-1-1-1:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: unknown
+      mac: 50:91:e3:38:03:e9
+      addresses:
+        lan: 10.1.1.1
+      discovery:
+        vendor: (Unknown)
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-2:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: unknown
+      mac: 10:13:31:57:fa:00
+      addresses:
+        lan: 10.1.1.2
+      discovery:
+        vendor: Technicolor Delivery Technologies Belgium NV
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-114:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: media
+      mac: 48:a6:b8:28:be:de
+      addresses:
+        lan: 10.1.1.114
+      discovery:
+        vendor: Sonos, Inc.
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-115:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: media
+      mac: 54:2a:1b:e6:63:03
+      addresses:
+        lan: 10.1.1.115
+      discovery:
+        vendor: Sonos, Inc.
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-124:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: unknown
+      mac: f8:f0:05:a7:63:f6
+      addresses:
+        lan: 10.1.1.124
+      discovery:
+        vendor: Newport Media Inc.
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-107:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: unknown
+      mac: 50:14:79:fa:2c:a4
+      addresses:
+        lan: 10.1.1.107
+      discovery:
+        vendor: iRobot Corporation
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-116:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: unknown
+      mac: 8c:26:aa:c4:ff:2c
+      addresses:
+        lan: 10.1.1.116
+      discovery:
+        vendor: (Unknown)
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-108:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: media
+      mac: b0:99:d7:4b:00:94
+      addresses:
+        lan: 10.1.1.108
+      discovery:
+        vendor: Samsung Electronics Co.,Ltd
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-102:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: unknown
+      mac: 90:bf:d9:28:de:e8
+      addresses:
+        lan: 10.1.1.102
+      discovery:
+        vendor: (Unknown)
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-177:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: locally administered MAC
+      category: unknown
+      mac: de:ad:be:ef:fe:ed
+      addresses:
+        lan: 10.1.1.177
+      discovery:
+        vendor: '(Unknown: locally administered)'
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-178:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: camera
+      mac: 24:52:6a:25:bd:f4
+      addresses:
+        lan: 10.1.1.178
+      discovery:
+        vendor: Zhejiang Dahua Technology Co., Ltd.
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-129:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: unknown
+      mac: 88:a2:9e:6e:8c:d5
+      addresses:
+        lan: 10.1.1.129
+      discovery:
+        vendor: '(Unknown) (DUP: 2)'
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-112:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: media
+      mac: 7c:91:22:41:87:d4
+      addresses:
+        lan: 10.1.1.112
+      discovery:
+        vendor: Samsung Electronics Co.,Ltd
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-106:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: unknown
+      mac: a8:16:9d:3d:b3:0d
+      addresses:
+        lan: 10.1.1.106
+      discovery:
+        vendor: Hui Zhou Gaoshengda Technology Co.,LTD
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-125:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: media
+      mac: 8c:86:1e:c4:4e:6f
+      addresses:
+        lan: 10.1.1.125
+      discovery:
+        vendor: Apple, Inc.
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-110:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: locally administered MAC
+      category: unknown
+      mac: b2:d1:bb:c4:23:e2
+      addresses:
+        lan: 10.1.1.110
+      discovery:
+        vendor: '(Unknown: locally administered)'
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-101:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: iot
+      mac: 24:6f:28:b9:af:2c
+      addresses:
+        lan: 10.1.1.101
+      discovery:
+        vendor: Espressif Inc.
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-104:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: unknown
+      mac: 30:ed:a0:d7:e3:fc
+      addresses:
+        lan: 10.1.1.104
+      discovery:
+        vendor: (Unknown)
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-111:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: unknown
+      mac: ec:64:c9:96:07:b4
+      addresses:
+        lan: 10.1.1.111
+      discovery:
+        vendor: (Unknown)
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-122:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: iot
+      mac: 10:97:bd:d3:f6:38
+      addresses:
+        lan: 10.1.1.122
+      discovery:
+        vendor: Espressif Inc.
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-128:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: iot
+      mac: e0:e2:e6:c0:b3:fc
+      addresses:
+        lan: 10.1.1.128
+      discovery:
+        vendor: Espressif Inc.
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-109:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: locally administered MAC
+      category: unknown
+      mac: b6:29:43:61:d4:b6
+      addresses:
+        lan: 10.1.1.109
+      discovery:
+        vendor: Unknown
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-130:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: unknown
+      mac: 74:d5:c6:46:36:12
+      addresses:
+        lan: 10.1.1.130
+      discovery:
+        vendor: Unknown
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  unknown-10-1-1-134:
+    status: unknown
+    suggested_entry:
+      site: reid
+      description: Auto-discovered device
+      category: unknown
+      mac: null
+      addresses:
+        lan: 10.1.1.134
+      discovery:
+        vendor: null
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  mudpi:
+    status: changed
+    suggested_entry:
+      site: reid
+      description: check stale IP observations; multiple observed IPs
+      category: unknown
+      mac: 88:a2:9e:6e:8c:d4
+      addresses:
+        lan: 10.1.1.3
+      discovery:
+        vendor: (Unknown)
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  printer:
+    status: changed
+    suggested_entry:
+      site: reid
+      description: IPv4 differs from registry
+      category: printer
+      mac: 00:41:0e:fe:b0:84
+      addresses:
+        lan: 10.1.1.136
+      discovery:
+        vendor: CLOUD NETWORK TECHNOLOGY SINGAPORE PTE. LTD.
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
+  zappi:
+    status: changed
+    suggested_entry:
+      site: reid
+      description: IPv4 differs from registry
+      category: iot
+      mac: c0:49:ef:64:e9:a8
+      addresses:
+        lan: 10.1.1.103
+      discovery:
+        vendor: Espressif
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-03-31T12:01:28+11:00'
