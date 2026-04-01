@@ -171,6 +171,28 @@ sites:
       mode: none
 
 hosts:
+  # --- Network infrastructure ---
+  - name: router
+    site: reid
+    category: network
+    addressing: static-on-host
+    mac: "50:91:E3:38:03:E9"
+    addresses:
+      lan: 10.1.1.1
+    roles: [router, gateway]
+    notes: Primary LAN router (to be replaced by RUT241)
+
+  - name: vdsl-modem
+    site: reid
+    category: network
+    addressing: static-on-host
+    mac: "10:13:31:57:FA:00"
+    addresses:
+      lan: 10.1.1.2
+    roles: [modem, bridge]
+    notes: VDSL modem/bridge (Technicolor/Zyxel)
+
+  # gateway host
   - name: mudpi
     site: reid
     category: infrastructure
@@ -251,6 +273,16 @@ hosts:
     diagram:
       importance: secondary
 
+  # --- Security NVR (VIP Vision / Dahua) ---
+  - name: nvr
+    site: reid
+    category: security
+    addressing: dhcp-reservation
+    mac: "24:52:6A:25:BD:F4"
+    addresses:
+      lan: 10.1.1.178
+    roles: [nvr, video-recorder, security]
+    notes: VIP Vision NVR (Dahua OEM) for IP camera system
 
   # --- IP Cameras (Dahua) ---
   - name: cam-01
@@ -398,6 +430,217 @@ hosts:
       patch_panel: mudroom-main
       port: "19"
 
+  # --- Sonos devices ---
+  - name: sonos-workshop
+    site: reid
+    category: media
+    addressing: dhcp-reservation
+    mac: "48:A6:B8:28:BE:DE"
+    addresses:
+      lan: 10.1.1.114
+    roles: [audio, speaker]
+    notes: Sonos device
+
+  - name: sonos-mudroom
+    site: reid
+    category: media
+    addressing: dhcp-reservation
+    mac: "54:2A:1B:E6:63:03"
+    addresses:
+      lan: 10.1.1.115
+    roles: [audio, speaker]
+    notes: Sonos device
+
+  - name: sonos-spare
+    site: reid
+    category: media
+    addressing: dhcp-reservation
+    mac: "54:2A:1B:E6:68:8E"
+    addresses:
+      lan: 10.1.1.100
+    roles: [audio, speaker]
+    notes: Sonos device
+
+  # --- Irrigation controllers (Hydrawise) ---
+  - name: hydrawise-workshop
+    site: reid
+    category: iot
+    addressing: dhcp-reservation
+    mac: "F8:F0:05:A7:63:F6"
+    addresses:
+      lan: 10.1.1.124
+    roles: [irrigation-controller]
+    notes: Hydrawise irrigation controller in workshop (6 valves)
+
+  - name: hydrawise-main
+    site: reid
+    category: iot
+    addressing: dhcp-reservation
+    mac: "74:D5:C6:46:36:12" 
+    addresses:
+      lan: 10.1.1.130
+    roles: [irrigation-controller]
+    notes: Hydrawise irrigation controller next to terrace (18 valves, 24 port system)
+
+  # --- Home media / appliances ---
+  - name: appletv-lounge
+    site: reid
+    category: media
+    addressing: dhcp-reservation
+    mac: "8C:26:AA:C4:FF:2C"
+    addresses:
+      lan: 10.1.1.116
+    roles: [media-player, tv]
+    notes: Apple TV in lounge room
+
+  # --- Audio system (JBL soundbar) ---
+  - name: soundbar-lounge
+    site: reid
+    category: media
+    addressing: dhcp-reservation
+    mac: "A8:16:9D:3D:B3:0D"
+    addresses:
+      lan: 10.1.1.106
+    roles: [audio, soundbar, airplay]
+    notes: JBL Bar 300 soundbar (Harman / Linkplay platform)
+
+  # --- Television (Samsung) ---
+  - name: tv-french-room
+    site: reid
+    category: media
+    addressing: dhcp-reservation
+    mac: "84:C0:EF:63:46:08"
+    addresses:
+      lan: 10.1.1.131
+    roles: [tv, display, smart-tv]
+    notes: Samsung television in French Room
+
+  # --- Kitchen display tablet (Samsung) ---
+  - name: kitchen-display
+    site: reid
+    category: iot
+    addressing: dhcp-reservation
+    mac: "7C:91:22:41:87:D4"
+    addresses:
+      lan: 10.1.1.112
+    roles: [display, dashboard, energy-monitor]
+    notes: Samsung tablet in kitchen used for electricity consumption display, weather, and recipes
+
+  - name: irobot-vacuum
+    site: reid
+    category: iot
+    addressing: dhcp-reservation
+    mac: "50:14:79:FA:2C:A4"
+    addresses:
+      lan: 10.1.1.107
+    roles: [vacuum, robot]
+    notes: iRobot vacuum cleaner
+
+  # --- Home automation tablet ---
+  - name: myplace-tablet
+    site: reid
+    category: iot
+    addressing: dhcp-reservation
+    mac: "B6:29:43:61:D4:B6"
+    addresses:
+      lan: 10.1.1.109
+    roles: [home-automation-ui, tablet]
+    notes: Samsung Android tablet mounted in mudroom running MyPlace home automation UI
+
+  # --- Energy monitoring (Waveshare ESP32) ---
+  - name: energy-monitor
+    site: reid
+    category: iot
+    addressing: dhcp-reservation
+    mac: "30:ED:A0:D7:E3:FC"
+    addresses:
+      lan: 10.1.1.104
+    roles: [energy-monitor, esp32, relay-controller]
+    notes: Waveshare ESP32 electricity monitor with 6 relay outputs (mudroom cabinet)
+
+  # --- Weather station (ESP32) ---
+  - name: weather-station
+    site: reid
+    category: iot
+    addressing: dhcp-reservation
+    mac: "EC:64:C9:96:07:B4"
+    addresses:
+      lan: 10.1.1.111
+    roles: [weather-station, esp32, sensors]
+    notes: ESP32-based weather station mounted outside workshop on pole
+
+  # --- Custom hardware ---
+  - name: speaker-switch
+    site: reid
+    category: iot
+    addressing: dhcp-reservation
+    mac: "DE:AD:BE:EF:FE:ED"
+    addresses:
+      lan: 10.1.1.177
+    roles: [audio-switch, custom]
+    notes: Arduino-based 8-relay speaker switch (Ethernet shield) 
+
+  # --- ESP32 devices ---
+  - name: chain-counter
+    site: reid
+    category: iot
+    addressing: dhcp-reservation
+    mac: "24:0A:C4:F6:A0:7C"
+    addresses:
+      lan: 10.1.1.120
+    roles: [esp32]
+    notes: Experimental chain counter based on ESP32 
+
+  - name: solar-monitor
+    site: reid
+    category: iot
+    addressing: dhcp-reservation
+    mac: "24:0A:C4:F6:A7:3C"
+    addresses:
+      lan: 10.1.1.121
+    roles: [esp32]
+    notes: ESP32 solar production monitor scrapes data from   http://abbhub/plant.xm
+
+  - name: battery-temp
+    site: reid
+    category: iot
+    addressing: dhcp-reservation
+    mac: "10:97:BD:D3:F6:38"
+    addresses:
+      lan: 10.1.1.122
+    roles: [esp32]
+    notes: ESP32 experimental battery monitor
+
+  - name: wearable-01
+    site: reid
+    category: iot
+    addressing: dhcp-reservation
+    mac: "24:6F:28:B9:AF:2C"
+    addresses:
+      lan: 10.1.1.129
+    roles: [esp32]
+    notes: ESP32 wearable - currently not in use
+
+  - name: signal-generator
+    site: reid
+    category: iot
+    addressing: dhcp-reservation
+    mac: "E0:E2:E6:C0:B3:FC"
+    addresses:
+      lan: 10.1.1.128
+    roles: [signal-generator, esp32]
+    notes: ESP32-based signal generator in workshop
+
+  - name: dfrobot-edge101 
+    site: reid
+    category: iot
+    addressing: dhcp-reservation
+    mac: "80:F3:DA:6B:3C:74"
+    addresses:
+      lan: 10.1.1.133
+    roles: [signal-generator, esp32]
+    notes: ESP32-based signal generator in workshop
+
   - name: shedpi
     site: barkingowl
     category: infrastructure
@@ -534,3 +777,4 @@ patch_panels:
       "22": { kind: spare }
       "23": { kind: spare }
       "24": { kind: spare }
+

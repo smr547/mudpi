@@ -1,121 +1,124 @@
-Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-03-31 10:41 AEDT
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-03-31 13:33 AEDT
 Nmap scan report for 10.1.1.1
-Host is up (0.00029s latency).
+Host is up (0.00034s latency).
 MAC Address: 50:91:E3:38:03:E9 (Unknown)
 Nmap scan report for 10.1.1.2
-Host is up (0.00089s latency).
+Host is up (0.00093s latency).
 MAC Address: 10:13:31:57:FA:00 (Technicolor Delivery Technologies Belgium NV)
 Nmap scan report for 10.1.1.3
-Host is up (0.00085s latency).
+Host is up (0.00086s latency).
 MAC Address: 88:A2:9E:6E:8C:D4 (Unknown)
 Nmap scan report for 10.1.1.6
-Host is up (0.00088s latency).
+Host is up (0.00085s latency).
 MAC Address: 00:04:A3:F3:2D:FE (Microchip Technology)
 Nmap scan report for 10.1.1.20
-Host is up (0.00065s latency).
+Host is up (0.0013s latency).
 MAC Address: D8:3A:DD:2A:25:3F (Unknown)
 Nmap scan report for 10.1.1.30
-Host is up (0.23s latency).
+Host is up (0.26s latency).
 MAC Address: 88:A2:9E:19:07:69 (Unknown)
 Nmap scan report for 10.1.1.41
-Host is up (0.00045s latency).
+Host is up (0.00071s latency).
 MAC Address: 24:52:6A:34:6A:36 (Zhejiang Dahua Technology)
 Nmap scan report for 10.1.1.42
-Host is up (0.00053s latency).
+Host is up (0.00049s latency).
 MAC Address: 24:52:6A:34:69:F5 (Zhejiang Dahua Technology)
 Nmap scan report for 10.1.1.43
-Host is up (0.00092s latency).
+Host is up (0.00076s latency).
 MAC Address: 24:52:6A:34:69:C9 (Zhejiang Dahua Technology)
 Nmap scan report for 10.1.1.44
-Host is up (0.00024s latency).
+Host is up (0.00027s latency).
 MAC Address: 24:52:6A:34:6D:13 (Zhejiang Dahua Technology)
 Nmap scan report for 10.1.1.45
-Host is up (0.00021s latency).
+Host is up (0.00033s latency).
 MAC Address: 24:52:6A:34:69:73 (Zhejiang Dahua Technology)
 Nmap scan report for 10.1.1.46
-Host is up (0.00020s latency).
+Host is up (0.00023s latency).
 MAC Address: FC:B6:9D:9E:D1:E5 (Zhejiang Dahua Technology)
 Nmap scan report for 10.1.1.47
-Host is up (0.00033s latency).
+Host is up (0.00027s latency).
 MAC Address: 24:52:6A:34:6D:18 (Zhejiang Dahua Technology)
+Nmap scan report for 10.1.1.100
+Host is up (0.16s latency).
+MAC Address: CE:25:11:7C:E6:A7 (Unknown)
 Nmap scan report for 10.1.1.101
-Host is up (0.059s latency).
+Host is up (0.13s latency).
 MAC Address: 24:6F:28:B9:AF:2C (Espressif)
 Nmap scan report for 10.1.1.102
-Host is up (0.28s latency).
+Host is up (0.22s latency).
 MAC Address: 90:BF:D9:28:DE:E8 (Unknown)
 Nmap scan report for 10.1.1.103
-Host is up (1.5s latency).
+Host is up (0.0018s latency).
 MAC Address: C0:49:EF:64:E9:A8 (Espressif)
 Nmap scan report for 10.1.1.104
-Host is up (0.24s latency).
+Host is up (0.22s latency).
 MAC Address: 30:ED:A0:D7:E3:FC (Unknown)
 Nmap scan report for 10.1.1.106
-Host is up (0.079s latency).
+Host is up (0.080s latency).
 MAC Address: A8:16:9D:3D:B3:0D (Hui Zhou Gaoshengda Technology)
 Nmap scan report for 10.1.1.107
-Host is up (0.24s latency).
+Host is up (0.14s latency).
 MAC Address: 50:14:79:FA:2C:A4 (iRobot)
 Nmap scan report for 10.1.1.108
-Host is up (0.24s latency).
+Host is up (0.054s latency).
 MAC Address: B0:99:D7:4B:00:94 (Samsung Electronics)
 Nmap scan report for 10.1.1.109
-Host is up (1.3s latency).
+Host is up.
 MAC Address: B6:29:43:61:D4:B6 (Unknown)
+Nmap scan report for 10.1.1.110
+Host is up (0.013s latency).
+MAC Address: B2:D1:BB:C4:23:E2 (Unknown)
 Nmap scan report for 10.1.1.111
 Host is up (0.23s latency).
 MAC Address: EC:64:C9:96:07:B4 (Unknown)
 Nmap scan report for 10.1.1.112
-Host is up (0.056s latency).
+Host is up (0.0023s latency).
 MAC Address: 7C:91:22:41:87:D4 (Samsung Electronics)
 Nmap scan report for 10.1.1.113
-Host is up (0.0018s latency).
+Host is up (0.00098s latency).
 MAC Address: F4:92:BF:C3:40:24 (Ubiquiti Networks)
 Nmap scan report for 10.1.1.114
-Host is up (0.00058s latency).
+Host is up (0.00097s latency).
 MAC Address: 48:A6:B8:28:BE:DE (Sonos)
 Nmap scan report for 10.1.1.115
-Host is up (0.00020s latency).
+Host is up (0.00022s latency).
 MAC Address: 54:2A:1B:E6:63:03 (Sonos)
 Nmap scan report for 10.1.1.116
-Host is up (0.20s latency).
+Host is up (0.13s latency).
 MAC Address: 8C:26:AA:C4:FF:2C (Unknown)
 Nmap scan report for 10.1.1.117
-Host is up (0.00041s latency).
+Host is up (0.00065s latency).
 MAC Address: 74:AC:B9:69:7E:6E (Ubiquiti Networks)
 Nmap scan report for 10.1.1.118
-Host is up (0.00082s latency).
+Host is up (0.0013s latency).
 MAC Address: 74:AC:B9:69:7C:62 (Ubiquiti Networks)
-Nmap scan report for 10.1.1.122
-Host is up (0.20s latency).
-MAC Address: 10:97:BD:D3:F6:38 (Espressif)
 Nmap scan report for 10.1.1.123
-Host is up (0.00047s latency).
+Host is up (0.0060s latency).
 MAC Address: 74:AC:B9:69:80:42 (Ubiquiti Networks)
 Nmap scan report for 10.1.1.124
-Host is up (0.013s latency).
+Host is up (0.097s latency).
 MAC Address: F8:F0:05:A7:63:F6 (Newport Media)
 Nmap scan report for 10.1.1.125
-Host is up (0.049s latency).
+Host is up (0.077s latency).
 MAC Address: 8C:86:1E:C4:4E:6F (Apple)
 Nmap scan report for 10.1.1.128
-Host is up (0.31s latency).
+Host is up (0.29s latency).
 MAC Address: E0:E2:E6:C0:B3:FC (Espressif)
 Nmap scan report for 10.1.1.129
-Host is up (0.0019s latency).
+Host is up (0.0032s latency).
 MAC Address: 88:A2:9E:6E:8C:D5 (Unknown)
 Nmap scan report for 10.1.1.130
-Host is up (0.24s latency).
+Host is up (0.28s latency).
 MAC Address: 74:D5:C6:46:36:12 (Unknown)
 Nmap scan report for 10.1.1.136
-Host is up (0.56s latency).
+Host is up (0.26s latency).
 MAC Address: 00:41:0E:FE:B0:84 (Cloud Network Technology Singapore PTE.)
 Nmap scan report for 10.1.1.177
-Host is up (0.00012s latency).
+Host is up (0.00046s latency).
 MAC Address: DE:AD:BE:EF:FE:ED (Unknown)
 Nmap scan report for 10.1.1.178
-Host is up (0.0017s latency).
+Host is up (0.0015s latency).
 MAC Address: 24:52:6A:25:BD:F4 (Zhejiang Dahua Technology)
 Nmap scan report for 10.1.1.134
 Host is up.
-Nmap done: 256 IP addresses (40 hosts up) scanned in 16.22 seconds
+Nmap done: 256 IP addresses (41 hosts up) scanned in 3.30 seconds
