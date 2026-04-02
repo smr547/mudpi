@@ -1,185 +1,160 @@
-generated_at: '2026-04-01T14:18:22+11:00'
+generated_at: '2026-04-02T10:48:27+11:00'
 site: reid
 candidates:
-  unknown-10-1-1-129:
-    status: unknown
-    suggested_entry:
-      site: reid
-      description: Auto-discovered device
-      category: unknown
-      mac: 88:a2:9e:6e:8c:d5
-      addresses:
-        lan: 10.1.1.129
-      discovery:
-        vendor: '(Unknown) (DUP: 3)'
-        observed_hostnames: []
-        mdns_names: []
-        last_seen: '2026-04-01T14:18:22+11:00'
-  unknown-10-1-1-125:
-    status: unknown
-    suggested_entry:
-      site: reid
-      description: Auto-discovered device
-      category: media
-      mac: 8c:86:1e:c4:4e:6f
-      addresses:
-        lan: 10.1.1.125
-      discovery:
-        vendor: Apple, Inc.
-        observed_hostnames: []
-        mdns_names: []
-        last_seen: '2026-04-01T14:18:22+11:00'
   unknown-10-1-1-108:
     status: unknown
     suggested_entry:
       site: reid
       description: Auto-discovered device
       category: media
-      mac: b0:99:d7:4b:00:94
       addresses:
         lan: 10.1.1.108
       discovery:
         vendor: Samsung Electronics Co.,Ltd
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-01T14:18:22+11:00'
+        last_seen: '2026-04-02T10:48:27+11:00'
+      mac: b0:99:d7:4b:00:94
   unknown-10-1-1-102:
     status: unknown
     suggested_entry:
       site: reid
       description: Auto-discovered device
       category: unknown
-      mac: 90:bf:d9:28:de:e8
       addresses:
         lan: 10.1.1.102
       discovery:
         vendor: (Unknown)
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-01T14:18:22+11:00'
-  unknown-10-1-1-110:
-    status: unknown
-    suggested_entry:
-      site: reid
-      description: locally administered MAC
-      category: unknown
-      mac: b2:d1:bb:c4:23:e2
-      addresses:
-        lan: 10.1.1.110
-      discovery:
-        vendor: '(Unknown: locally administered)'
-        observed_hostnames: []
-        mdns_names: []
-        last_seen: '2026-04-01T14:18:22+11:00'
-  unknown-10-1-1-134:
-    status: unknown
-    suggested_entry:
-      site: reid
-      description: Auto-discovered device
-      category: unknown
-      mac: null
-      addresses:
-        lan: 10.1.1.134
-      discovery:
-        vendor: null
-        observed_hostnames: []
-        mdns_names: []
-        last_seen: '2026-04-01T14:18:22+11:00'
+        last_seen: '2026-04-02T10:48:27+11:00'
+      mac: 90:bf:d9:28:de:e8
   mudpi:
     status: changed
     suggested_entry:
       site: reid
-      description: check stale IP observations; multiple observed IPs
+      description: 'matched via alternate registry MAC: 88:a2:9e:6e:8c:d5; multi-homed
+        host observed; multiple observed IPs'
       category: unknown
-      mac: 88:a2:9e:6e:8c:d4
       addresses:
-        lan: 10.1.1.3
+        lan: 10.1.1.129, 10.1.1.3
       discovery:
-        vendor: (Unknown)
+        vendor: '(Unknown), (Unknown) (DUP: 2), (Unknown) (DUP: 3), Unknown'
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-01T14:18:22+11:00'
+        last_seen: '2026-04-02T10:48:27+11:00'
+      mac: 88:a2:9e:6e:8c:d4
   printer:
     status: changed
     suggested_entry:
       site: reid
-      description: IPv4 differs from registry
+      description: 'unregistered IP observed: 10.1.1.136'
       category: printer
-      mac: 00:41:0e:fe:b0:84
       addresses:
         lan: 10.1.1.136
       discovery:
-        vendor: CLOUD NETWORK TECHNOLOGY SINGAPORE PTE. LTD.
+        vendor: CLOUD NETWORK TECHNOLOGY SINGAPORE PTE. LTD., Cloud Network Technology
+          Singapore PTE.
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-01T14:18:22+11:00'
+        last_seen: '2026-04-02T10:48:27+11:00'
+      mac: 00:41:0e:fe:b0:84
   zappi:
     status: changed
     suggested_entry:
       site: reid
-      description: IPv4 differs from registry
+      description: 'unregistered IP observed: 10.1.1.103'
       category: iot
-      mac: c0:49:ef:64:e9:a8
       addresses:
         lan: 10.1.1.103
       discovery:
         vendor: Espressif
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-01T14:18:22+11:00'
+        last_seen: '2026-04-02T10:48:27+11:00'
+      mac: c0:49:ef:64:e9:a8
+  irene-iphone:
+    status: changed
+    suggested_entry:
+      site: reid
+      description: 'matched by IP only: 10.1.1.125; unregistered MAC observed: 8c:86:1e:c4:4e:6f'
+      category: media
+      addresses:
+        lan: 10.1.1.125
+      discovery:
+        vendor: Apple, Apple, Inc.
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-04-02T10:48:27+11:00'
+      mac: 8c:86:1e:c4:4e:6f
   sonos-spare:
     status: changed
     suggested_entry:
       site: reid
-      description: MAC mismatch; locally administered MAC; matched by IP only
+      description: 'locally administered MAC; matched by IP only: 10.1.1.100; unregistered
+        MAC observed: ce:25:11:7c:e6:a7'
       category: unknown
-      mac: ce:25:11:7c:e6:a7
       addresses:
         lan: 10.1.1.100
       discovery:
-        vendor: '(Unknown: locally administered)'
+        vendor: '(Unknown: locally administered), Unknown'
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-01T14:18:22+11:00'
+        last_seen: '2026-04-02T10:48:27+11:00'
+      mac: ce:25:11:7c:e6:a7
   myplace-tablet:
     status: changed
     suggested_entry:
       site: reid
       description: locally administered MAC
       category: unknown
-      mac: b6:29:43:61:d4:b6
       addresses:
         lan: 10.1.1.109
       discovery:
         vendor: Unknown
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-01T14:18:22+11:00'
+        last_seen: '2026-04-02T10:48:27+11:00'
+      mac: b6:29:43:61:d4:b6
   speaker-switch:
     status: changed
     suggested_entry:
       site: reid
       description: locally administered MAC
       category: unknown
-      mac: de:ad:be:ef:fe:ed
       addresses:
         lan: 10.1.1.177
       discovery:
-        vendor: '(Unknown: locally administered)'
+        vendor: '(Unknown: locally administered), Unknown'
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-01T14:18:22+11:00'
+        last_seen: '2026-04-02T10:48:27+11:00'
+      mac: de:ad:be:ef:fe:ed
   wearable-01:
     status: changed
     suggested_entry:
       site: reid
-      description: IPv4 differs from registry
+      description: 'unregistered IP observed: 10.1.1.101'
       category: iot
-      mac: 24:6f:28:b9:af:2c
       addresses:
         lan: 10.1.1.101
       discovery:
-        vendor: Espressif Inc.
+        vendor: Espressif, Espressif Inc.
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-01T14:18:22+11:00'
+        last_seen: '2026-04-02T10:48:27+11:00'
+      mac: 24:6f:28:b9:af:2c
+  irene-macbook:
+    status: changed
+    suggested_entry:
+      site: reid
+      description: locally administered MAC
+      category: unknown
+      addresses:
+        lan: 10.1.1.110
+      discovery:
+        vendor: '(Unknown: locally administered), Unknown'
+        observed_hostnames: []
+        mdns_names: []
+        last_seen: '2026-04-02T10:48:27+11:00'
+      mac: b2:d1:bb:c4:23:e2

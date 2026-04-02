@@ -193,20 +193,25 @@ hosts:
     notes: VDSL modem/bridge (Technicolor/Zyxel)
 
   # gateway host
+  #
+  # gateway host
   - name: mudpi
     site: reid
     category: infrastructure
     addressing: static-on-host
-    mac: "88:A2:9E:6E:8C:D4"
+    macs:
+      ethernet: "88:A2:9E:6E:8C:D4"
+      wifi: "88:A2:9E:6E:8C:D5"
     addresses:
       lan: 10.1.1.3
+      wifi: 10.1.1.129
       vpn: 10.8.1.1
     roles: [wireguard-hub, dns, dhcp, ntp-stratum1, dynamic-dns]
     dns:
       canonical: mudpi.reid.home.arpa
-      aliases: 
+      aliases:
         - mudpi.vpn.home.arpa
-    notes: Infrastructure control-plane node
+    notes: Infrastructure control-plane node; wlan0 has also acquired DHCP address 10.1.1.129 on the Reid LAN
     diagram:
       importance: primary
 
@@ -430,6 +435,50 @@ hosts:
       patch_panel: mudroom-main
       port: "19"
 
+
+  # --- Personal workstation (Steven's laptop) ---
+  - name: stevenlaptop
+    site: reid
+    category: workstation
+    addressing: dhcp-reservation
+    macs:
+      ethernet: "80:3F:5D:F4:44:B6"
+      wifi: "D4:D8:53:AA:84:D5"
+    addresses:
+      lan: 10.1.1.134
+      wifi: 10.1.1.132
+    roles: [workstation, admin]
+    notes: Steven's Lenovo Yoga laptop (Kubuntu); dual-homed Ethernet + WiFi
+
+
+  - irene-iphone:
+    site: reid
+    description: Irene's iPhone
+    category: personal
+    roles: [mobile]
+    macs:
+      wifi: "f0:d7:93:32:00:69"
+    addresses:
+      lan: 10.1.1.105
+    dns:
+      canonical: irene-iphone.reid.home.arpa
+      aliases:
+        - irene-phone
+
+  - irene-iphone:
+    site: reid
+    description: Stens's iPhone
+    category: personal
+    roles: [mobile]
+    macs:
+      wifi: "8C:86:1E:C4:4E:7F"
+    addresses:
+      lan: 10.1.1.125
+    dns:
+      canonical: irene-iphone.reid.home.arpa
+      aliases:
+        - irene-phone
+
   # --- Sonos devices ---
   - name: sonos-workshop
     site: reid
@@ -617,7 +666,7 @@ hosts:
     addressing: dhcp-reservation
     mac: "24:6F:28:B9:AF:2C"
     addresses:
-      lan: 10.1.1.129
+      lan: 10.1.1.135
     roles: [esp32]
     notes: ESP32 wearable - currently not in use
 
@@ -640,6 +689,21 @@ hosts:
       lan: 10.1.1.133
     roles: [signal-generator, esp32]
     notes: ESP32-based signal generator in workshop
+
+  - name: irene-macbook
+    site: reid
+    description: Irene's MacBook Pro
+    category: personal
+    roles: [laptop]
+    macs:
+      wifi: "b2:d1:bb:c4:23:e2"
+    addresses:
+      lan: 10.1.1.110
+    dns:
+      canonical: irene-macbook.reid.home.arpa
+      aliases:
+        - irene-laptop
+    notes: macOS device; currently using locally administered (private) MAC address on WiFi
 
   - name: shedpi
     site: barkingowl
@@ -716,6 +780,8 @@ hosts:
     notes: Sten's roaming laptop
     diagram:
       importance: secondary
+
+
 
 forwarding:
   mudpi:

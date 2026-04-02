@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 """Discover live network devices and compare them with network-registry.yaml.
 
-v3 goals:
+v5 goals:
 - Correctly load the current MudPi registry schema:
     * hosts as a list of host objects
     * host identity from name/id/hostname
-    * LAN IP from addresses.lan
-    * VPN IP from addresses.vpn
-    * MAC from top-level mac
+    * host MAC identity from either top-level mac or top-level macs mapping
+    * multiple IPv4 addresses from addresses.* mappings (e.g. lan, wifi, vpn)
 - Parse arp-scan, ip -br neigh, nmap -sn output, optional dnsmasq leases, optional avahi browse output
 - Merge observations by MAC address where possible
 - Prefer stronger evidence sources when consolidating IP/vendor/hostname data
-- Compare observations with registry hosts for a site
+- Compare observations with registry hosts for a site, including multi-homed hosts
 - Emit:
     * console summary
     * Markdown report
@@ -52,6 +51,7 @@ SOURCE_PRIORITY = {
     "nmap": 40,
 }
 
+
 def source_rank(name: str) -> int:
     return SOURCE_PRIORITY.get(name, 0)
 
@@ -67,7 +67,6 @@ class ObservedDevice:
     sources: Set[str] = field(default_factory=set)
     notes: Set[str] = field(default_factory=set)
 
-    # evidence maps preserve source-specific values so we can prefer stronger sources
     ip_sources: Dict[str, Set[str]] = field(default_factory=dict)
     vendor_sources: Dict[str, Set[str]] = field(default_factory=dict)
     hostname_sources: Dict[str, Set[str]] = field(default_factory=dict)
@@ -132,19 +131,23 @@ class ObservedDevice:
     def best_ip(self) -> Optional[str]:
         if not self.ips:
             return None
+
         def key(ip: str) -> Tuple[int, int, str]:
             sources = self.ip_sources.get(ip, set())
             best = max((source_rank(s) for s in sources), default=0)
             return (best, len(sources), ip)
+
         return sorted(self.ips, key=key, reverse=True)[0]
 
     def best_vendor(self) -> Optional[str]:
         if not self.vendors:
             return None
+
         def key(vendor: str) -> Tuple[int, int, str]:
             sources = self.vendor_sources.get(vendor, set())
             best = max((source_rank(s) for s in sources), default=0)
             return (best, len(sources), vendor)
+
         return sorted(self.vendors, key=key, reverse=True)[0]
 
 
@@ -155,12 +158,35 @@ class RegistryHost:
     description: str
     category: str
     roles: List[str]
-    ipv4: Optional[str]
+    lan_ipv4: Optional[str]
     vpn_ipv4: Optional[str]
-    mac: Optional[str]
+    addresses: Dict[str, str]
+    macs: Dict[str, str]
     dns_canonical: Optional[str]
     dns_aliases: List[str]
     raw: Dict[str, Any]
+
+    @property
+    def primary_mac(self) -> Optional[str]:
+        if not self.macs:
+            return None
+        for preferred_key in ("ethernet", "lan", "wifi", "wlan", "primary"):
+            if preferred_key in self.macs:
+                return self.macs[preferred_key]
+        return next(iter(self.macs.values()))
+
+    @property
+    def mac_list(self) -> List[str]:
+        return list(self.macs.values())
+
+    @property
+    def ipv4_list(self) -> List[str]:
+        return list(self.addresses.values())
+
+    def format_macs(self) -> str:
+        if not self.macs:
+            return ""
+        return ", ".join(f"{name}={mac}" for name, mac in self.macs.items())
 
 
 @dataclass
@@ -169,7 +195,7 @@ class ComparisonRow:
     host_id: Optional[str]
     registry_ip: Optional[str]
     observed_ip: Optional[str]
-    registry_mac: Optional[str]
+    registry_macs: List[str]
     observed_mac: Optional[str]
     vendor: Optional[str]
     hostnames: List[str]
@@ -198,7 +224,6 @@ class DeviceIndex:
             entry = self.by_mac.setdefault(device.mac, ObservedDevice(mac=device.mac))
             entry.merge(device)
         else:
-            # ignore records with neither MAC nor IP
             if not device.ips:
                 return
             for ip in device.ips:
@@ -255,54 +280,97 @@ def _extract_addresses_mapping(host: Dict[str, Any]) -> Dict[str, Any]:
     return {}
 
 
-def extract_ipv4_and_mac(host: Dict[str, Any]) -> Tuple[Optional[str], Optional[str], Optional[str]]:
-    # Preferred/current MudPi shape
-    addresses = _extract_addresses_mapping(host)
-    lan_ip = addresses.get("lan")
-    vpn_ip = addresses.get("vpn")
-    if isinstance(lan_ip, dict):
-        lan_ip = lan_ip.get("ipv4") or lan_ip.get("ip")
-    if isinstance(vpn_ip, dict):
-        vpn_ip = vpn_ip.get("ipv4") or vpn_ip.get("ip")
+def normalize_address_value(value: Any) -> Optional[str]:
+    if isinstance(value, dict):
+        value = value.get("ipv4") or value.get("ip")
+    if isinstance(value, str) and is_valid_ipv4(value):
+        return value
+    return None
 
-    # Backward-compatible fallbacks
+
+def extract_host_addresses(host: Dict[str, Any]) -> Dict[str, str]:
+    extracted: Dict[str, str] = {}
+    addresses = _extract_addresses_mapping(host)
+    for key, value in addresses.items():
+        normalized = normalize_address_value(value)
+        if normalized:
+            extracted[str(key)] = normalized
+
+    if "lan" not in extracted:
+        direct = normalize_address_value(host.get("ip")) or normalize_address_value(host.get("ipv4"))
+        if direct:
+            extracted["lan"] = direct
+
     network = host.get("network")
-    if (not lan_ip or not host.get("mac")) and isinstance(network, dict):
+    if isinstance(network, dict):
         lan = network.get("lan")
-        if isinstance(lan, dict):
-            lan_ip = lan_ip or lan.get("ipv4") or lan.get("ip")
-            fallback_mac = lan.get("mac")
-        else:
-            fallback_mac = None
-    else:
-        fallback_mac = None
+        normalized = normalize_address_value(lan)
+        if normalized:
+            extracted.setdefault("lan", normalized)
 
     interfaces = host.get("interfaces")
-    if not lan_ip and isinstance(interfaces, dict):
+    if isinstance(interfaces, dict):
+        lan = interfaces.get("lan")
+        normalized = normalize_address_value(lan)
+        if normalized:
+            extracted.setdefault("lan", normalized)
+    elif isinstance(interfaces, list):
+        for item in interfaces:
+            if not isinstance(item, dict):
+                continue
+            name = str(item.get("name", "")).lower()
+            normalized = normalize_address_value(item)
+            if name and normalized:
+                extracted.setdefault(name, normalized)
+
+    return extracted
+
+
+def extract_host_macs(host: Dict[str, Any], fallback_mac: Optional[str] = None) -> Dict[str, str]:
+    extracted: Dict[str, str] = {}
+
+    macs = host.get("macs")
+    if isinstance(macs, dict):
+        for key, value in macs.items():
+            normalized = normalize_mac(value)
+            if normalized:
+                extracted[str(key)] = normalized
+
+    top_mac = normalize_mac(host.get("mac"))
+    if top_mac and top_mac not in extracted.values():
+        extracted.setdefault("primary", top_mac)
+
+    fallback = normalize_mac(fallback_mac)
+    if fallback and fallback not in extracted.values():
+        extracted.setdefault("fallback", fallback)
+
+    return extracted
+
+
+def extract_host_identity(host: Dict[str, Any]) -> Tuple[Dict[str, str], Dict[str, str]]:
+    fallback_mac: Optional[str] = None
+
+    network = host.get("network")
+    if isinstance(network, dict):
+        lan = network.get("lan")
+        if isinstance(lan, dict):
+            fallback_mac = lan.get("mac")
+
+    interfaces = host.get("interfaces")
+    if isinstance(interfaces, dict):
         lan = interfaces.get("lan")
         if isinstance(lan, dict):
-            lan_ip = lan.get("ipv4") or lan.get("ip")
             fallback_mac = fallback_mac or lan.get("mac")
-    elif not lan_ip and isinstance(interfaces, list):
+    elif isinstance(interfaces, list):
         for item in interfaces:
             if not isinstance(item, dict):
                 continue
             name = str(item.get("name", "")).lower()
             if name == "lan":
-                lan_ip = item.get("ipv4") or item.get("ip")
                 fallback_mac = fallback_mac or item.get("mac")
                 break
 
-    if not lan_ip:
-        lan_ip = host.get("ip") or host.get("ipv4")
-    mac = normalize_mac(host.get("mac")) or normalize_mac(fallback_mac)
-
-    if isinstance(lan_ip, str) and not is_valid_ipv4(lan_ip):
-        lan_ip = None
-    if isinstance(vpn_ip, str) and not is_valid_ipv4(vpn_ip):
-        vpn_ip = None
-
-    return lan_ip, vpn_ip, mac
+    return extract_host_addresses(host), extract_host_macs(host, fallback_mac=fallback_mac)
 
 
 def load_registry(path: Path) -> Tuple[Dict[str, Any], Dict[str, RegistryHost]]:
@@ -336,7 +404,8 @@ def load_registry(path: Path) -> Tuple[Dict[str, Any], Dict[str, RegistryHost]]:
     for host_id, raw in host_items:
         if not isinstance(raw, dict):
             continue
-        ipv4, vpn_ipv4, mac = extract_ipv4_and_mac(raw)
+
+        addresses, macs = extract_host_identity(raw)
         dns = raw.get("dns", {}) if isinstance(raw.get("dns"), dict) else {}
         rh = RegistryHost(
             host_id=str(host_id),
@@ -344,23 +413,25 @@ def load_registry(path: Path) -> Tuple[Dict[str, Any], Dict[str, RegistryHost]]:
             description=str(raw.get("description") or raw.get("notes") or ""),
             category=str(raw.get("category", "unknown")),
             roles=[str(x) for x in raw.get("roles", [])] if isinstance(raw.get("roles"), list) else [],
-            ipv4=ipv4,
-            vpn_ipv4=vpn_ipv4,
-            mac=mac,
+            lan_ipv4=addresses.get("lan"),
+            vpn_ipv4=addresses.get("vpn"),
+            addresses=addresses,
+            macs=macs,
             dns_canonical=dns.get("canonical"),
             dns_aliases=[str(x) for x in dns.get("aliases", [])] if isinstance(dns.get("aliases"), list) else [],
             raw=raw,
         )
         loaded[rh.host_id] = rh
 
-        if rh.mac:
-            if rh.mac in seen_macs:
-                raise ValueError(f"Duplicate MAC in registry: {rh.mac} on {seen_macs[rh.mac]} and {rh.host_id}")
-            seen_macs[rh.mac] = rh.host_id
-        if rh.ipv4:
-            if rh.ipv4 in seen_ips:
-                raise ValueError(f"Duplicate IPv4 in registry: {rh.ipv4} on {seen_ips[rh.ipv4]} and {rh.host_id}")
-            seen_ips[rh.ipv4] = rh.host_id
+        for mac in rh.mac_list:
+            if mac in seen_macs:
+                raise ValueError(f"Duplicate MAC in registry: {mac} on {seen_macs[mac]} and {rh.host_id}")
+            seen_macs[mac] = rh.host_id
+
+        for ip in rh.ipv4_list:
+            if ip in seen_ips:
+                raise ValueError(f"Duplicate IPv4 in registry: {ip} on {seen_ips[ip]} and {rh.host_id}")
+            seen_ips[ip] = rh.host_id
 
     return data, loaded
 
@@ -523,7 +594,11 @@ def apply_overrides(index: DeviceIndex, overrides_path: Optional[Path]) -> None:
                 target.notes.add(f"{field_name}:{val}")
 
 
-def compare_registry_to_observed(registry_hosts: Dict[str, RegistryHost], index: DeviceIndex, site: Optional[str] = None) -> ComparisonResult:
+def compare_registry_to_observed(
+    registry_hosts: Dict[str, RegistryHost],
+    index: DeviceIndex,
+    site: Optional[str] = None,
+) -> ComparisonResult:
     result = ComparisonResult()
     matched_observed_ids: Set[str] = set()
 
@@ -537,22 +612,41 @@ def compare_registry_to_observed(registry_hosts: Dict[str, RegistryHost], index:
     }
 
     for host in filtered_registry.values():
-        dev: Optional[ObservedDevice] = None
+        matched_devices: List[ObservedDevice] = []
         notes: List[str] = []
-        if host.mac and host.mac in index.by_mac:
-            dev = index.by_mac[host.mac]
-        elif host.ipv4:
-            dev = index.find_by_ip(host.ipv4)
-            if dev:
-                notes.append("matched by IP only")
+        seen_dev_keys: Set[str] = set()
 
-        if not dev:
+        for mac in host.mac_list:
+            dev = index.by_mac.get(mac)
+            if not dev:
+                continue
+            key = observed_key(dev)
+            if key in seen_dev_keys:
+                continue
+            matched_devices.append(dev)
+            seen_dev_keys.add(key)
+            if mac != host.primary_mac:
+                notes.append(f"matched via alternate registry MAC: {mac}")
+
+        for ip in host.ipv4_list:
+            dev = index.find_by_ip(ip)
+            if not dev:
+                continue
+            key = observed_key(dev)
+            if key in seen_dev_keys:
+                continue
+            matched_devices.append(dev)
+            seen_dev_keys.add(key)
+            if dev.mac and dev.mac not in host.mac_list:
+                notes.append(f"matched by IP only: {ip}")
+
+        if not matched_devices:
             result.missing.append(ComparisonRow(
                 status="missing",
                 host_id=host.host_id,
-                registry_ip=host.ipv4,
+                registry_ip=", ".join(host.ipv4_list) if host.ipv4_list else None,
                 observed_ip=None,
-                registry_mac=host.mac,
+                registry_macs=host.mac_list,
                 observed_mac=None,
                 vendor=None,
                 hostnames=[],
@@ -562,35 +656,43 @@ def compare_registry_to_observed(registry_hosts: Dict[str, RegistryHost], index:
             ))
             continue
 
-        matched_observed_ids.add(observed_key(dev))
-        observed_ip = dev.best_ip()
-        observed_mac = dev.mac
-        vendor = dev.best_vendor()
+        for dev in matched_devices:
+            matched_observed_ids.add(observed_key(dev))
 
-        if host.mac and observed_mac and host.mac != observed_mac:
-            notes.append("MAC mismatch")
-        if host.ipv4 and observed_ip and host.ipv4 != observed_ip:
-            notes.append("IPv4 differs from registry")
-        if dev.mac_type == "locally_administered":
+        observed_ips = sorted({ip for dev in matched_devices for ip in dev.ips})
+        observed_macs = sorted({dev.mac for dev in matched_devices if dev.mac})
+        hostnames = sorted({name for dev in matched_devices for name in dev.hostnames})
+        mdns_names = sorted({name for dev in matched_devices for name in dev.mdns_names})
+        vendors = sorted({vendor for dev in matched_devices for vendor in dev.vendors})
+
+        for mac in observed_macs:
+            if mac not in host.mac_list:
+                notes.append(f"unregistered MAC observed: {mac}")
+
+        for ip in observed_ips:
+            if ip not in host.ipv4_list:
+                notes.append(f"unregistered IP observed: {ip}")
+
+        if any(dev.mac_type == "locally_administered" for dev in matched_devices if dev.mac):
             notes.append("locally administered MAC")
-        if len(dev.ips) > 1:
+        if len(matched_devices) > 1:
+            notes.append("multi-homed host observed")
+        if len(observed_ips) > 1:
             notes.append("multiple observed IPs")
-        if len({ip for ip in dev.ips if is_valid_ipv4(ip)}) > 1:
-            notes.append("check stale IP observations")
 
         row = ComparisonRow(
             status="changed" if notes else "matched",
             host_id=host.host_id,
-            registry_ip=host.ipv4,
-            observed_ip=observed_ip,
-            registry_mac=host.mac,
-            observed_mac=observed_mac,
-            vendor=vendor,
-            hostnames=sorted(dev.hostnames),
-            mdns_names=sorted(dev.mdns_names),
+            registry_ip=", ".join(host.ipv4_list) if host.ipv4_list else None,
+            observed_ip=", ".join(observed_ips) if observed_ips else None,
+            registry_macs=host.mac_list,
+            observed_mac=", ".join(observed_macs) if observed_macs else None,
+            vendor=", ".join(vendors) if vendors else None,
+            hostnames=hostnames,
+            mdns_names=mdns_names,
             notes=sorted(set(notes)),
             raw_registry=host,
-            raw_observed=dev,
+            raw_observed=matched_devices[0] if matched_devices else None,
         )
         if notes:
             result.changed.append(row)
@@ -612,7 +714,7 @@ def compare_registry_to_observed(registry_hosts: Dict[str, RegistryHost], index:
             host_id=None,
             registry_ip=None,
             observed_ip=observed_ip,
-            registry_mac=None,
+            registry_macs=[],
             observed_mac=dev.mac,
             vendor=vendor,
             hostnames=sorted(dev.hostnames),
@@ -658,7 +760,7 @@ def emit_markdown_report(result: ComparisonResult, path: Path, site: str, cidr: 
                 r.host_id or "",
                 r.registry_ip or "",
                 r.observed_ip or "",
-                r.registry_mac or "",
+                ", ".join(r.registry_macs),
                 r.observed_mac or "",
                 r.vendor or "",
                 ", ".join(r.hostnames),
@@ -667,7 +769,7 @@ def emit_markdown_report(result: ComparisonResult, path: Path, site: str, cidr: 
             ])
         return rows
 
-    headers = ["Host", "Registry IP", "Observed IP", "Registry MAC", "Observed MAC", "Vendor", "Hostnames", "mDNS", "Notes"]
+    headers = ["Host", "Registry IP", "Observed IP", "Registry MACs", "Observed MAC", "Vendor", "Hostnames", "mDNS", "Notes"]
     for title, items in [("Changed", result.changed), ("Unknown", result.unknown), ("Missing", result.missing), ("Matched", result.matched)]:
         sections.append(f"## {title}\n")
         sections.append(_markdown_table(headers, rows_from(items)) if items else "None.\n")
@@ -684,7 +786,8 @@ def suggested_host_id(row: ComparisonRow) -> str:
     if row.observed_ip:
         return f"unknown-{row.observed_ip.replace('.', '-')}"
     if row.observed_mac:
-        return f"unknown-{row.observed_mac.replace(':', '')[-6:]}"
+        mac_tail = row.observed_mac.split(",")[0].replace(":", "")[-6:]
+        return f"unknown-{mac_tail}"
     return "unknown-device"
 
 
@@ -711,21 +814,30 @@ def emit_candidate_yaml(result: ComparisonResult, path: Path, site: str, generat
     candidates: Dict[str, Any] = {"generated_at": generated_at, "site": site, "candidates": {}}
     for row in result.unknown + result.changed:
         host_id = row.host_id or suggested_host_id(row)
+        suggested_entry: Dict[str, Any] = {
+            "site": site,
+            "description": "Auto-discovered device" if not row.notes else "; ".join(row.notes),
+            "category": classify_vendor(row.vendor),
+            "addresses": {"lan": row.observed_ip or row.registry_ip},
+            "discovery": {
+                "vendor": row.vendor,
+                "observed_hostnames": row.hostnames,
+                "mdns_names": row.mdns_names,
+                "last_seen": generated_at,
+            },
+        }
+
+        chosen_mac = None
+        if row.observed_mac:
+            chosen_mac = row.observed_mac.split(",")[0].strip()
+        elif row.registry_macs:
+            chosen_mac = row.registry_macs[0]
+        if chosen_mac:
+            suggested_entry["mac"] = chosen_mac
+
         candidates["candidates"][host_id] = {
             "status": row.status,
-            "suggested_entry": {
-                "site": site,
-                "description": "Auto-discovered device" if not row.notes else "; ".join(row.notes),
-                "category": classify_vendor(row.vendor),
-                "mac": row.observed_mac or row.registry_mac,
-                "addresses": {"lan": row.observed_ip or row.registry_ip},
-                "discovery": {
-                    "vendor": row.vendor,
-                    "observed_hostnames": row.hostnames,
-                    "mdns_names": row.mdns_names,
-                    "last_seen": generated_at,
-                },
-            },
+            "suggested_entry": suggested_entry,
         }
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(yaml.safe_dump(candidates, sort_keys=False, allow_unicode=True), encoding="utf-8")
@@ -735,10 +847,27 @@ def emit_csv(result: ComparisonResult, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["status", "host_id", "registry_ip", "observed_ip", "registry_mac", "observed_mac", "vendor", "hostnames", "mdns_names", "notes"])
-        for status_name, items in [("matched", result.matched), ("changed", result.changed), ("unknown", result.unknown), ("missing", result.missing), ("conflict", result.conflicts)]:
+        writer.writerow(["status", "host_id", "registry_ip", "observed_ip", "registry_macs", "observed_mac", "vendor", "hostnames", "mdns_names", "notes"])
+        for status_name, items in [
+            ("matched", result.matched),
+            ("changed", result.changed),
+            ("unknown", result.unknown),
+            ("missing", result.missing),
+            ("conflict", result.conflicts),
+        ]:
             for r in items:
-                writer.writerow([status_name, r.host_id or "", r.registry_ip or "", r.observed_ip or "", r.registry_mac or "", r.observed_mac or "", r.vendor or "", ", ".join(r.hostnames), ", ".join(r.mdns_names), "; ".join(r.notes)])
+                writer.writerow([
+                    status_name,
+                    r.host_id or "",
+                    r.registry_ip or "",
+                    r.observed_ip or "",
+                    ", ".join(r.registry_macs),
+                    r.observed_mac or "",
+                    r.vendor or "",
+                    ", ".join(r.hostnames),
+                    ", ".join(r.mdns_names),
+                    "; ".join(r.notes),
+                ])
 
 
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:

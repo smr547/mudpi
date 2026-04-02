@@ -76,3 +76,24 @@ MudPi is powered from the **house DC UPS system** to allow continued operation d
 # Repository Structure
 
 See `docs/repository-structure.md` for the recommended repository layout.
+
+---
+
+## Some shortcuts
+
+```
+mkdir -p artifacts generate && \
+sudo arp-scan --localnet > artifacts/arp-scan.txt && \
+ip -br neigh > artifacts/ip-neigh.txt && \
+nmap -sn -n 10.1.1.0/24 > artifacts/nmap.txt && \
+python3 ./tools/discover_network.py \
+  --registry docs/reference/network-registry.yaml \
+  --site reid \
+  --cidr 10.1.1.0/24 \
+  --arp-scan-file artifacts/arp-scan.txt \
+  --ip-neigh-file artifacts/ip-neigh.txt \
+  --nmap-file artifacts/nmap.txt \
+  --report-md generate/discovery-report.md \
+  --report-yaml generate/discovered-hosts.yaml \
+  --report-csv generate/discovery.csv
+```
