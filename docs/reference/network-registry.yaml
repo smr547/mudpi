@@ -180,6 +180,8 @@ hosts:
     addresses:
       lan: 10.1.1.1
     roles: [router, gateway]
+    dns:
+      canonical: router.reid.home.arpa
     notes: Primary LAN router (to be replaced by RUT241)
 
   - name: vdsl-modem
@@ -190,6 +192,8 @@ hosts:
     addresses:
       lan: 10.1.1.2
     roles: [modem, bridge]
+    dns:
+      canonical: vdsl-modem.reid.home.arpa
     notes: VDSL modem/bridge (Technicolor/Zyxel)
 
   # gateway host
@@ -224,20 +228,23 @@ hosts:
     addresses:
       lan: 10.1.1.60   # pick from your reserved_appliances range
     roles: [printer, appliance]
+    dns:
+      canonical: printer.reid.home.arpa
     notes: Brother HL-L2460DW network printer
 
   - name: shorepi
     site: reid
-    category: server
+    category: infrastructure
     addressing: static-on-host
-    mac: "D8:3A:DD:2A:25:3F"
+    macs:
+      ethernet: "D8:3A:DD:2A:25:3F"
     addresses:
       lan: 10.1.1.20
-    roles: [signalk, influxdb, grafana, app-host]
-    aliases: []
-    notes: Legacy services host
-    diagram:
-      importance: secondary
+    roles: [signalk, grafana, influxdb]
+    dns:
+      canonical: shorepi.reid.home.arpa
+    notes: Data services node (SignalK, Grafana, InfluxDB)
+
 
   - name: printserver
     site: reid
@@ -448,6 +455,8 @@ hosts:
       lan: 10.1.1.134
       wifi: 10.1.1.132
     roles: [workstation, admin]
+    dns:
+      canonical: stevenlaptop.reid.home.arpa
     notes: Steven's Lenovo Yoga laptop (Kubuntu); dual-homed Ethernet + WiFi
 
 
@@ -465,7 +474,7 @@ hosts:
       aliases:
         - irene-phone
 
-  - irene-iphone:
+  - steven-iphone:
     site: reid
     description: Stens's iPhone
     category: personal
@@ -475,9 +484,9 @@ hosts:
     addresses:
       lan: 10.1.1.125
     dns:
-      canonical: irene-iphone.reid.home.arpa
+      canonical: steven-iphone.reid.home.arpa
       aliases:
-        - irene-phone
+        - steven-phone
 
   # --- Sonos devices ---
   - name: sonos-workshop

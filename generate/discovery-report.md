@@ -1,6 +1,6 @@
 # Network Discovery Report
 
-Date: 2026-04-02T10:48:27+11:00
+Date: 2026-04-02T11:48:28+11:00
 
 Site: reid
 
@@ -12,7 +12,7 @@ CIDR: 10.1.1.0/24
 - Matched: 30
 - Changed: 9
 - Unknown: 2
-- Missing: 4
+- Missing: 5
 - Conflicts: 0
 
 
@@ -24,7 +24,7 @@ CIDR: 10.1.1.0/24
 | mudpi | 10.1.1.3, 10.1.1.129, 10.8.1.1 | 10.1.1.129, 10.1.1.3 | 88:a2:9e:6e:8c:d4, 88:a2:9e:6e:8c:d5 | 88:a2:9e:6e:8c:d4, 88:a2:9e:6e:8c:d5 | (Unknown), (Unknown) (DUP: 2), (Unknown) (DUP: 3), Unknown |  |  | matched via alternate registry MAC: 88:a2:9e:6e:8c:d5; multi-homed host observed; multiple observed IPs |
 | printer | 10.1.1.60 | 10.1.1.136 | 00:41:0e:fe:b0:84 | 00:41:0e:fe:b0:84 | CLOUD NETWORK TECHNOLOGY SINGAPORE PTE. LTD., Cloud Network Technology Singapore PTE. |  |  | unregistered IP observed: 10.1.1.136 |
 | zappi | 10.1.1.50 | 10.1.1.103 | c0:49:ef:64:e9:a8 | c0:49:ef:64:e9:a8 | Espressif |  |  | unregistered IP observed: 10.1.1.103 |
-| irene-iphone | 10.1.1.125 | 10.1.1.125 | 8c:86:1e:c4:4e:7f | 8c:86:1e:c4:4e:6f | Apple, Apple, Inc. |  |  | matched by IP only: 10.1.1.125; unregistered MAC observed: 8c:86:1e:c4:4e:6f |
+| steven-iphone | 10.1.1.125 | 10.1.1.125 | 8c:86:1e:c4:4e:7f | 8c:86:1e:c4:4e:6f | Apple, Apple, Inc. |  |  | matched by IP only: 10.1.1.125; unregistered MAC observed: 8c:86:1e:c4:4e:6f |
 | sonos-spare | 10.1.1.100 | 10.1.1.100 | 54:2a:1b:e6:68:8e | ce:25:11:7c:e6:a7 | (Unknown: locally administered), Unknown |  |  | locally administered MAC; matched by IP only: 10.1.1.100; unregistered MAC observed: ce:25:11:7c:e6:a7 |
 | myplace-tablet | 10.1.1.109 | 10.1.1.109 | b6:29:43:61:d4:b6 | b6:29:43:61:d4:b6 | Unknown |  |  | locally administered MAC |
 | speaker-switch | 10.1.1.177 | 10.1.1.177 | de:ad:be:ef:fe:ed | de:ad:be:ef:fe:ed | (Unknown: locally administered), Unknown |  |  | locally administered MAC |
@@ -44,6 +44,7 @@ CIDR: 10.1.1.0/24
 
 | Host | Registry IP | Observed IP | Registry MACs | Observed MAC | Vendor | Hostnames | mDNS | Notes |
 |---|---|---|---|---|---|---|---|---|
+| irene-iphone | 10.1.1.105 |  | f0:d7:93:32:00:69 |  |  |  |  | registry host not seen live |
 | tv-french-room | 10.1.1.131 |  | 84:c0:ef:63:46:08 |  |  |  |  | registry host not seen live |
 | chain-counter | 10.1.1.120 |  | 24:0a:c4:f6:a0:7c |  |  |  |  | registry host not seen live |
 | solar-monitor | 10.1.1.121 |  | 24:0a:c4:f6:a7:3c |  |  |  |  | registry host not seen live |

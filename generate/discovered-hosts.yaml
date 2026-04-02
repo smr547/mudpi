@@ -1,4 +1,4 @@
-generated_at: '2026-04-02T10:48:27+11:00'
+generated_at: '2026-04-02T11:48:28+11:00'
 site: reid
 candidates:
   unknown-10-1-1-108:
@@ -13,7 +13,7 @@ candidates:
         vendor: Samsung Electronics Co.,Ltd
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-02T10:48:27+11:00'
+        last_seen: '2026-04-02T11:48:28+11:00'
       mac: b0:99:d7:4b:00:94
   unknown-10-1-1-102:
     status: unknown
@@ -27,7 +27,7 @@ candidates:
         vendor: (Unknown)
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-02T10:48:27+11:00'
+        last_seen: '2026-04-02T11:48:28+11:00'
       mac: 90:bf:d9:28:de:e8
   mudpi:
     status: changed
@@ -42,7 +42,7 @@ candidates:
         vendor: '(Unknown), (Unknown) (DUP: 2), (Unknown) (DUP: 3), Unknown'
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-02T10:48:27+11:00'
+        last_seen: '2026-04-02T11:48:28+11:00'
       mac: 88:a2:9e:6e:8c:d4
   printer:
     status: changed
@@ -57,7 +57,7 @@ candidates:
           Singapore PTE.
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-02T10:48:27+11:00'
+        last_seen: '2026-04-02T11:48:28+11:00'
       mac: 00:41:0e:fe:b0:84
   zappi:
     status: changed
@@ -71,9 +71,9 @@ candidates:
         vendor: Espressif
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-02T10:48:27+11:00'
+        last_seen: '2026-04-02T11:48:28+11:00'
       mac: c0:49:ef:64:e9:a8
-  irene-iphone:
+  steven-iphone:
     status: changed
     suggested_entry:
       site: reid
@@ -85,7 +85,7 @@ candidates:
         vendor: Apple, Apple, Inc.
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-02T10:48:27+11:00'
+        last_seen: '2026-04-02T11:48:28+11:00'
       mac: 8c:86:1e:c4:4e:6f
   sonos-spare:
     status: changed
@@ -100,7 +100,7 @@ candidates:
         vendor: '(Unknown: locally administered), Unknown'
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-02T10:48:27+11:00'
+        last_seen: '2026-04-02T11:48:28+11:00'
       mac: ce:25:11:7c:e6:a7
   myplace-tablet:
     status: changed
@@ -114,7 +114,7 @@ candidates:
         vendor: Unknown
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-02T10:48:27+11:00'
+        last_seen: '2026-04-02T11:48:28+11:00'
       mac: b6:29:43:61:d4:b6
   speaker-switch:
     status: changed
@@ -128,7 +128,7 @@ candidates:
         vendor: '(Unknown: locally administered), Unknown'
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-02T10:48:27+11:00'
+        last_seen: '2026-04-02T11:48:28+11:00'
       mac: de:ad:be:ef:fe:ed
   wearable-01:
     status: changed
@@ -142,7 +142,7 @@ candidates:
         vendor: Espressif, Espressif Inc.
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-02T10:48:27+11:00'
+        last_seen: '2026-04-02T11:48:28+11:00'
       mac: 24:6f:28:b9:af:2c
   irene-macbook:
     status: changed
@@ -156,5 +156,5 @@ candidates:
         vendor: '(Unknown: locally administered), Unknown'
         observed_hostnames: []
         mdns_names: []
-        last_seen: '2026-04-02T10:48:27+11:00'
+        last_seen: '2026-04-02T11:48:28+11:00'
       mac: b2:d1:bb:c4:23:e2
