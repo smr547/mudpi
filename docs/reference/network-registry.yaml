@@ -460,7 +460,7 @@ hosts:
     notes: Steven's Lenovo Yoga laptop (Kubuntu); dual-homed Ethernet + WiFi
 
 
-  - irene-iphone:
+  - name: irene-iphone
     site: reid
     description: Irene's iPhone
     category: personal
@@ -468,13 +468,13 @@ hosts:
     macs:
       wifi: "f0:d7:93:32:00:69"
     addresses:
-      lan: 10.1.1.105
+      wifi: 10.1.1.105
     dns:
       canonical: irene-iphone.reid.home.arpa
       aliases:
         - irene-phone
 
-  - steven-iphone:
+  - name: steven-iphone
     site: reid
     description: Stens's iPhone
     category: personal
@@ -482,7 +482,7 @@ hosts:
     macs:
       wifi: "8C:86:1E:C4:4E:7F"
     addresses:
-      lan: 10.1.1.125
+      wifi: 10.1.1.125
     dns:
       canonical: steven-iphone.reid.home.arpa
       aliases:
