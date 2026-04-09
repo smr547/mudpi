@@ -19,13 +19,17 @@ Current policy:
     * domain=<site domain>,<cidr>
 - Emit fixed leases ONLY for hosts that have:
     * a MAC address (top-level mac or top-level macs mapping), AND
-    * an addresses.lan IPv4 address
+    * a usable service IPv4 address
+- Address preference for DHCP generation:
+    * prefer addresses.lan
+    * fall back to addresses.wifi
+    * then legacy shapes
 - For multi-homed hosts, choose a single preferred MAC for DHCP generation,
   using this priority:
     ethernet, lan, wifi, wlan, primary, fallback, then first available key.
 - The generated hostname for dhcp-host is the host identity (name/id/hostname)
   normalised to a dns-safe lowercase label.
-- Hosts without a usable MAC or LAN IPv4 are skipped and written to warnings.txt.
+- Hosts without a usable MAC or service IPv4 are skipped and written to warnings.txt.
 - This generator does NOT try to infer dynamic-host identity for privacy-preserving
   devices (e.g. Apple phones using private Wi-Fi addresses). Those devices should
   remain dynamic unless you explicitly choose to model them differently later.
@@ -109,52 +113,76 @@ def preferred_mac(macs: Dict[str, str]) -> Optional[Tuple[str, str]]:
     return None
 
 
-def extract_lan_ip_and_macs(host: Dict[str, Any]) -> Tuple[Optional[str], Dict[str, str]]:
+def extract_service_ip_and_macs(host: Dict[str, Any]) -> Tuple[Optional[str], str, Dict[str, str]]:
+    """Return the preferred service IPv4, the address kind, and available MACs."""
     addresses = _extract_addresses_mapping(host)
+
     lan_ip = addresses.get("lan")
+    wifi_ip = addresses.get("wifi")
+
     if isinstance(lan_ip, dict):
         lan_ip = lan_ip.get("ipv4") or lan_ip.get("ip")
+    if isinstance(wifi_ip, dict):
+        wifi_ip = wifi_ip.get("ipv4") or wifi_ip.get("ip")
 
+    chosen_ip: Optional[str] = None
+    address_kind = "legacy"
     fallback_mac = None
 
+    if isinstance(lan_ip, str) and is_valid_ipv4(lan_ip):
+        chosen_ip = lan_ip
+        address_kind = "lan"
+    elif isinstance(wifi_ip, str) and is_valid_ipv4(wifi_ip):
+        chosen_ip = wifi_ip
+        address_kind = "wifi"
+
     network = host.get("network")
-    if (not lan_ip or (not host.get("mac") and not host.get("macs"))) and isinstance(network, dict):
+    if not chosen_ip and isinstance(network, dict):
         lan = network.get("lan")
         if isinstance(lan, dict):
-            lan_ip = lan_ip or lan.get("ipv4") or lan.get("ip")
-            fallback_mac = lan.get("mac")
+            candidate = lan.get("ipv4") or lan.get("ip")
+            if isinstance(candidate, str) and is_valid_ipv4(candidate):
+                chosen_ip = candidate
+                address_kind = "legacy"
+                fallback_mac = lan.get("mac")
 
     interfaces = host.get("interfaces")
-    if not lan_ip and isinstance(interfaces, dict):
+    if not chosen_ip and isinstance(interfaces, dict):
         lan = interfaces.get("lan")
         if isinstance(lan, dict):
-            lan_ip = lan.get("ipv4") or lan.get("ip")
-            fallback_mac = fallback_mac or lan.get("mac")
-    elif not lan_ip and isinstance(interfaces, list):
+            candidate = lan.get("ipv4") or lan.get("ip")
+            if isinstance(candidate, str) and is_valid_ipv4(candidate):
+                chosen_ip = candidate
+                address_kind = "legacy"
+                fallback_mac = fallback_mac or lan.get("mac")
+    elif not chosen_ip and isinstance(interfaces, list):
         for item in interfaces:
             if not isinstance(item, dict):
                 continue
             if str(item.get("name", "")).lower() == "lan":
-                lan_ip = item.get("ipv4") or item.get("ip")
-                fallback_mac = fallback_mac or item.get("mac")
-                break
+                candidate = item.get("ipv4") or item.get("ip")
+                if isinstance(candidate, str) and is_valid_ipv4(candidate):
+                    chosen_ip = candidate
+                    address_kind = "legacy"
+                    fallback_mac = fallback_mac or item.get("mac")
+                    break
 
-    if not lan_ip:
-        lan_ip = host.get("ip") or host.get("ipv4")
+    if not chosen_ip:
+        candidate = host.get("ip") or host.get("ipv4")
+        if isinstance(candidate, str) and is_valid_ipv4(candidate):
+            chosen_ip = candidate
+            address_kind = "legacy"
 
     macs = extract_host_macs(host, fallback_mac=fallback_mac)
-
-    if isinstance(lan_ip, str) and not is_valid_ipv4(lan_ip):
-        lan_ip = None
-
-    return lan_ip, macs
+    return chosen_ip, address_kind, macs
 
 
 @dataclass
 class LeaseCandidate:
     host_id: str
     hostname: str
-    lan_ip: str
+    ip: str
+    address_kind: str
     mac_key: str
     mac: str
 
@@ -165,7 +193,23 @@ def load_registry(path: Path) -> List[Dict[str, Any]]:
         raise ValueError("Registry YAML must be a mapping at top level")
     hosts = data.get("hosts", {})
     if isinstance(hosts, list):
-        return [h for h in hosts if isinstance(h, dict)]
+        out: List[Dict[str, Any]] = []
+        for item in hosts:
+            if not isinstance(item, dict):
+                continue
+            if any(k in item for k in ("name", "id", "hostname")):
+                out.append(item)
+                continue
+            if len(item) == 1:
+                only_key = next(iter(item.keys()))
+                only_val = item[only_key]
+                if isinstance(only_val, dict):
+                    clone = dict(only_val)
+                    clone.setdefault("name", str(only_key))
+                    out.append(clone)
+                    continue
+            out.append(item)
+        return out
     if isinstance(hosts, dict):
         out: List[Dict[str, Any]] = []
         for key, value in hosts.items():
@@ -189,11 +233,11 @@ def collect_candidates(hosts: Iterable[Dict[str, Any]], site: Optional[str]) -> 
 
         host_id = str(raw.get("id") or raw.get("name") or raw.get("hostname") or "unnamed-host")
         hostname = normalize_hostname(host_id)
-        lan_ip, macs = extract_lan_ip_and_macs(raw)
+        service_ip, address_kind, macs = extract_service_ip_and_macs(raw)
         chosen = preferred_mac(macs)
 
-        if not lan_ip:
-            warnings.append(f"Host {host_id}: skipped because addresses.lan is missing or invalid")
+        if not service_ip:
+            warnings.append(f"Host {host_id}: skipped because neither addresses.lan nor addresses.wifi is usable")
             continue
         if not chosen:
             warnings.append(f"Host {host_id}: skipped because no usable MAC was found")
@@ -201,9 +245,9 @@ def collect_candidates(hosts: Iterable[Dict[str, Any]], site: Optional[str]) -> 
 
         mac_key, mac = chosen
 
-        if lan_ip in seen_ips:
+        if service_ip in seen_ips:
             warnings.append(
-                f"Host {host_id}: skipped because LAN IP {lan_ip} duplicates host {seen_ips[lan_ip]}"
+                f"Host {host_id}: skipped because service IP {service_ip} duplicates host {seen_ips[service_ip]}"
             )
             continue
         if mac in seen_macs:
@@ -212,11 +256,20 @@ def collect_candidates(hosts: Iterable[Dict[str, Any]], site: Optional[str]) -> 
             )
             continue
 
-        seen_ips[lan_ip] = host_id
+        seen_ips[service_ip] = host_id
         seen_macs[mac] = host_id
-        candidates.append(LeaseCandidate(host_id=host_id, hostname=hostname, lan_ip=lan_ip, mac_key=mac_key, mac=mac))
+        candidates.append(
+            LeaseCandidate(
+                host_id=host_id,
+                hostname=hostname,
+                ip=service_ip,
+                address_kind=address_kind,
+                mac_key=mac_key,
+                mac=mac,
+            )
+        )
 
-    candidates.sort(key=lambda c: tuple(int(x) for x in c.lan_ip.split(".")))
+    candidates.sort(key=lambda c: tuple(int(x) for x in c.ip.split(".")))
     return candidates, warnings
 
 
@@ -240,7 +293,8 @@ def build_dhcp_conf(
     lines.append("#")
     lines.append("# Generation policy:")
     lines.append("# - DHCP served only on the chosen interface")
-    lines.append("# - Fixed leases generated only for hosts with a usable MAC and addresses.lan")
+    lines.append("# - Fixed leases generated only for hosts with a usable MAC and a usable service IP")
+    lines.append("# - Address preference is lan, then wifi, then legacy forms")
     lines.append("# - One preferred MAC is chosen for multi-homed hosts")
     lines.append("# - Privacy-preserving/mobile devices should usually remain dynamic unless deliberately modelled")
     lines.append("")
@@ -256,8 +310,8 @@ def build_dhcp_conf(
     lines.append("")
     lines.append("# Fixed leases generated from registry")
     for c in candidates:
-        lines.append(f"# {c.host_id} ({c.mac_key})")
-        lines.append(f"dhcp-host={c.mac},{c.hostname},{c.lan_ip}")
+        lines.append(f"# {c.host_id} ({c.mac_key}, {c.address_kind})")
+        lines.append(f"dhcp-host={c.mac},{c.hostname},{c.ip}")
     lines.append("")
     return "\n".join(lines)
 
@@ -343,7 +397,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         "",
     ]
     for c in candidates:
-        summary_lines.append(f"{c.lan_ip:15}  {c.mac:17}  {c.hostname:20}  ({c.host_id}, {c.mac_key})")
+        summary_lines.append(
+            f"{c.ip:15}  {c.mac:17}  {c.hostname:20}  ({c.host_id}, {c.mac_key}, {c.address_kind})"
+        )
     write_text(outdir / "leases-summary.txt", "\n".join(summary_lines) + "\n")
 
     if args.stdout:

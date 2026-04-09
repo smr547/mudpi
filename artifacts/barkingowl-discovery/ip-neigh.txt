@@ -1,0 +1,7 @@
+192.168.0.147 dev wlp0s20f3 lladdr 00:40:ad:af:c3:ee REACHABLE 
+192.168.0.1 dev wlp0s20f3 lladdr a8:42:a1:e9:ad:d4 REACHABLE 
+192.168.0.114 dev wlp0s20f3 FAILED 
+192.168.0.210 dev wlp0s20f3 lladdr e4:5f:01:78:f6:62 REACHABLE 
+192.168.0.37 dev wlp0s20f3 FAILED 
+192.168.0.150 dev wlp0s20f3 lladdr 84:a4:66:da:97:eb REACHABLE 
+192.168.0.250 dev wlp0s20f3 lladdr 00:40:ad:b5:00:f8 DELAY 

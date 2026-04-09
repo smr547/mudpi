@@ -1,0 +1,36 @@
+# Nmap 7.94SVN scan initiated Sat Apr  4 21:07:12 2026 as: nmap -sn -oN nmap-ping.txt 192.168.0.0/24
+Nmap scan report for _gateway (192.168.0.1)
+Host is up (0.0015s latency).
+Nmap scan report for 192.168.0.100
+Host is up (0.0054s latency).
+Nmap scan report for sunnyboy1.barkingowl.farm (192.168.0.147)
+Host is up (0.0026s latency).
+Nmap scan report for 192.168.0.150
+Host is up (0.0026s latency).
+Nmap scan report for 192.168.0.155
+Host is up (0.27s latency).
+Nmap scan report for 192.168.0.183
+Host is up (0.062s latency).
+Nmap scan report for 192.168.0.186
+Host is up (0.062s latency).
+Nmap scan report for 192.168.0.191
+Host is up (0.0030s latency).
+Nmap scan report for 192.168.0.194
+Host is up (0.0031s latency).
+Nmap scan report for StevenLaptop (192.168.0.198)
+Host is up (0.000042s latency).
+Nmap scan report for sunnyboy2.barkingowl.farm (192.168.0.206)
+Host is up (0.0045s latency).
+Nmap scan report for shedpi.barkingowl.farm (192.168.0.210)
+Host is up (0.0024s latency).
+Nmap scan report for 192.168.0.215
+Host is up (0.088s latency).
+Nmap scan report for sunnyboy3.barkingowl.farm (192.168.0.223)
+Host is up (0.0033s latency).
+Nmap scan report for 192.168.0.239
+Host is up (0.30s latency).
+Nmap scan report for 192.168.0.242
+Host is up (0.059s latency).
+Nmap scan report for sunnyisland.barkingowl.farm (192.168.0.250)
+Host is up (0.0052s latency).
+# Nmap done at Sat Apr  4 21:07:18 2026 -- 256 IP addresses (17 hosts up) scanned in 6.31 seconds
