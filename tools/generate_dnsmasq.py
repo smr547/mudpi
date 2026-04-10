@@ -177,7 +177,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     p.add_argument("--registry", required=True, help="Path to network-registry.yaml")
     p.add_argument("--site", help="Optional site filter, e.g. reid")
     p.add_argument("--domain", help="Authoritative zone domain, e.g. farm.home.arpa")
-    p.add_argument("--outdir", default="generate/dnsmasq", help="Output directory")
+    p.add_argument("--outdir", default="generated/dnsmasq", help="Output directory")
     p.add_argument("--install-root", help="Base directory for dnsmasq deployment (used to emit absolute paths)",)
     p.add_argument(
         "--mode",

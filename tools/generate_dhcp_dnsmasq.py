@@ -317,7 +317,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Generate dnsmasq DHCP config from network-registry.yaml")
     p.add_argument("--registry", required=True, help="Path to network-registry.yaml")
     p.add_argument("--site", help="Optional site filter, e.g. reid")
-    p.add_argument("--outdir", default="generate/dhcp", help="Output directory")
+    p.add_argument("--outdir", default="generated/dhcp", help="Output directory")
     p.add_argument("--interface", default="eth0", help="Primary LAN interface for DHCP service")
     p.add_argument("--extra-interface", action="append", default=[], help="Additional interface(s) to bind")
     p.add_argument("--cidr", required=True, help="LAN CIDR, e.g. 10.1.1.0/24")
