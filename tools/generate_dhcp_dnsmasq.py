@@ -1,39 +1,17 @@
 #!/usr/bin/env python3
 """Generate dnsmasq DHCP configuration from network-registry.yaml.
 
-Policy (deliberately conservative)
-----------------------------------
-This generator is intended for a staged migration from ad-hoc/router DHCP
-reservations to registry-driven DHCP on MudPi.
+This version preserves the baseline behaviour and adds two small but useful
+capabilities for a staged multi-site rollout:
+- optional interface binding list via --extra-interface
+- optional dhcp-host tagging by site role/category for easier future policy use
 
-Current policy:
+Policy remains conservative:
 - Generate ONE dnsmasq dhcp.conf file.
-- Emit the global DHCP service settings:
-    * interface=<chosen interface>
-    * bind-interfaces
-    * dhcp-authoritative
-    * dhcp-range=<configured pool>
-    * dhcp-option router=<gateway>
-    * dhcp-option dns-server=<MudPi DNS>
-    * dhcp-option domain-search=<site domain>
-    * domain=<site domain>,<cidr>
-- Emit fixed leases ONLY for hosts that have:
-    * a MAC address (top-level mac or top-level macs mapping), AND
-    * a usable service IPv4 address
-- Address preference for DHCP generation:
-    * prefer addresses.lan
-    * fall back to addresses.wifi
-    * then legacy shapes
-- For multi-homed hosts, choose a single preferred MAC for DHCP generation,
-  using this priority:
-    ethernet, lan, wifi, wlan, primary, fallback, then first available key.
-- The generated hostname for dhcp-host is the host identity (name/id/hostname)
-  normalised to a dns-safe lowercase label.
-- Hosts without a usable MAC or service IPv4 are skipped and written to warnings.txt.
-- This generator does NOT try to infer dynamic-host identity for privacy-preserving
-  devices (e.g. Apple phones using private Wi-Fi addresses). Those devices should
-  remain dynamic unless you explicitly choose to model them differently later.
-- This generator does NOT rewrite the registry. It only emits dnsmasq config.
+- Emit the global DHCP service settings.
+- Emit fixed leases ONLY for hosts that have a MAC and a usable service IPv4.
+- Address preference remains lan, then wifi, then legacy forms.
+- One preferred MAC is chosen for multi-homed hosts.
 """
 
 from __future__ import annotations
@@ -77,6 +55,10 @@ def normalize_hostname(name: str) -> str:
     return cleaned or "unnamed-host"
 
 
+def normalize_tag(value: str) -> str:
+    return normalize_hostname(value).replace("-", "_")
+
+
 def _extract_addresses_mapping(host: Dict[str, Any]) -> Dict[str, Any]:
     addresses = host.get("addresses")
     return addresses if isinstance(addresses, dict) else {}
@@ -114,7 +96,6 @@ def preferred_mac(macs: Dict[str, str]) -> Optional[Tuple[str, str]]:
 
 
 def extract_service_ip_and_macs(host: Dict[str, Any]) -> Tuple[Optional[str], str, Dict[str, str]]:
-    """Return the preferred service IPv4, the address kind, and available MACs."""
     addresses = _extract_addresses_mapping(host)
 
     lan_ip = addresses.get("lan")
@@ -185,6 +166,8 @@ class LeaseCandidate:
     address_kind: str
     mac_key: str
     mac: str
+    category: str
+    roles: List[str]
 
 
 def load_registry(path: Path) -> List[Dict[str, Any]]:
@@ -258,6 +241,8 @@ def collect_candidates(hosts: Iterable[Dict[str, Any]], site: Optional[str]) -> 
 
         seen_ips[service_ip] = host_id
         seen_macs[mac] = host_id
+        roles = raw.get("roles") if isinstance(raw.get("roles"), list) else []
+        category = str(raw.get("category") or "uncategorized")
         candidates.append(
             LeaseCandidate(
                 host_id=host_id,
@@ -266,6 +251,8 @@ def collect_candidates(hosts: Iterable[Dict[str, Any]], site: Optional[str]) -> 
                 address_kind=address_kind,
                 mac_key=mac_key,
                 mac=mac,
+                category=category,
+                roles=[str(r) for r in roles if isinstance(r, (str, int, float))],
             )
         )
 
@@ -274,7 +261,7 @@ def collect_candidates(hosts: Iterable[Dict[str, Any]], site: Optional[str]) -> 
 
 
 def build_dhcp_conf(
-    interface: str,
+    interfaces: List[str],
     cidr: str,
     range_start: str,
     range_end: str,
@@ -285,6 +272,7 @@ def build_dhcp_conf(
     candidates: List[LeaseCandidate],
     registry_path: Path,
     site: Optional[str],
+    emit_tags: bool,
 ) -> str:
     lines: List[str] = []
     lines.append("# This file is generated. Edit network-registry.yaml and rerun the generator.")
@@ -292,13 +280,13 @@ def build_dhcp_conf(
     lines.append(f"# Site filter: {site or '(none)'}")
     lines.append("#")
     lines.append("# Generation policy:")
-    lines.append("# - DHCP served only on the chosen interface")
+    lines.append("# - DHCP served only on the chosen interfaces")
     lines.append("# - Fixed leases generated only for hosts with a usable MAC and a usable service IP")
     lines.append("# - Address preference is lan, then wifi, then legacy forms")
     lines.append("# - One preferred MAC is chosen for multi-homed hosts")
-    lines.append("# - Privacy-preserving/mobile devices should usually remain dynamic unless deliberately modelled")
     lines.append("")
-    lines.append(f"interface={interface}")
+    for interface in interfaces:
+        lines.append(f"interface={interface}")
     lines.append("bind-interfaces")
     lines.append("dhcp-authoritative")
     lines.append("")
@@ -310,8 +298,12 @@ def build_dhcp_conf(
     lines.append("")
     lines.append("# Fixed leases generated from registry")
     for c in candidates:
-        lines.append(f"# {c.host_id} ({c.mac_key}, {c.address_kind})")
-        lines.append(f"dhcp-host={c.mac},{c.hostname},{c.ip}")
+        lines.append(f"# {c.host_id} ({c.mac_key}, {c.address_kind}, category={c.category})")
+        tag_prefix = ""
+        if emit_tags:
+            tags = [f"set:{normalize_tag(c.category)}"] + [f"set:{normalize_tag(role)}" for role in c.roles]
+            tag_prefix = ",".join(tags) + "," if tags else ""
+        lines.append(f"dhcp-host={tag_prefix}{c.mac},{c.hostname},{c.ip}")
     lines.append("")
     return "\n".join(lines)
 
@@ -326,7 +318,8 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     p.add_argument("--registry", required=True, help="Path to network-registry.yaml")
     p.add_argument("--site", help="Optional site filter, e.g. reid")
     p.add_argument("--outdir", default="generate/dhcp", help="Output directory")
-    p.add_argument("--interface", default="eth0", help="LAN interface for DHCP service")
+    p.add_argument("--interface", default="eth0", help="Primary LAN interface for DHCP service")
+    p.add_argument("--extra-interface", action="append", default=[], help="Additional interface(s) to bind")
     p.add_argument("--cidr", required=True, help="LAN CIDR, e.g. 10.1.1.0/24")
     p.add_argument("--range-start", required=True, help="DHCP pool start, e.g. 10.1.1.100")
     p.add_argument("--range-end", required=True, help="DHCP pool end, e.g. 10.1.1.199")
@@ -334,6 +327,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     p.add_argument("--dns-server", required=True, help="DNS server advertised by DHCP, e.g. 10.1.1.3")
     p.add_argument("--domain", required=True, help="Search/default domain, e.g. reid.home.arpa")
     p.add_argument("--lease-time", default="12h", help="Lease time, e.g. 12h")
+    p.add_argument("--emit-tags", action="store_true", help="Add set:<tag> markers from category/roles")
     p.add_argument("--stdout", action="store_true", help="Also print dhcp.conf to stdout")
     return p.parse_args(argv)
 
@@ -363,8 +357,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print(f"Failed to load or process registry: {exc}", file=sys.stderr)
         return 2
 
+    interfaces = [args.interface] + [i for i in args.extra_interface if i and i != args.interface]
     dhcp_conf = build_dhcp_conf(
-        interface=args.interface,
+        interfaces=interfaces,
         cidr=args.cidr,
         range_start=args.range_start,
         range_end=args.range_end,
@@ -375,6 +370,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         candidates=candidates,
         registry_path=registry_path,
         site=args.site,
+        emit_tags=args.emit_tags,
     )
 
     outdir = Path(args.outdir)
@@ -398,7 +394,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ]
     for c in candidates:
         summary_lines.append(
-            f"{c.ip:15}  {c.mac:17}  {c.hostname:20}  ({c.host_id}, {c.mac_key}, {c.address_kind})"
+            f"{c.ip:15}  {c.mac:17}  {c.hostname:20}  ({c.host_id}, {c.mac_key}, {c.address_kind}, {c.category})"
         )
     write_text(outdir / "leases-summary.txt", "\n".join(summary_lines) + "\n")
 

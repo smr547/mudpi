@@ -74,7 +74,7 @@ sites:
         end: 10.1.1.199
 
   barkingowl:
-    zone: barkingowl.home.arpa
+    zone: farm.home.arpa
     description: Barking Owl Farm
     lan:
       cidr: 192.168.0.0/24
@@ -88,15 +88,15 @@ sites:
     dns:
       mode: local-authoritative
       server_host: shedpi
-      server_ip: 192.168.0.10
-      search_domain: barkingowl.home.arpa
+      server_ip: 192.168.0.210
+      search_domain: farm.home.arpa
     dhcp:
       authority: shedpi
       mode: authoritative
-      search_domain: barkingowl.home.arpa
+      search_domain: farm.home.arpa
       default_gateway: 192.168.0.1
       dns_servers:
-        - 192.168.0.10
+        - 192.168.0.210
       dynamic_pool:
         start: 192.168.0.100
         end: 192.168.0.199
@@ -243,6 +243,8 @@ hosts:
     roles: [signalk, grafana, influxdb]
     dns:
       canonical: shorepi.reid.home.arpa
+      aliases:
+        - signalk.reid.home.arpa
     notes: Data services node (SignalK, Grafana, InfluxDB)
 
 
@@ -714,31 +716,131 @@ hosts:
         - irene-laptop
     notes: macOS device; currently using locally administered (private) MAC address on WiFi
 
+# --- Barking Owl Farm Infrastructure ---
+
+  # --- Barking Owl Farm Infrastructure ---
+
+  - name: farm-router
+    site: barkingowl
+    category: network
+    addressing: dhcp-reservation
+    mac: "a8:42:a1:e9:ad:d4"
+    addresses:
+      lan: 192.168.0.1
+    roles: [router, gateway]
+    dns:
+      canonical: router.farm.home.arpa
+    notes: Farm LAN gateway/router
+
   - name: shedpi
     site: barkingowl
     category: infrastructure
-    addressing: static-on-host
+    addressing: dhcp-reservation
+    macs:
+      ethernet: "e4:5f:01:78:f6:62"
     addresses:
-      lan: 192.168.0.10
-      vpn: 10.8.1.30
-    roles: [dns, dhcp, farm-server]
-    aliases: []
+      lan: 192.168.0.210
+      vpn: 10.8.1.4
+    roles: [dns, dhcp, signalk, farm-server]
+    dns:
+      canonical: shedpi.farm.home.arpa
+      aliases:
+        - shedpi
     notes: Local DNS/DHCP authority for Barking Owl
     diagram:
       importance: primary
 
+  # --- Solar + Battery System ---
+
+  - name: sunnyisland
+    site: barkingowl
+    category: energy
+    addressing: static-on-host
+    mac: "00:40:ad:b5:00:f8"
+    addresses:
+      lan: 192.168.0.250
+    roles: [battery-inverter, solar-control]
+    dns:
+      canonical: sunnyisland.farm.home.arpa
+    notes: Observed stable address; may be DHCP-assigned or statically configured on device
+
+  - name: sunnyboy1
+    site: barkingowl
+    category: energy
+    addressing: static-on-host
+    mac: "00:40:ad:af:c3:ee"
+    addresses:
+      lan: 192.168.0.147
+    roles: [pv-inverter]
+    dns:
+      canonical: sunnyboy1.farm.home.arpa
+    notes: Observed stable address; DHCP/static configuration not yet confirmed
+
+  - name: sunnyboy2
+    site: barkingowl
+    category: energy
+    addressing: static-on-host
+    mac: "00:40:ad:af:f5:7f"
+    addresses:
+      lan: 192.168.0.206
+    roles: [pv-inverter]
+    dns:
+      canonical: sunnyboy2.farm.home.arpa
+    notes: Observed stable address; DHCP/static configuration not yet confirmed
+
+  - name: sunnyboy3
+    site: barkingowl
+    category: energy
+    addressing: static-on-host
+    mac: "00:40:ad:af:f6:d9"
+    addresses:
+      lan: 192.168.0.223
+    roles: [pv-inverter]
+    dns:
+      canonical: sunnyboy3.farm.home.arpa
+    notes: Observed stable address; DHCP/static configuration not yet confirmed
+
+  # --- Monitoring / Sensors ---
+
   - name: weatherstation
     site: barkingowl
     category: sensor
-    addressing: dhcp-reservation
-    mac: "TBD"
+    addressing: static-on-host
     addresses:
-      lan: 192.168.0.50
+      lan: 192.168.0.179
     roles: [weather]
-    aliases: []
-    notes: Example farm service for Bubs and local users
+    dns:
+      canonical: weatherstation.farm.home.arpa
+    notes: Farm weather station
     diagram:
       importance: secondary
+
+  # --- Network Infrastructure ---
+
+  - name: ap1
+    site: barkingowl
+    category: network
+    addressing: dhcp-reservation
+    mac: "74:83:c2:7b:35:6f"
+    addresses:
+      lan: 192.168.0.100
+    roles: [wifi-ap]
+    dns:
+      canonical: ap1.farm.home.arpa
+
+  - name: ap2
+    site: barkingowl
+    category: network
+    addressing: dhcp-reservation
+    mac: "78:45:58:ed:73:dd"
+    addresses:
+      lan: 192.168.0.194
+    roles: [wifi-ap]
+    dns:
+      canonical: ap2.farm.home.arpa
+
+
+  # --- TRILOGY Infrastructure ---
 
   - name: boatdns
     site: trilogy

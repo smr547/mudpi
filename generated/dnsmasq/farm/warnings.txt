@@ -1,6 +1,7 @@
 # generator warnings
 # Generated from: docs/reference/network-registry.yaml
-# Site filter: reid
+# Site filter: barkingowl
+# Domain: farm.home.arpa
 # This file is generated. Edit network-registry.yaml instead.
 
 No warnings.

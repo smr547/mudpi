@@ -1,0 +1,14 @@
+# dns publication summary
+# Registry: docs/reference/network-registry.yaml
+# Site filter: barkingowl
+# Domain: farm.home.arpa
+
+192.168.0.1      router.farm.home.arpa router
+192.168.0.100    ap1.farm.home.arpa ap1
+192.168.0.147    sunnyboy1.farm.home.arpa sunnyboy1
+192.168.0.179    weatherstation.farm.home.arpa weatherstation
+192.168.0.194    ap2.farm.home.arpa ap2
+192.168.0.206    sunnyboy2.farm.home.arpa sunnyboy2
+192.168.0.210    shedpi.farm.home.arpa shedpi
+192.168.0.223    sunnyboy3.farm.home.arpa sunnyboy3
+192.168.0.250    sunnyisland.farm.home.arpa sunnyisland
