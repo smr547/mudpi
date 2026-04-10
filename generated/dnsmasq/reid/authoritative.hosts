@@ -1,0 +1,27 @@
+# This file is generated. Edit network-registry.yaml and rerun the generator.
+# Registry: docs/reference/network-registry.yaml
+# Site filter: reid
+# Domain: reid.home.arpa
+
+10.1.1.1 router.reid.home.arpa router
+10.1.1.2 vdsl-modem.reid.home.arpa vdsl-modem
+10.1.1.3 mudpi.reid.home.arpa mudpi
+10.1.1.6 abbhub.reid.home.arpa abbhub
+10.1.1.20 shorepi.reid.home.arpa shorepi signalk.reid.home.arpa
+10.1.1.30 printserver.reid.home.arpa printserver 3dprintserver.reid.home.arpa
+10.1.1.41 cam-01.reid.home.arpa cam-01 cam1.reid.home.arpa
+10.1.1.42 cam-02.reid.home.arpa cam-02 cam2.reid.home.arpa
+10.1.1.43 cam-03.reid.home.arpa cam-03 cam3.reid.home.arpa
+10.1.1.44 cam-04.reid.home.arpa cam-04 cam4.reid.home.arpa
+10.1.1.45 cam-05.reid.home.arpa cam-05 cam5.reid.home.arpa
+10.1.1.46 cam-06.reid.home.arpa cam-06 cam6.reid.home.arpa
+10.1.1.47 cam-07.reid.home.arpa cam-07 cam7.reid.home.arpa
+10.1.1.50 zappi.reid.home.arpa zappi
+10.1.1.60 printer.reid.home.arpa printer
+10.1.1.105 irene-iphone.reid.home.arpa irene-iphone
+10.1.1.110 irene-macbook.reid.home.arpa irene-macbook
+10.1.1.119 solar-monitor.reid.home.arpa solar-monitor
+10.1.1.125 steven-iphone.reid.home.arpa steven-iphone
+10.1.1.134 stevenlaptop.reid.home.arpa stevenlaptop
+10.1.1.177 speaker-switch.reid.home.arpa speaker-switch
+10.1.1.178 nvr.reid.home.arpa nvr

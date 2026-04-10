@@ -73,7 +73,7 @@ sites:
         start: 10.1.1.100
         end: 10.1.1.199
 
-  barkingowl:
+  farm:
     zone: farm.home.arpa
     description: Barking Owl Farm
     lan:
@@ -256,8 +256,11 @@ hosts:
     addresses:
       lan: 10.1.1.30
     roles: [print-server, utility]
-    aliases: []
-    notes: Raspberry Pi 5 used as 3D print server
+    dns:
+      canonical: printserver.reid.home.arpa
+      aliases:
+        - 3dprintserver.reid.home.arpa
+    notes: Raspberry Pi 4 used as 3D print server
     diagram:
       importance: secondary
 
@@ -269,7 +272,8 @@ hosts:
     addresses:
       lan: 10.1.1.6
     roles: [solar-monitor, appliance]
-    aliases: []
+    dns:
+      canonical: abbhub.reid.home.arpa
     notes: ABB solar monitor hub for RF communication with rooftop panels; queried for plant.xml to monitor solar energy production
     diagram:
       importance: secondary
@@ -282,6 +286,8 @@ hosts:
     addresses:
       lan: 10.1.1.50
     roles: [ev-charger, energy-device]
+    dns:
+      canonical: zappi.reid.home.arpa
     aliases: []
     notes: MyEnergi Zappi EV charger
     diagram:
@@ -296,6 +302,8 @@ hosts:
     addresses:
       lan: 10.1.1.178
     roles: [nvr, video-recorder, security]
+    dns:
+      canonical: nvr.reid.home.arpa
     notes: VIP Vision NVR (Dahua OEM) for IP camera system
 
   # --- IP Cameras (Dahua) ---
@@ -307,6 +315,10 @@ hosts:
     addresses:
       lan: 10.1.1.41
     roles: [camera]
+    dns:
+      canonical: cam-01.reid.home.arpa
+      aliases:
+        - cam1.reid.home.arpa
     notes: Dahua IP camera
     physical:
       patch_panel: mudroom-main
@@ -320,6 +332,10 @@ hosts:
     addresses:
       lan: 10.1.1.42
     roles: [camera]
+    dns:
+      canonical: cam-02.reid.home.arpa
+      aliases:
+        - cam2.reid.home.arpa
     notes: Dahua IP camera
     physical:
       patch_panel: mudroom-main
@@ -333,6 +349,10 @@ hosts:
     addresses:
       lan: 10.1.1.43
     roles: [camera]
+    dns:
+      canonical: cam-03.reid.home.arpa
+      aliases:
+        - cam3.reid.home.arpa
     notes: Dahua IP camera
     physical:
       patch_panel: mudroom-main
@@ -346,6 +366,10 @@ hosts:
     addresses:
       lan: 10.1.1.44
     roles: [camera]
+    dns:
+      canonical: cam-04.reid.home.arpa
+      aliases:
+        - cam4.reid.home.arpa
     notes: Dahua IP camera
     physical:
       patch_panel: mudroom-main
@@ -359,6 +383,10 @@ hosts:
     addresses:
       lan: 10.1.1.45
     roles: [camera]
+    dns:
+      canonical: cam-05.reid.home.arpa
+      aliases:
+        - cam5.reid.home.arpa
     notes: Dahua IP camera
     physical:
       patch_panel: mudroom-main
@@ -372,6 +400,10 @@ hosts:
     addresses:
       lan: 10.1.1.46
     roles: [camera]
+    dns:
+      canonical: cam-06.reid.home.arpa
+      aliases:
+        - cam6.reid.home.arpa
     notes: Dahua IP camera
     physical:
       patch_panel: mudroom-main
@@ -385,6 +417,10 @@ hosts:
     addresses:
       lan: 10.1.1.47
     roles: [camera]
+    dns:
+      canonical: cam-07.reid.home.arpa
+      aliases:
+        - cam7.reid.home.arpa
     notes: Dahua IP camera
     physical:
       patch_panel: mudroom-main
@@ -638,6 +674,8 @@ hosts:
     addresses:
       lan: 10.1.1.177
     roles: [audio-switch, custom]
+    dns:
+      canonical: speaker-switch.reid.home.arpa
     notes: Arduino-based 8-relay speaker switch (Ethernet shield) 
 
   # --- ESP32 devices ---
@@ -651,7 +689,7 @@ hosts:
     roles: [esp32]
     notes: Experimental chain counter based on ESP32 
 
-  - name: solar-monitor
+  - name: esp32-spare-1-monitor
     site: reid
     category: iot
     addressing: dhcp-reservation
@@ -659,6 +697,18 @@ hosts:
     addresses:
       lan: 10.1.1.121
     roles: [esp32]
+    notes: ESP32 dev module
+
+  - name: solar-monitor
+    site: reid
+    category: iot
+    addressing: dhcp-reservation
+    mac: "01:1c:db:d4:7a:33:08"
+    addresses:
+      lan: 10.1.1.119
+    roles: [esp32]
+    dns:
+      canonical: solar-monitor.reid.home.arpa
     notes: ESP32 solar production monitor scrapes data from   http://abbhub/plant.xm
 
   - name: battery-temp
@@ -721,7 +771,7 @@ hosts:
   # --- Barking Owl Farm Infrastructure ---
 
   - name: farm-router
-    site: barkingowl
+    site: farm
     category: network
     addressing: dhcp-reservation
     mac: "a8:42:a1:e9:ad:d4"
@@ -733,7 +783,7 @@ hosts:
     notes: Farm LAN gateway/router
 
   - name: shedpi
-    site: barkingowl
+    site: farm
     category: infrastructure
     addressing: dhcp-reservation
     macs:
@@ -753,7 +803,7 @@ hosts:
   # --- Solar + Battery System ---
 
   - name: sunnyisland
-    site: barkingowl
+    site: farm
     category: energy
     addressing: static-on-host
     mac: "00:40:ad:b5:00:f8"
@@ -765,7 +815,7 @@ hosts:
     notes: Observed stable address; may be DHCP-assigned or statically configured on device
 
   - name: sunnyboy1
-    site: barkingowl
+    site: farm
     category: energy
     addressing: static-on-host
     mac: "00:40:ad:af:c3:ee"
@@ -777,7 +827,7 @@ hosts:
     notes: Observed stable address; DHCP/static configuration not yet confirmed
 
   - name: sunnyboy2
-    site: barkingowl
+    site: farm
     category: energy
     addressing: static-on-host
     mac: "00:40:ad:af:f5:7f"
@@ -789,7 +839,7 @@ hosts:
     notes: Observed stable address; DHCP/static configuration not yet confirmed
 
   - name: sunnyboy3
-    site: barkingowl
+    site: farm
     category: energy
     addressing: static-on-host
     mac: "00:40:ad:af:f6:d9"
@@ -803,7 +853,7 @@ hosts:
   # --- Monitoring / Sensors ---
 
   - name: weatherstation
-    site: barkingowl
+    site: farm
     category: sensor
     addressing: static-on-host
     addresses:
@@ -818,7 +868,7 @@ hosts:
   # --- Network Infrastructure ---
 
   - name: ap1
-    site: barkingowl
+    site: farm
     category: network
     addressing: dhcp-reservation
     mac: "74:83:c2:7b:35:6f"
@@ -829,7 +879,7 @@ hosts:
       canonical: ap1.farm.home.arpa
 
   - name: ap2
-    site: barkingowl
+    site: farm
     category: network
     addressing: dhcp-reservation
     mac: "78:45:58:ed:73:dd"
@@ -898,13 +948,13 @@ forwarding:
   mudpi:
     authoritative_zones: [reid.home.arpa, vpn.home.arpa]
     conditional_forwarders:
-      barkingowl.home.arpa: 192.168.0.10
+      farm.home.arpa: 192.168.0.10
       trilogy.home.arpa: 10.8.1.40
       testboat.home.arpa: 10.8.1.50
     upstream_resolvers: [1.1.1.1, 8.8.8.8]
 
   shedpi:
-    authoritative_zones: [barkingowl.home.arpa]
+    authoritative_zones: [farm.home.arpa]
     upstream_resolvers: [192.168.0.1]
 
 reverse_dns:
@@ -916,7 +966,7 @@ reverse_dns:
     authority: mudpi.vpn.home.arpa
   - cidr: 192.168.0.0/24
     zone: 0.168.192.in-addr.arpa
-    authority: shedpi.barkingowl.home.arpa
+    authority: shedpi.farm.home.arpa
   - cidr: 192.168.98.0/24
     zone: 98.168.192.in-addr.arpa
     authority: boatdns.trilogy.home.arpa

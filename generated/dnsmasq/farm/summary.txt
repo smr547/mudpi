@@ -1,6 +1,6 @@
 # dns publication summary
 # Registry: docs/reference/network-registry.yaml
-# Site filter: barkingowl
+# Site filter: farm
 # Domain: farm.home.arpa
 
 192.168.0.1      router.farm.home.arpa router

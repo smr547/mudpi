@@ -1,0 +1,29 @@
+# generator warnings
+# Generated from: docs/reference/network-registry.yaml
+# Site filter: reid
+# Domain: reid.home.arpa
+# This file is generated. Edit network-registry.yaml instead.
+
+Host ap-01: skipped because dns.canonical is missing
+Host ap-02: skipped because dns.canonical is missing
+Host ap-03: skipped because dns.canonical is missing
+Host ubiquiti-unknown: skipped because dns.canonical is missing
+Host sonos-workshop: skipped because dns.canonical is missing
+Host sonos-mudroom: skipped because dns.canonical is missing
+Host sonos-spare: skipped because dns.canonical is missing
+Host hydrawise-workshop: skipped because dns.canonical is missing
+Host hydrawise-main: skipped because dns.canonical is missing
+Host appletv-lounge: skipped because dns.canonical is missing
+Host soundbar-lounge: skipped because dns.canonical is missing
+Host tv-french-room: skipped because dns.canonical is missing
+Host kitchen-display: skipped because dns.canonical is missing
+Host irobot-vacuum: skipped because dns.canonical is missing
+Host myplace-tablet: skipped because dns.canonical is missing
+Host energy-monitor: skipped because dns.canonical is missing
+Host weather-station: skipped because dns.canonical is missing
+Host chain-counter: skipped because dns.canonical is missing
+Host esp32-spare-1-monitor: skipped because dns.canonical is missing
+Host battery-temp: skipped because dns.canonical is missing
+Host wearable-01: skipped because dns.canonical is missing
+Host signal-generator: skipped because dns.canonical is missing
+Host dfrobot-edge101: skipped because dns.canonical is missing
