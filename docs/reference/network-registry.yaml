@@ -703,10 +703,10 @@ hosts:
     site: reid
     category: iot
     addressing: dhcp-reservation
-    mac: "01:1c:db:d4:7a:33:08"
+    mac: "1c:db:d4:7a:33:08"
     addresses:
       lan: 10.1.1.119
-    roles: [esp32]
+    roles: [solar-monitor, esp32]
     dns:
       canonical: solar-monitor.reid.home.arpa
     notes: ESP32 solar production monitor scrapes data from   http://abbhub/plant.xm

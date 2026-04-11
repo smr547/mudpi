@@ -1,0 +1,6 @@
+# generator warnings
+# Generated from: docs/reference/network-registry.yaml
+# Site filter: reid
+# This file is generated. Edit network-registry.yaml instead.
+
+No warnings.
