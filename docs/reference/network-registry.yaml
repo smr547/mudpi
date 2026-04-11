@@ -805,49 +805,57 @@ hosts:
   - name: sunnyisland
     site: farm
     category: energy
-    addressing: static-on-host
+    addressing: dhcp-reservation
     mac: "00:40:ad:b5:00:f8"
     addresses:
       lan: 192.168.0.250
     roles: [battery-inverter, solar-control]
     dns:
       canonical: sunnyisland.farm.home.arpa
+      aliases:
+        - barkingisland
     notes: Observed stable address; may be DHCP-assigned or statically configured on device
 
   - name: sunnyboy1
     site: farm
     category: energy
-    addressing: static-on-host
+    addressing: dhcp-reservation
     mac: "00:40:ad:af:c3:ee"
     addresses:
       lan: 192.168.0.147
     roles: [pv-inverter]
     dns:
       canonical: sunnyboy1.farm.home.arpa
+      aliases:
+        - barkingisland1
     notes: Observed stable address; DHCP/static configuration not yet confirmed
 
   - name: sunnyboy2
     site: farm
     category: energy
-    addressing: static-on-host
+    addressing: dhcp-reservation
     mac: "00:40:ad:af:f5:7f"
     addresses:
       lan: 192.168.0.206
     roles: [pv-inverter]
     dns:
       canonical: sunnyboy2.farm.home.arpa
+      aliases:
+        - barkingisland2
     notes: Observed stable address; DHCP/static configuration not yet confirmed
 
   - name: sunnyboy3
     site: farm
     category: energy
-    addressing: static-on-host
+    addressing: dhcp-reservation
     mac: "00:40:ad:af:f6:d9"
     addresses:
       lan: 192.168.0.223
     roles: [pv-inverter]
     dns:
       canonical: sunnyboy3.farm.home.arpa
+      aliases:
+        - barkingisland3
     notes: Observed stable address; DHCP/static configuration not yet confirmed
 
   # --- Monitoring / Sensors ---
@@ -855,7 +863,8 @@ hosts:
   - name: weatherstation
     site: farm
     category: sensor
-    addressing: static-on-host
+    addressing: dhcp-reservation
+    mac: "7C:9E:BD:78:C4:58"
     addresses:
       lan: 192.168.0.179
     roles: [weather]

@@ -1,0 +1,14 @@
+# generated lease summary
+# Registry: docs/reference/network-registry.yaml
+# Site filter: farm
+# Include unscoped hosts: no
+
+192.168.0.1      a8:42:a1:e9:ad:d4  farm-router           (farm-router, primary, lan, network)
+192.168.0.100    74:83:c2:7b:35:6f  ap1                   (ap1, primary, lan, network)
+192.168.0.147    00:40:ad:af:c3:ee  sunnyboy1             (sunnyboy1, primary, lan, energy)
+192.168.0.179    7c:9e:bd:78:c4:58  weatherstation        (weatherstation, primary, lan, sensor)
+192.168.0.194    78:45:58:ed:73:dd  ap2                   (ap2, primary, lan, network)
+192.168.0.206    00:40:ad:af:f5:7f  sunnyboy2             (sunnyboy2, primary, lan, energy)
+192.168.0.210    e4:5f:01:78:f6:62  shedpi                (shedpi, ethernet, lan, infrastructure)
+192.168.0.223    00:40:ad:af:f6:d9  sunnyboy3             (sunnyboy3, primary, lan, energy)
+192.168.0.250    00:40:ad:b5:00:f8  sunnyisland           (sunnyisland, primary, lan, energy)

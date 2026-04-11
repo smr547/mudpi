@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
 """Generate dnsmasq DHCP configuration from network-registry.yaml.
 
-This version preserves the baseline behaviour and adds two small but useful
-capabilities for a staged multi-site rollout:
-- optional interface binding list via --extra-interface
-- optional dhcp-host tagging by site role/category for easier future policy use
+Drop-in replacement for the staged multi-site DHCP generator.
 
-Policy remains conservative:
-- Generate ONE dnsmasq dhcp.conf file.
-- Emit the global DHCP service settings.
-- Emit fixed leases ONLY for hosts that have a MAC and a usable service IPv4.
-- Address preference remains lan, then wifi, then legacy forms.
-- One preferred MAC is chosen for multi-homed hosts.
+Key improvements:
+- Tight site filtering by default when --site is supplied
+- Validates that router, DNS server, DHCP range, and fixed leases lie inside the LAN CIDR
+- Warns when fixed leases overlap the dynamic pool
+- Supports optional site subdirectory output to mirror generated/dnsmasq/<site> layout
+- Adds optional constructor for dnsmasq 'listen-address=' lines if desired later
 """
 
 from __future__ import annotations
@@ -48,6 +45,10 @@ def is_valid_ipv4(value: Optional[str]) -> bool:
         return True
     except Exception:
         return False
+
+
+def as_ipv4(value: str) -> ipaddress.IPv4Address:
+    return ipaddress.IPv4Address(str(value))
 
 
 def normalize_hostname(name: str) -> str:
@@ -204,14 +205,32 @@ def load_registry(path: Path) -> List[Dict[str, Any]]:
     raise ValueError("Registry YAML 'hosts' must be a list or mapping")
 
 
-def collect_candidates(hosts: Iterable[Dict[str, Any]], site: Optional[str]) -> Tuple[List[LeaseCandidate], List[str]]:
+def host_matches_site(raw: Dict[str, Any], site: Optional[str], include_unscoped: bool) -> bool:
+    if site is None:
+        return True
+    raw_site = raw.get("site")
+    if raw_site == site:
+        return True
+    if raw_site is None and include_unscoped:
+        return True
+    return False
+
+
+def collect_candidates(
+    hosts: Iterable[Dict[str, Any]],
+    site: Optional[str],
+    include_unscoped: bool,
+    network: ipaddress.IPv4Network,
+    pool_start: ipaddress.IPv4Address,
+    pool_end: ipaddress.IPv4Address,
+) -> Tuple[List[LeaseCandidate], List[str]]:
     candidates: List[LeaseCandidate] = []
     warnings: List[str] = []
     seen_ips: Dict[str, str] = {}
     seen_macs: Dict[str, str] = {}
 
     for raw in hosts:
-        if site is not None and raw.get("site") not in (None, site):
+        if not host_matches_site(raw, site, include_unscoped):
             continue
 
         host_id = str(raw.get("id") or raw.get("name") or raw.get("hostname") or "unnamed-host")
@@ -220,13 +239,25 @@ def collect_candidates(hosts: Iterable[Dict[str, Any]], site: Optional[str]) -> 
         chosen = preferred_mac(macs)
 
         if not service_ip:
-            warnings.append(f"Host {host_id}: skipped because neither addresses.lan nor addresses.wifi is usable")
+            warnings.append(f"Host {host_id}: skipped because no usable service IPv4 was found")
             continue
         if not chosen:
             warnings.append(f"Host {host_id}: skipped because no usable MAC was found")
             continue
 
+        try:
+            service_addr = as_ipv4(service_ip)
+        except ValueError:
+            warnings.append(f"Host {host_id}: skipped because service IP {service_ip!r} is invalid")
+            continue
+
         mac_key, mac = chosen
+
+        if service_addr not in network:
+            warnings.append(
+                f"Host {host_id}: skipped because service IP {service_ip} is outside LAN CIDR {network}"
+            )
+            continue
 
         if service_ip in seen_ips:
             warnings.append(
@@ -238,6 +269,11 @@ def collect_candidates(hosts: Iterable[Dict[str, Any]], site: Optional[str]) -> 
                 f"Host {host_id}: skipped because MAC {mac} duplicates host {seen_macs[mac]}"
             )
             continue
+
+        if pool_start <= service_addr <= pool_end:
+            warnings.append(
+                f"Host {host_id}: fixed lease {service_ip} overlaps dynamic pool {pool_start}-{pool_end}"
+            )
 
         seen_ips[service_ip] = host_id
         seen_macs[mac] = host_id
@@ -274,6 +310,8 @@ def build_dhcp_conf(
     site: Optional[str],
     emit_tags: bool,
 ) -> str:
+    netmask = ipaddress.ip_network(cidr, strict=False).netmask
+
     lines: List[str] = []
     lines.append("# This file is generated. Edit network-registry.yaml and rerun the generator.")
     lines.append(f"# Registry: {registry_path}")
@@ -285,17 +323,19 @@ def build_dhcp_conf(
     lines.append("# - Address preference is lan, then wifi, then legacy forms")
     lines.append("# - One preferred MAC is chosen for multi-homed hosts")
     lines.append("")
+
     for interface in interfaces:
         lines.append(f"interface={interface}")
     lines.append("bind-interfaces")
     lines.append("dhcp-authoritative")
     lines.append("")
-    lines.append(f"dhcp-range={range_start},{range_end},{ipaddress.ip_network(cidr, strict=False).netmask},{lease_time}")
+    lines.append(f"dhcp-range={range_start},{range_end},{netmask},{lease_time}")
     lines.append(f"dhcp-option=option:router,{router}")
     lines.append(f"dhcp-option=option:dns-server,{dns_server}")
     lines.append(f"dhcp-option=option:domain-search,{domain}")
     lines.append(f"domain={domain},{cidr}")
     lines.append("")
+
     lines.append("# Fixed leases generated from registry")
     for c in candidates:
         lines.append(f"# {c.host_id} ({c.mac_key}, {c.address_kind}, category={c.category})")
@@ -313,19 +353,27 @@ def write_text(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8")
 
 
+def resolve_outdir(base_outdir: Path, site: Optional[str], site_subdir: bool) -> Path:
+    if site and site_subdir:
+        return base_outdir / site
+    return base_outdir
+
+
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Generate dnsmasq DHCP config from network-registry.yaml")
     p.add_argument("--registry", required=True, help="Path to network-registry.yaml")
-    p.add_argument("--site", help="Optional site filter, e.g. reid")
-    p.add_argument("--outdir", default="generated/dhcp", help="Output directory")
+    p.add_argument("--site", help="Optional site filter, e.g. farm")
+    p.add_argument("--outdir", default="generated/dnsmasq", help="Base output directory")
+    p.add_argument("--no-site-subdir", action="store_true", help="Write directly into --outdir instead of --outdir/<site>")
+    p.add_argument("--include-unscoped", action="store_true", help="When --site is used, also include hosts with no site")
     p.add_argument("--interface", default="eth0", help="Primary LAN interface for DHCP service")
     p.add_argument("--extra-interface", action="append", default=[], help="Additional interface(s) to bind")
-    p.add_argument("--cidr", required=True, help="LAN CIDR, e.g. 10.1.1.0/24")
-    p.add_argument("--range-start", required=True, help="DHCP pool start, e.g. 10.1.1.100")
-    p.add_argument("--range-end", required=True, help="DHCP pool end, e.g. 10.1.1.199")
-    p.add_argument("--router", required=True, help="Default gateway IP, e.g. 10.1.1.1")
-    p.add_argument("--dns-server", required=True, help="DNS server advertised by DHCP, e.g. 10.1.1.3")
-    p.add_argument("--domain", required=True, help="Search/default domain, e.g. reid.home.arpa")
+    p.add_argument("--cidr", required=True, help="LAN CIDR, e.g. 192.168.0.0/24")
+    p.add_argument("--range-start", required=True, help="DHCP pool start, e.g. 192.168.0.100")
+    p.add_argument("--range-end", required=True, help="DHCP pool end, e.g. 192.168.0.199")
+    p.add_argument("--router", required=True, help="Default gateway IP, e.g. 192.168.0.1")
+    p.add_argument("--dns-server", required=True, help="DNS server advertised by DHCP, e.g. 192.168.0.210")
+    p.add_argument("--domain", required=True, help="Search/default domain, e.g. farm.home.arpa")
     p.add_argument("--lease-time", default="12h", help="Lease time, e.g. 12h")
     p.add_argument("--emit-tags", action="store_true", help="Add set:<tag> markers from category/roles")
     p.add_argument("--stdout", action="store_true", help="Also print dhcp.conf to stdout")
@@ -336,13 +384,26 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     args = parse_args(argv)
 
     try:
-        ipaddress.ip_network(args.cidr, strict=False)
-        ipaddress.IPv4Address(args.range_start)
-        ipaddress.IPv4Address(args.range_end)
-        ipaddress.IPv4Address(args.router)
-        ipaddress.IPv4Address(args.dns_server)
+        network = ipaddress.ip_network(args.cidr, strict=False)
+        pool_start = as_ipv4(args.range_start)
+        pool_end = as_ipv4(args.range_end)
+        router_ip = as_ipv4(args.router)
+        dns_ip = as_ipv4(args.dns_server)
     except ValueError as exc:
         print(f"Invalid IP/CIDR input: {exc}", file=sys.stderr)
+        return 2
+
+    if pool_start not in network or pool_end not in network:
+        print(f"DHCP range must lie within LAN CIDR {network}", file=sys.stderr)
+        return 2
+    if router_ip not in network:
+        print(f"Router IP {router_ip} is outside LAN CIDR {network}", file=sys.stderr)
+        return 2
+    if dns_ip not in network:
+        print(f"DNS server IP {dns_ip} is outside LAN CIDR {network}", file=sys.stderr)
+        return 2
+    if int(pool_start) > int(pool_end):
+        print("DHCP range start must be <= range end", file=sys.stderr)
         return 2
 
     registry_path = Path(args.registry)
@@ -352,7 +413,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     try:
         hosts = load_registry(registry_path)
-        candidates, warnings = collect_candidates(hosts, args.site)
+        candidates, warnings = collect_candidates(
+            hosts=hosts,
+            site=args.site,
+            include_unscoped=args.include_unscoped,
+            network=network,
+            pool_start=pool_start,
+            pool_end=pool_end,
+        )
     except Exception as exc:
         print(f"Failed to load or process registry: {exc}", file=sys.stderr)
         return 2
@@ -373,23 +441,25 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         emit_tags=args.emit_tags,
     )
 
-    outdir = Path(args.outdir)
+    outdir = resolve_outdir(Path(args.outdir), args.site, site_subdir=not args.no_site_subdir)
     write_text(outdir / "dhcp.conf", dhcp_conf)
 
     warnings_text = [
         "# generator warnings",
         f"# Generated from: {registry_path}",
         f"# Site filter: {args.site or '(none)'}",
+        f"# Include unscoped hosts: {'yes' if args.include_unscoped else 'no'}",
         "# This file is generated. Edit network-registry.yaml instead.",
         "",
     ]
     warnings_text.extend(warnings if warnings else ["No warnings."])
-    write_text(outdir / "warnings.txt", "\n".join(warnings_text) + "\n")
+    write_text(outdir / "warnings_dhcp.txt", "\n".join(warnings_text) + "\n")
 
     summary_lines = [
         "# generated lease summary",
         f"# Registry: {registry_path}",
         f"# Site filter: {args.site or '(none)'}",
+        f"# Include unscoped hosts: {'yes' if args.include_unscoped else 'no'}",
         "",
     ]
     for c in candidates:
@@ -402,7 +472,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print(dhcp_conf)
 
     print(f"Generated: {outdir / 'dhcp.conf'}")
-    print(f"Warnings : {outdir / 'warnings.txt'}")
+    print(f"Warnings : {outdir / 'warnings_dhcp.txt'}")
     print(f"Summary  : {outdir / 'leases-summary.txt'}")
     return 0
 

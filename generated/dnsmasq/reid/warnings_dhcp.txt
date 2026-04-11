@@ -1,0 +1,36 @@
+# generator warnings
+# Generated from: docs/reference/network-registry.yaml
+# Site filter: reid
+# Include unscoped hosts: no
+# This file is generated. Edit network-registry.yaml instead.
+
+Host nvr: fixed lease 10.1.1.178 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host ap-01: fixed lease 10.1.1.123 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host ap-02: fixed lease 10.1.1.117 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host ap-03: fixed lease 10.1.1.118 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host ubiquiti-unknown: fixed lease 10.1.1.113 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host stevenlaptop: fixed lease 10.1.1.134 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host irene-iphone: fixed lease 10.1.1.105 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host steven-iphone: fixed lease 10.1.1.125 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host sonos-workshop: fixed lease 10.1.1.114 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host sonos-mudroom: fixed lease 10.1.1.115 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host sonos-spare: fixed lease 10.1.1.100 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host hydrawise-workshop: fixed lease 10.1.1.124 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host hydrawise-main: fixed lease 10.1.1.130 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host appletv-lounge: fixed lease 10.1.1.116 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host soundbar-lounge: fixed lease 10.1.1.106 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host tv-french-room: fixed lease 10.1.1.131 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host kitchen-display: fixed lease 10.1.1.112 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host irobot-vacuum: fixed lease 10.1.1.107 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host myplace-tablet: fixed lease 10.1.1.109 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host energy-monitor: fixed lease 10.1.1.104 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host weather-station: fixed lease 10.1.1.111 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host speaker-switch: fixed lease 10.1.1.177 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host chain-counter: fixed lease 10.1.1.120 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host esp32-spare-1-monitor: fixed lease 10.1.1.121 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host solar-monitor: fixed lease 10.1.1.119 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host battery-temp: fixed lease 10.1.1.122 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host wearable-01: fixed lease 10.1.1.135 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host signal-generator: fixed lease 10.1.1.128 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host dfrobot-edge101: fixed lease 10.1.1.133 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host irene-macbook: fixed lease 10.1.1.110 overlaps dynamic pool 10.1.1.100-10.1.1.199

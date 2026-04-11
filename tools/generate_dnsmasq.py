@@ -373,7 +373,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         "",
     ]
     warnings_text.extend(warnings if warnings else ["No warnings."])
-    write_text(outdir / "warnings.txt", "\n".join(warnings_text) + "\n")
+    write_text(outdir / "warnings_dns.txt", "\n".join(warnings_text) + "\n")
 
     summary_lines = [
         "# dns publication summary",
@@ -397,7 +397,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     print(f"Generated: {outdir / 'reverse.conf'}")
     print(f"Generated: {outdir / 'hosts.conf'}")
     print(f"Generated: {outdir / 'summary.txt'}")
-    print(f"Warnings : {outdir / 'warnings.txt'}")
+    print(f"Warnings : {outdir / 'warnings_dns.txt'}")
     return 0
 
 

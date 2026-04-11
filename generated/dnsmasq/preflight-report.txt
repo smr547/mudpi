@@ -1,0 +1,626 @@
+# dnsmasq preflight validation report
+# registry: docs/reference/network-registry.yaml
+# generated: 2026-04-11T14:21:00+10:00
+
+## reid
+### zone.conf
+# This file is generated. Edit network-registry.yaml and rerun the generator.
+# Registry: docs/reference/network-registry.yaml
+# Site filter: reid
+# Domain: reid.home.arpa
+
+domain=reid.home.arpa
+local=/reid.home.arpa/
+expand-hosts
+interface=eth0
+bind-interfaces
+addn-hosts=/etc/dnsmasq.d/generated/reid/authoritative.hosts
+conf-file=/etc/dnsmasq.d/generated/reid/aliases.conf
+conf-file=/etc/dnsmasq.d/generated/reid/reverse.conf
+
+
+### hosts.conf
+# This file is generated. Edit network-registry.yaml and rerun the generator.
+# Registry: docs/reference/network-registry.yaml
+# Site filter: reid
+# Domain: reid.home.arpa
+
+# abbhub short-name (lan)
+address=/abbhub/10.1.1.6
+# abbhub canonical (lan)
+address=/abbhub.reid.home.arpa/10.1.1.6
+# cam-01 short-name (lan)
+address=/cam-01/10.1.1.41
+# cam-01 canonical (lan)
+address=/cam-01.reid.home.arpa/10.1.1.41
+# cam-02 short-name (lan)
+address=/cam-02/10.1.1.42
+# cam-02 canonical (lan)
+address=/cam-02.reid.home.arpa/10.1.1.42
+# cam-03 short-name (lan)
+address=/cam-03/10.1.1.43
+# cam-03 canonical (lan)
+address=/cam-03.reid.home.arpa/10.1.1.43
+# cam-04 short-name (lan)
+address=/cam-04/10.1.1.44
+# cam-04 canonical (lan)
+address=/cam-04.reid.home.arpa/10.1.1.44
+# cam-05 short-name (lan)
+address=/cam-05/10.1.1.45
+# cam-05 canonical (lan)
+address=/cam-05.reid.home.arpa/10.1.1.45
+# cam-06 short-name (lan)
+address=/cam-06/10.1.1.46
+# cam-06 canonical (lan)
+address=/cam-06.reid.home.arpa/10.1.1.46
+# cam-07 short-name (lan)
+address=/cam-07/10.1.1.47
+# cam-07 canonical (lan)
+address=/cam-07.reid.home.arpa/10.1.1.47
+# irene-iphone short-name (wifi)
+address=/irene-iphone/10.1.1.105
+# irene-iphone canonical (wifi)
+address=/irene-iphone.reid.home.arpa/10.1.1.105
+# irene-macbook short-name (lan)
+address=/irene-macbook/10.1.1.110
+# irene-macbook canonical (lan)
+address=/irene-macbook.reid.home.arpa/10.1.1.110
+# mudpi short-name (lan)
+address=/mudpi/10.1.1.3
+# mudpi canonical (lan)
+address=/mudpi.reid.home.arpa/10.1.1.3
+# nvr short-name (lan)
+address=/nvr/10.1.1.178
+# nvr canonical (lan)
+address=/nvr.reid.home.arpa/10.1.1.178
+# printer short-name (lan)
+address=/printer/10.1.1.60
+# printer canonical (lan)
+address=/printer.reid.home.arpa/10.1.1.60
+# printserver short-name (lan)
+address=/printserver/10.1.1.30
+# printserver canonical (lan)
+address=/printserver.reid.home.arpa/10.1.1.30
+# router short-name (lan)
+address=/router/10.1.1.1
+# router canonical (lan)
+address=/router.reid.home.arpa/10.1.1.1
+# shorepi short-name (lan)
+address=/shorepi/10.1.1.20
+# shorepi canonical (lan)
+address=/shorepi.reid.home.arpa/10.1.1.20
+# solar-monitor short-name (lan)
+address=/solar-monitor/10.1.1.119
+# solar-monitor canonical (lan)
+address=/solar-monitor.reid.home.arpa/10.1.1.119
+# speaker-switch short-name (lan)
+address=/speaker-switch/10.1.1.177
+# speaker-switch canonical (lan)
+address=/speaker-switch.reid.home.arpa/10.1.1.177
+# steven-iphone short-name (wifi)
+address=/steven-iphone/10.1.1.125
+# steven-iphone canonical (wifi)
+address=/steven-iphone.reid.home.arpa/10.1.1.125
+# stevenlaptop short-name (lan)
+address=/stevenlaptop/10.1.1.134
+# stevenlaptop canonical (lan)
+address=/stevenlaptop.reid.home.arpa/10.1.1.134
+# vdsl-modem short-name (lan)
+address=/vdsl-modem/10.1.1.2
+# vdsl-modem canonical (lan)
+address=/vdsl-modem.reid.home.arpa/10.1.1.2
+# zappi short-name (lan)
+address=/zappi/10.1.1.50
+# zappi canonical (lan)
+address=/zappi.reid.home.arpa/10.1.1.50
+
+### aliases.conf
+# This file is generated. Edit network-registry.yaml and rerun the generator.
+# Registry: docs/reference/network-registry.yaml
+# Site filter: reid
+# Domain: reid.home.arpa
+
+# printserver alias
+address=/3dprintserver.reid.home.arpa/10.1.1.30
+# cam-01 alias
+address=/cam1.reid.home.arpa/10.1.1.41
+# cam-02 alias
+address=/cam2.reid.home.arpa/10.1.1.42
+# cam-03 alias
+address=/cam3.reid.home.arpa/10.1.1.43
+# cam-04 alias
+address=/cam4.reid.home.arpa/10.1.1.44
+# cam-05 alias
+address=/cam5.reid.home.arpa/10.1.1.45
+# cam-06 alias
+address=/cam6.reid.home.arpa/10.1.1.46
+# cam-07 alias
+address=/cam7.reid.home.arpa/10.1.1.47
+# irene-macbook alias
+address=/irene-laptop/10.1.1.110
+# irene-iphone alias
+address=/irene-phone/10.1.1.105
+# mudpi alias
+address=/mudpi.vpn.home.arpa/10.8.1.1
+# shorepi alias
+address=/signalk.reid.home.arpa/10.1.1.20
+# steven-iphone alias
+address=/steven-phone/10.1.1.125
+
+### reverse.conf
+# This file is generated. Edit network-registry.yaml and rerun the generator.
+# Registry: docs/reference/network-registry.yaml
+# Site filter: reid
+# Domain: reid.home.arpa
+
+ptr-record=1.1.1.10.in-addr.arpa,router.reid.home.arpa
+ptr-record=105.1.1.10.in-addr.arpa,irene-iphone.reid.home.arpa
+ptr-record=110.1.1.10.in-addr.arpa,irene-macbook.reid.home.arpa
+ptr-record=119.1.1.10.in-addr.arpa,solar-monitor.reid.home.arpa
+ptr-record=125.1.1.10.in-addr.arpa,steven-iphone.reid.home.arpa
+ptr-record=134.1.1.10.in-addr.arpa,stevenlaptop.reid.home.arpa
+ptr-record=177.1.1.10.in-addr.arpa,speaker-switch.reid.home.arpa
+ptr-record=178.1.1.10.in-addr.arpa,nvr.reid.home.arpa
+ptr-record=2.1.1.10.in-addr.arpa,vdsl-modem.reid.home.arpa
+ptr-record=20.1.1.10.in-addr.arpa,shorepi.reid.home.arpa
+ptr-record=3.1.1.10.in-addr.arpa,mudpi.reid.home.arpa
+ptr-record=30.1.1.10.in-addr.arpa,printserver.reid.home.arpa
+ptr-record=41.1.1.10.in-addr.arpa,cam-01.reid.home.arpa
+ptr-record=42.1.1.10.in-addr.arpa,cam-02.reid.home.arpa
+ptr-record=43.1.1.10.in-addr.arpa,cam-03.reid.home.arpa
+ptr-record=44.1.1.10.in-addr.arpa,cam-04.reid.home.arpa
+ptr-record=45.1.1.10.in-addr.arpa,cam-05.reid.home.arpa
+ptr-record=46.1.1.10.in-addr.arpa,cam-06.reid.home.arpa
+ptr-record=47.1.1.10.in-addr.arpa,cam-07.reid.home.arpa
+ptr-record=50.1.1.10.in-addr.arpa,zappi.reid.home.arpa
+ptr-record=6.1.1.10.in-addr.arpa,abbhub.reid.home.arpa
+ptr-record=60.1.1.10.in-addr.arpa,printer.reid.home.arpa
+
+### warnings_dns.txt
+# generator warnings
+# Generated from: docs/reference/network-registry.yaml
+# Site filter: reid
+# Domain: reid.home.arpa
+# This file is generated. Edit network-registry.yaml instead.
+
+Host ap-01: skipped because dns.canonical is missing
+Host ap-02: skipped because dns.canonical is missing
+Host ap-03: skipped because dns.canonical is missing
+Host ubiquiti-unknown: skipped because dns.canonical is missing
+Host sonos-workshop: skipped because dns.canonical is missing
+Host sonos-mudroom: skipped because dns.canonical is missing
+Host sonos-spare: skipped because dns.canonical is missing
+Host hydrawise-workshop: skipped because dns.canonical is missing
+Host hydrawise-main: skipped because dns.canonical is missing
+Host appletv-lounge: skipped because dns.canonical is missing
+Host soundbar-lounge: skipped because dns.canonical is missing
+Host tv-french-room: skipped because dns.canonical is missing
+Host kitchen-display: skipped because dns.canonical is missing
+Host irobot-vacuum: skipped because dns.canonical is missing
+Host myplace-tablet: skipped because dns.canonical is missing
+Host energy-monitor: skipped because dns.canonical is missing
+Host weather-station: skipped because dns.canonical is missing
+Host chain-counter: skipped because dns.canonical is missing
+Host esp32-spare-1-monitor: skipped because dns.canonical is missing
+Host battery-temp: skipped because dns.canonical is missing
+Host wearable-01: skipped because dns.canonical is missing
+Host signal-generator: skipped because dns.canonical is missing
+Host dfrobot-edge101: skipped because dns.canonical is missing
+
+### warnings_dhcp.txt
+# generator warnings
+# Generated from: docs/reference/network-registry.yaml
+# Site filter: reid
+# Include unscoped hosts: no
+# This file is generated. Edit network-registry.yaml instead.
+
+Host nvr: fixed lease 10.1.1.178 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host ap-01: fixed lease 10.1.1.123 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host ap-02: fixed lease 10.1.1.117 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host ap-03: fixed lease 10.1.1.118 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host ubiquiti-unknown: fixed lease 10.1.1.113 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host stevenlaptop: fixed lease 10.1.1.134 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host irene-iphone: fixed lease 10.1.1.105 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host steven-iphone: fixed lease 10.1.1.125 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host sonos-workshop: fixed lease 10.1.1.114 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host sonos-mudroom: fixed lease 10.1.1.115 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host sonos-spare: fixed lease 10.1.1.100 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host hydrawise-workshop: fixed lease 10.1.1.124 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host hydrawise-main: fixed lease 10.1.1.130 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host appletv-lounge: fixed lease 10.1.1.116 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host soundbar-lounge: fixed lease 10.1.1.106 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host tv-french-room: fixed lease 10.1.1.131 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host kitchen-display: fixed lease 10.1.1.112 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host irobot-vacuum: fixed lease 10.1.1.107 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host myplace-tablet: fixed lease 10.1.1.109 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host energy-monitor: fixed lease 10.1.1.104 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host weather-station: fixed lease 10.1.1.111 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host speaker-switch: fixed lease 10.1.1.177 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host chain-counter: fixed lease 10.1.1.120 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host esp32-spare-1-monitor: fixed lease 10.1.1.121 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host solar-monitor: fixed lease 10.1.1.119 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host battery-temp: fixed lease 10.1.1.122 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host wearable-01: fixed lease 10.1.1.135 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host signal-generator: fixed lease 10.1.1.128 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host dfrobot-edge101: fixed lease 10.1.1.133 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host irene-macbook: fixed lease 10.1.1.110 overlaps dynamic pool 10.1.1.100-10.1.1.199
+
+### dhcp.conf
+# This file is generated. Edit network-registry.yaml and rerun the generator.
+# Registry: docs/reference/network-registry.yaml
+# Site filter: reid
+#
+# Generation policy:
+# - DHCP served only on the chosen interfaces
+# - Fixed leases generated only for hosts with a usable MAC and a usable service IP
+# - Address preference is lan, then wifi, then legacy forms
+# - One preferred MAC is chosen for multi-homed hosts
+
+interface=eth0
+bind-interfaces
+dhcp-authoritative
+
+dhcp-range=10.1.1.100,10.1.1.199,255.255.255.0,12h
+dhcp-option=option:router,10.1.1.1
+dhcp-option=option:dns-server,10.1.1.3
+dhcp-option=option:domain-search,reid.home.arpa
+domain=reid.home.arpa,10.1.1.0/24
+
+# Fixed leases generated from registry
+# router (primary, lan, category=network)
+dhcp-host=50:91:e3:38:03:e9,router,10.1.1.1
+# vdsl-modem (primary, lan, category=network)
+dhcp-host=10:13:31:57:fa:00,vdsl-modem,10.1.1.2
+# mudpi (ethernet, lan, category=infrastructure)
+dhcp-host=88:a2:9e:6e:8c:d4,mudpi,10.1.1.3
+# abbhub (primary, lan, category=energy)
+dhcp-host=00:04:a3:f3:2d:fe,abbhub,10.1.1.6
+# shorepi (ethernet, lan, category=infrastructure)
+dhcp-host=d8:3a:dd:2a:25:3f,shorepi,10.1.1.20
+# printserver (primary, lan, category=server)
+dhcp-host=88:a2:9e:19:07:69,printserver,10.1.1.30
+# cam-01 (primary, lan, category=camera)
+dhcp-host=24:52:6a:34:6a:36,cam-01,10.1.1.41
+# cam-02 (primary, lan, category=camera)
+dhcp-host=24:52:6a:34:69:f5,cam-02,10.1.1.42
+# cam-03 (primary, lan, category=camera)
+dhcp-host=24:52:6a:34:69:c9,cam-03,10.1.1.43
+# cam-04 (primary, lan, category=camera)
+dhcp-host=24:52:6a:34:6d:13,cam-04,10.1.1.44
+# cam-05 (primary, lan, category=camera)
+dhcp-host=24:52:6a:34:69:73,cam-05,10.1.1.45
+# cam-06 (primary, lan, category=camera)
+dhcp-host=fc:b6:9d:9e:d1:e5,cam-06,10.1.1.46
+# cam-07 (primary, lan, category=camera)
+dhcp-host=24:52:6a:34:6d:18,cam-07,10.1.1.47
+# zappi (primary, lan, category=energy)
+dhcp-host=c0:49:ef:64:e9:a8,zappi,10.1.1.50
+# printer (primary, lan, category=appliance)
+dhcp-host=00:41:0e:fe:b0:84,printer,10.1.1.60
+# sonos-spare (primary, lan, category=media)
+dhcp-host=54:2a:1b:e6:68:8e,sonos-spare,10.1.1.100
+# energy-monitor (primary, lan, category=iot)
+dhcp-host=30:ed:a0:d7:e3:fc,energy-monitor,10.1.1.104
+# irene-iphone (wifi, wifi, category=personal)
+dhcp-host=f0:d7:93:32:00:69,irene-iphone,10.1.1.105
+# soundbar-lounge (primary, lan, category=media)
+dhcp-host=a8:16:9d:3d:b3:0d,soundbar-lounge,10.1.1.106
+# irobot-vacuum (primary, lan, category=iot)
+dhcp-host=50:14:79:fa:2c:a4,irobot-vacuum,10.1.1.107
+# myplace-tablet (primary, lan, category=iot)
+dhcp-host=b6:29:43:61:d4:b6,myplace-tablet,10.1.1.109
+# irene-macbook (wifi, lan, category=personal)
+dhcp-host=b2:d1:bb:c4:23:e2,irene-macbook,10.1.1.110
+# weather-station (primary, lan, category=iot)
+dhcp-host=ec:64:c9:96:07:b4,weather-station,10.1.1.111
+# kitchen-display (primary, lan, category=iot)
+dhcp-host=7c:91:22:41:87:d4,kitchen-display,10.1.1.112
+# ubiquiti-unknown (primary, lan, category=network)
+dhcp-host=f4:92:bf:c3:40:24,ubiquiti-unknown,10.1.1.113
+# sonos-workshop (primary, lan, category=media)
+dhcp-host=48:a6:b8:28:be:de,sonos-workshop,10.1.1.114
+# sonos-mudroom (primary, lan, category=media)
+dhcp-host=54:2a:1b:e6:63:03,sonos-mudroom,10.1.1.115
+# appletv-lounge (primary, lan, category=media)
+dhcp-host=8c:26:aa:c4:ff:2c,appletv-lounge,10.1.1.116
+# ap-02 (primary, lan, category=network)
+dhcp-host=74:ac:b9:69:7e:6e,ap-02,10.1.1.117
+# ap-03 (primary, lan, category=network)
+dhcp-host=74:ac:b9:69:7c:62,ap-03,10.1.1.118
+# solar-monitor (primary, lan, category=iot)
+dhcp-host=1c:db:d4:7a:33:08,solar-monitor,10.1.1.119
+# chain-counter (primary, lan, category=iot)
+dhcp-host=24:0a:c4:f6:a0:7c,chain-counter,10.1.1.120
+# esp32-spare-1-monitor (primary, lan, category=iot)
+dhcp-host=24:0a:c4:f6:a7:3c,esp32-spare-1-monitor,10.1.1.121
+# battery-temp (primary, lan, category=iot)
+dhcp-host=10:97:bd:d3:f6:38,battery-temp,10.1.1.122
+# ap-01 (primary, lan, category=network)
+dhcp-host=74:ac:b9:69:80:42,ap-01,10.1.1.123
+# hydrawise-workshop (primary, lan, category=iot)
+dhcp-host=f8:f0:05:a7:63:f6,hydrawise-workshop,10.1.1.124
+# steven-iphone (wifi, wifi, category=personal)
+dhcp-host=8c:86:1e:c4:4e:7f,steven-iphone,10.1.1.125
+# signal-generator (primary, lan, category=iot)
+dhcp-host=e0:e2:e6:c0:b3:fc,signal-generator,10.1.1.128
+# hydrawise-main (primary, lan, category=iot)
+dhcp-host=74:d5:c6:46:36:12,hydrawise-main,10.1.1.130
+# tv-french-room (primary, lan, category=media)
+dhcp-host=84:c0:ef:63:46:08,tv-french-room,10.1.1.131
+# dfrobot-edge101 (primary, lan, category=iot)
+dhcp-host=80:f3:da:6b:3c:74,dfrobot-edge101,10.1.1.133
+# stevenlaptop (ethernet, lan, category=workstation)
+dhcp-host=80:3f:5d:f4:44:b6,stevenlaptop,10.1.1.134
+# wearable-01 (primary, lan, category=iot)
+dhcp-host=24:6f:28:b9:af:2c,wearable-01,10.1.1.135
+# speaker-switch (primary, lan, category=iot)
+dhcp-host=de:ad:be:ef:fe:ed,speaker-switch,10.1.1.177
+# nvr (primary, lan, category=security)
+dhcp-host=24:52:6a:25:bd:f4,nvr,10.1.1.178
+
+### leases-summary.txt
+# generated lease summary
+# Registry: docs/reference/network-registry.yaml
+# Site filter: reid
+# Include unscoped hosts: no
+
+10.1.1.1         50:91:e3:38:03:e9  router                (router, primary, lan, network)
+10.1.1.2         10:13:31:57:fa:00  vdsl-modem            (vdsl-modem, primary, lan, network)
+10.1.1.3         88:a2:9e:6e:8c:d4  mudpi                 (mudpi, ethernet, lan, infrastructure)
+10.1.1.6         00:04:a3:f3:2d:fe  abbhub                (abbhub, primary, lan, energy)
+10.1.1.20        d8:3a:dd:2a:25:3f  shorepi               (shorepi, ethernet, lan, infrastructure)
+10.1.1.30        88:a2:9e:19:07:69  printserver           (printserver, primary, lan, server)
+10.1.1.41        24:52:6a:34:6a:36  cam-01                (cam-01, primary, lan, camera)
+10.1.1.42        24:52:6a:34:69:f5  cam-02                (cam-02, primary, lan, camera)
+10.1.1.43        24:52:6a:34:69:c9  cam-03                (cam-03, primary, lan, camera)
+10.1.1.44        24:52:6a:34:6d:13  cam-04                (cam-04, primary, lan, camera)
+10.1.1.45        24:52:6a:34:69:73  cam-05                (cam-05, primary, lan, camera)
+10.1.1.46        fc:b6:9d:9e:d1:e5  cam-06                (cam-06, primary, lan, camera)
+10.1.1.47        24:52:6a:34:6d:18  cam-07                (cam-07, primary, lan, camera)
+10.1.1.50        c0:49:ef:64:e9:a8  zappi                 (zappi, primary, lan, energy)
+10.1.1.60        00:41:0e:fe:b0:84  printer               (printer, primary, lan, appliance)
+10.1.1.100       54:2a:1b:e6:68:8e  sonos-spare           (sonos-spare, primary, lan, media)
+10.1.1.104       30:ed:a0:d7:e3:fc  energy-monitor        (energy-monitor, primary, lan, iot)
+10.1.1.105       f0:d7:93:32:00:69  irene-iphone          (irene-iphone, wifi, wifi, personal)
+10.1.1.106       a8:16:9d:3d:b3:0d  soundbar-lounge       (soundbar-lounge, primary, lan, media)
+10.1.1.107       50:14:79:fa:2c:a4  irobot-vacuum         (irobot-vacuum, primary, lan, iot)
+10.1.1.109       b6:29:43:61:d4:b6  myplace-tablet        (myplace-tablet, primary, lan, iot)
+10.1.1.110       b2:d1:bb:c4:23:e2  irene-macbook         (irene-macbook, wifi, lan, personal)
+10.1.1.111       ec:64:c9:96:07:b4  weather-station       (weather-station, primary, lan, iot)
+10.1.1.112       7c:91:22:41:87:d4  kitchen-display       (kitchen-display, primary, lan, iot)
+10.1.1.113       f4:92:bf:c3:40:24  ubiquiti-unknown      (ubiquiti-unknown, primary, lan, network)
+10.1.1.114       48:a6:b8:28:be:de  sonos-workshop        (sonos-workshop, primary, lan, media)
+10.1.1.115       54:2a:1b:e6:63:03  sonos-mudroom         (sonos-mudroom, primary, lan, media)
+10.1.1.116       8c:26:aa:c4:ff:2c  appletv-lounge        (appletv-lounge, primary, lan, media)
+10.1.1.117       74:ac:b9:69:7e:6e  ap-02                 (ap-02, primary, lan, network)
+10.1.1.118       74:ac:b9:69:7c:62  ap-03                 (ap-03, primary, lan, network)
+10.1.1.119       1c:db:d4:7a:33:08  solar-monitor         (solar-monitor, primary, lan, iot)
+10.1.1.120       24:0a:c4:f6:a0:7c  chain-counter         (chain-counter, primary, lan, iot)
+10.1.1.121       24:0a:c4:f6:a7:3c  esp32-spare-1-monitor  (esp32-spare-1-monitor, primary, lan, iot)
+10.1.1.122       10:97:bd:d3:f6:38  battery-temp          (battery-temp, primary, lan, iot)
+10.1.1.123       74:ac:b9:69:80:42  ap-01                 (ap-01, primary, lan, network)
+10.1.1.124       f8:f0:05:a7:63:f6  hydrawise-workshop    (hydrawise-workshop, primary, lan, iot)
+10.1.1.125       8c:86:1e:c4:4e:7f  steven-iphone         (steven-iphone, wifi, wifi, personal)
+10.1.1.128       e0:e2:e6:c0:b3:fc  signal-generator      (signal-generator, primary, lan, iot)
+10.1.1.130       74:d5:c6:46:36:12  hydrawise-main        (hydrawise-main, primary, lan, iot)
+10.1.1.131       84:c0:ef:63:46:08  tv-french-room        (tv-french-room, primary, lan, media)
+10.1.1.133       80:f3:da:6b:3c:74  dfrobot-edge101       (dfrobot-edge101, primary, lan, iot)
+10.1.1.134       80:3f:5d:f4:44:b6  stevenlaptop          (stevenlaptop, ethernet, lan, workstation)
+10.1.1.135       24:6f:28:b9:af:2c  wearable-01           (wearable-01, primary, lan, iot)
+10.1.1.177       de:ad:be:ef:fe:ed  speaker-switch        (speaker-switch, primary, lan, iot)
+10.1.1.178       24:52:6a:25:bd:f4  nvr                   (nvr, primary, lan, security)
+
+### summary.txt
+# dns publication summary
+# Registry: docs/reference/network-registry.yaml
+# Site filter: reid
+# Domain: reid.home.arpa
+
+10.1.1.1         router.reid.home.arpa router
+10.1.1.2         vdsl-modem.reid.home.arpa vdsl-modem
+10.1.1.3         mudpi.reid.home.arpa mudpi
+10.1.1.6         abbhub.reid.home.arpa abbhub
+10.1.1.20        shorepi.reid.home.arpa shorepi signalk.reid.home.arpa
+10.1.1.30        printserver.reid.home.arpa printserver 3dprintserver.reid.home.arpa
+10.1.1.41        cam-01.reid.home.arpa cam-01 cam1.reid.home.arpa
+10.1.1.42        cam-02.reid.home.arpa cam-02 cam2.reid.home.arpa
+10.1.1.43        cam-03.reid.home.arpa cam-03 cam3.reid.home.arpa
+10.1.1.44        cam-04.reid.home.arpa cam-04 cam4.reid.home.arpa
+10.1.1.45        cam-05.reid.home.arpa cam-05 cam5.reid.home.arpa
+10.1.1.46        cam-06.reid.home.arpa cam-06 cam6.reid.home.arpa
+10.1.1.47        cam-07.reid.home.arpa cam-07 cam7.reid.home.arpa
+10.1.1.50        zappi.reid.home.arpa zappi
+10.1.1.60        printer.reid.home.arpa printer
+10.1.1.105       irene-iphone.reid.home.arpa irene-iphone
+10.1.1.110       irene-macbook.reid.home.arpa irene-macbook
+10.1.1.119       solar-monitor.reid.home.arpa solar-monitor
+10.1.1.125       steven-iphone.reid.home.arpa steven-iphone
+10.1.1.134       stevenlaptop.reid.home.arpa stevenlaptop
+10.1.1.177       speaker-switch.reid.home.arpa speaker-switch
+10.1.1.178       nvr.reid.home.arpa nvr
+
+## farm
+### zone.conf
+# This file is generated. Edit network-registry.yaml and rerun the generator.
+# Registry: docs/reference/network-registry.yaml
+# Site filter: farm
+# Domain: farm.home.arpa
+
+domain=farm.home.arpa
+local=/farm.home.arpa/
+expand-hosts
+interface=eth0
+bind-interfaces
+addn-hosts=/etc/dnsmasq.d/generated/farm/authoritative.hosts
+conf-file=/etc/dnsmasq.d/generated/farm/aliases.conf
+conf-file=/etc/dnsmasq.d/generated/farm/reverse.conf
+
+
+### hosts.conf
+# This file is generated. Edit network-registry.yaml and rerun the generator.
+# Registry: docs/reference/network-registry.yaml
+# Site filter: farm
+# Domain: farm.home.arpa
+
+# ap1 short-name (lan)
+address=/ap1/192.168.0.100
+# ap1 canonical (lan)
+address=/ap1.farm.home.arpa/192.168.0.100
+# ap2 short-name (lan)
+address=/ap2/192.168.0.194
+# ap2 canonical (lan)
+address=/ap2.farm.home.arpa/192.168.0.194
+# farm-router short-name (lan)
+address=/router/192.168.0.1
+# farm-router canonical (lan)
+address=/router.farm.home.arpa/192.168.0.1
+# shedpi canonical (lan)
+address=/shedpi.farm.home.arpa/192.168.0.210
+# sunnyboy1 short-name (lan)
+address=/sunnyboy1/192.168.0.147
+# sunnyboy1 canonical (lan)
+address=/sunnyboy1.farm.home.arpa/192.168.0.147
+# sunnyboy2 short-name (lan)
+address=/sunnyboy2/192.168.0.206
+# sunnyboy2 canonical (lan)
+address=/sunnyboy2.farm.home.arpa/192.168.0.206
+# sunnyboy3 short-name (lan)
+address=/sunnyboy3/192.168.0.223
+# sunnyboy3 canonical (lan)
+address=/sunnyboy3.farm.home.arpa/192.168.0.223
+# sunnyisland short-name (lan)
+address=/sunnyisland/192.168.0.250
+# sunnyisland canonical (lan)
+address=/sunnyisland.farm.home.arpa/192.168.0.250
+# weatherstation short-name (lan)
+address=/weatherstation/192.168.0.179
+# weatherstation canonical (lan)
+address=/weatherstation.farm.home.arpa/192.168.0.179
+
+### aliases.conf
+# This file is generated. Edit network-registry.yaml and rerun the generator.
+# Registry: docs/reference/network-registry.yaml
+# Site filter: farm
+# Domain: farm.home.arpa
+
+# sunnyisland alias
+address=/barkingisland/192.168.0.250
+# sunnyboy1 alias
+address=/barkingisland1/192.168.0.147
+# sunnyboy2 alias
+address=/barkingisland2/192.168.0.206
+# sunnyboy3 alias
+address=/barkingisland3/192.168.0.223
+# shedpi alias
+address=/shedpi/192.168.0.210
+
+### reverse.conf
+# This file is generated. Edit network-registry.yaml and rerun the generator.
+# Registry: docs/reference/network-registry.yaml
+# Site filter: farm
+# Domain: farm.home.arpa
+
+ptr-record=1.0.168.192.in-addr.arpa,router.farm.home.arpa
+ptr-record=100.0.168.192.in-addr.arpa,ap1.farm.home.arpa
+ptr-record=147.0.168.192.in-addr.arpa,sunnyboy1.farm.home.arpa
+ptr-record=179.0.168.192.in-addr.arpa,weatherstation.farm.home.arpa
+ptr-record=194.0.168.192.in-addr.arpa,ap2.farm.home.arpa
+ptr-record=206.0.168.192.in-addr.arpa,sunnyboy2.farm.home.arpa
+ptr-record=210.0.168.192.in-addr.arpa,shedpi.farm.home.arpa
+ptr-record=223.0.168.192.in-addr.arpa,sunnyboy3.farm.home.arpa
+ptr-record=250.0.168.192.in-addr.arpa,sunnyisland.farm.home.arpa
+
+### warnings_dns.txt
+# generator warnings
+# Generated from: docs/reference/network-registry.yaml
+# Site filter: farm
+# Domain: farm.home.arpa
+# This file is generated. Edit network-registry.yaml instead.
+
+No warnings.
+
+### warnings_dhcp.txt
+# generator warnings
+# Generated from: docs/reference/network-registry.yaml
+# Site filter: farm
+# Include unscoped hosts: no
+# This file is generated. Edit network-registry.yaml instead.
+
+Host sunnyboy1: fixed lease 192.168.0.147 overlaps dynamic pool 192.168.0.100-192.168.0.199
+Host weatherstation: fixed lease 192.168.0.179 overlaps dynamic pool 192.168.0.100-192.168.0.199
+Host ap1: fixed lease 192.168.0.100 overlaps dynamic pool 192.168.0.100-192.168.0.199
+Host ap2: fixed lease 192.168.0.194 overlaps dynamic pool 192.168.0.100-192.168.0.199
+
+### dhcp.conf
+# This file is generated. Edit network-registry.yaml and rerun the generator.
+# Registry: docs/reference/network-registry.yaml
+# Site filter: farm
+#
+# Generation policy:
+# - DHCP served only on the chosen interfaces
+# - Fixed leases generated only for hosts with a usable MAC and a usable service IP
+# - Address preference is lan, then wifi, then legacy forms
+# - One preferred MAC is chosen for multi-homed hosts
+
+interface=eth0
+bind-interfaces
+dhcp-authoritative
+
+dhcp-range=192.168.0.100,192.168.0.199,255.255.255.0,12h
+dhcp-option=option:router,192.168.0.1
+dhcp-option=option:dns-server,192.168.0.210
+dhcp-option=option:domain-search,farm.home.arpa
+domain=farm.home.arpa,192.168.0.0/24
+
+# Fixed leases generated from registry
+# farm-router (primary, lan, category=network)
+dhcp-host=a8:42:a1:e9:ad:d4,farm-router,192.168.0.1
+# ap1 (primary, lan, category=network)
+dhcp-host=74:83:c2:7b:35:6f,ap1,192.168.0.100
+# sunnyboy1 (primary, lan, category=energy)
+dhcp-host=00:40:ad:af:c3:ee,sunnyboy1,192.168.0.147
+# weatherstation (primary, lan, category=sensor)
+dhcp-host=7c:9e:bd:78:c4:58,weatherstation,192.168.0.179
+# ap2 (primary, lan, category=network)
+dhcp-host=78:45:58:ed:73:dd,ap2,192.168.0.194
+# sunnyboy2 (primary, lan, category=energy)
+dhcp-host=00:40:ad:af:f5:7f,sunnyboy2,192.168.0.206
+# shedpi (ethernet, lan, category=infrastructure)
+dhcp-host=e4:5f:01:78:f6:62,shedpi,192.168.0.210
+# sunnyboy3 (primary, lan, category=energy)
+dhcp-host=00:40:ad:af:f6:d9,sunnyboy3,192.168.0.223
+# sunnyisland (primary, lan, category=energy)
+dhcp-host=00:40:ad:b5:00:f8,sunnyisland,192.168.0.250
+
+### leases-summary.txt
+# generated lease summary
+# Registry: docs/reference/network-registry.yaml
+# Site filter: farm
+# Include unscoped hosts: no
+
+192.168.0.1      a8:42:a1:e9:ad:d4  farm-router           (farm-router, primary, lan, network)
+192.168.0.100    74:83:c2:7b:35:6f  ap1                   (ap1, primary, lan, network)
+192.168.0.147    00:40:ad:af:c3:ee  sunnyboy1             (sunnyboy1, primary, lan, energy)
+192.168.0.179    7c:9e:bd:78:c4:58  weatherstation        (weatherstation, primary, lan, sensor)
+192.168.0.194    78:45:58:ed:73:dd  ap2                   (ap2, primary, lan, network)
+192.168.0.206    00:40:ad:af:f5:7f  sunnyboy2             (sunnyboy2, primary, lan, energy)
+192.168.0.210    e4:5f:01:78:f6:62  shedpi                (shedpi, ethernet, lan, infrastructure)
+192.168.0.223    00:40:ad:af:f6:d9  sunnyboy3             (sunnyboy3, primary, lan, energy)
+192.168.0.250    00:40:ad:b5:00:f8  sunnyisland           (sunnyisland, primary, lan, energy)
+
+### summary.txt
+# dns publication summary
+# Registry: docs/reference/network-registry.yaml
+# Site filter: farm
+# Domain: farm.home.arpa
+
+192.168.0.1      router.farm.home.arpa router
+192.168.0.100    ap1.farm.home.arpa ap1
+192.168.0.147    sunnyboy1.farm.home.arpa sunnyboy1
+192.168.0.179    weatherstation.farm.home.arpa weatherstation
+192.168.0.194    ap2.farm.home.arpa ap2
+192.168.0.206    sunnyboy2.farm.home.arpa sunnyboy2
+192.168.0.210    shedpi.farm.home.arpa shedpi
+192.168.0.223    sunnyboy3.farm.home.arpa sunnyboy3
+192.168.0.250    sunnyisland.farm.home.arpa sunnyisland
+

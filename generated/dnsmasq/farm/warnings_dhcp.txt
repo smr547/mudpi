@@ -1,0 +1,10 @@
+# generator warnings
+# Generated from: docs/reference/network-registry.yaml
+# Site filter: farm
+# Include unscoped hosts: no
+# This file is generated. Edit network-registry.yaml instead.
+
+Host sunnyboy1: fixed lease 192.168.0.147 overlaps dynamic pool 192.168.0.100-192.168.0.199
+Host weatherstation: fixed lease 192.168.0.179 overlaps dynamic pool 192.168.0.100-192.168.0.199
+Host ap1: fixed lease 192.168.0.100 overlaps dynamic pool 192.168.0.100-192.168.0.199
+Host ap2: fixed lease 192.168.0.194 overlaps dynamic pool 192.168.0.100-192.168.0.199
