@@ -12,10 +12,9 @@ DIAGRAM_OUTPUT := generated/diagrams
 
 .PHONY: help network diagram all clean validate
 
+
 # --- DNS/DHCP generation and preflight ---------------------------------------
 
-PYTHON ?= python3
-REGISTRY ?= docs/reference/network-registry.yaml
 DNS_GEN ?= tools/generate_dnsmasq.py
 DHCP_GEN ?= tools/generate_dhcp_dnsmasq.py
 GEN_ROOT ?= generated/dnsmasq
@@ -96,7 +95,7 @@ preflight-dnsmasq: build-dnsmasq
 	echo >> "$$REPORT"; \
 	for site in reid farm; do \
 	  echo "## $$site" >> "$$REPORT"; \
-	  for f in zone.conf hosts.conf aliases.conf reverse.conf warnings.txt warnings_dns.txt warnings_dhcp.txt dhcp.conf leases-summary.txt summary.txt; do \
+	  for f in zone.conf hosts.conf aliases.conf reverse.conf warnings.txt warnings_dns.txt warnings_dhcp.txt dhcp.conf leases-summary.txt summary.txt authoritative.hosts; do \
 	    if [ -f "$(GEN_ROOT)/$$site/$$f" ]; then \
 	      echo "### $$f" >> "$$REPORT"; \
 	      cat "$(GEN_ROOT)/$$site/$$f" >> "$$REPORT"; \
@@ -131,8 +130,7 @@ deploy-farm-dnsmasq: preflight-dnsmasq
 	@./tools/deploy_dnsmasq.sh farm
 
 clean-dnsmasq:
-	rm -rf $(GEN_ROOT)/reid $(GEN_ROOT)/farm
-
+	rm -rf $(GEN_ROOT)/reid $(GEN_ROOT)/farm $(GEN_ROOT)/preflight-report.txt
 
 help:
 	@echo "MudPi Infrastructure Makefile"

@@ -1,6 +1,6 @@
 # dnsmasq preflight validation report
 # registry: docs/reference/network-registry.yaml
-# generated: 2026-04-11T14:21:00+10:00
+# generated: 2026-04-14T09:52:31+10:00
 
 ## reid
 ### zone.conf
@@ -439,6 +439,35 @@ dhcp-host=24:52:6a:25:bd:f4,nvr,10.1.1.178
 10.1.1.177       speaker-switch.reid.home.arpa speaker-switch
 10.1.1.178       nvr.reid.home.arpa nvr
 
+### authoritative.hosts
+# This file is generated. Edit network-registry.yaml and rerun the generator.
+# Registry: docs/reference/network-registry.yaml
+# Site filter: reid
+# Domain: reid.home.arpa
+
+10.1.1.1 router.reid.home.arpa router
+10.1.1.2 vdsl-modem.reid.home.arpa vdsl-modem
+10.1.1.3 mudpi.reid.home.arpa mudpi
+10.1.1.6 abbhub.reid.home.arpa abbhub
+10.1.1.20 shorepi.reid.home.arpa shorepi signalk.reid.home.arpa
+10.1.1.30 printserver.reid.home.arpa printserver 3dprintserver.reid.home.arpa
+10.1.1.41 cam-01.reid.home.arpa cam-01 cam1.reid.home.arpa
+10.1.1.42 cam-02.reid.home.arpa cam-02 cam2.reid.home.arpa
+10.1.1.43 cam-03.reid.home.arpa cam-03 cam3.reid.home.arpa
+10.1.1.44 cam-04.reid.home.arpa cam-04 cam4.reid.home.arpa
+10.1.1.45 cam-05.reid.home.arpa cam-05 cam5.reid.home.arpa
+10.1.1.46 cam-06.reid.home.arpa cam-06 cam6.reid.home.arpa
+10.1.1.47 cam-07.reid.home.arpa cam-07 cam7.reid.home.arpa
+10.1.1.50 zappi.reid.home.arpa zappi
+10.1.1.60 printer.reid.home.arpa printer
+10.1.1.105 irene-iphone.reid.home.arpa irene-iphone
+10.1.1.110 irene-macbook.reid.home.arpa irene-macbook
+10.1.1.119 solar-monitor.reid.home.arpa solar-monitor
+10.1.1.125 steven-iphone.reid.home.arpa steven-iphone
+10.1.1.134 stevenlaptop.reid.home.arpa stevenlaptop
+10.1.1.177 speaker-switch.reid.home.arpa speaker-switch
+10.1.1.178 nvr.reid.home.arpa nvr
+
 ## farm
 ### zone.conf
 # This file is generated. Edit network-registry.yaml and rerun the generator.
@@ -623,4 +652,20 @@ dhcp-host=00:40:ad:b5:00:f8,sunnyisland,192.168.0.250
 192.168.0.210    shedpi.farm.home.arpa shedpi
 192.168.0.223    sunnyboy3.farm.home.arpa sunnyboy3
 192.168.0.250    sunnyisland.farm.home.arpa sunnyisland
+
+### authoritative.hosts
+# This file is generated. Edit network-registry.yaml and rerun the generator.
+# Registry: docs/reference/network-registry.yaml
+# Site filter: farm
+# Domain: farm.home.arpa
+
+192.168.0.1 router.farm.home.arpa router
+192.168.0.100 ap1.farm.home.arpa ap1
+192.168.0.147 sunnyboy1.farm.home.arpa sunnyboy1
+192.168.0.179 weatherstation.farm.home.arpa weatherstation
+192.168.0.194 ap2.farm.home.arpa ap2
+192.168.0.206 sunnyboy2.farm.home.arpa sunnyboy2
+192.168.0.210 shedpi.farm.home.arpa shedpi
+192.168.0.223 sunnyboy3.farm.home.arpa sunnyboy3
+192.168.0.250 sunnyisland.farm.home.arpa sunnyisland
 
