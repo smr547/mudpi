@@ -1,6 +1,6 @@
 # dnsmasq preflight validation report
 # registry: docs/reference/network-registry.yaml
-# generated: 2026-04-15T09:18:46+10:00
+# generated: 2026-04-15T17:35:29+10:00
 
 ## reid
 ### zone.conf

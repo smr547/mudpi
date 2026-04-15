@@ -126,7 +126,7 @@ preflight-dnsmasq: build-dnsmasq
 	done
 
 deploy-reid-dnsmasq: preflight-dnsmasq
-	@./tools/deploy_dnsmasq.sh reid
+	@./tools/deploy_mudpi_dns.sh
 
 deploy-farm-dnsmasq: preflight-dnsmasq
 	@./tools/deploy_dnsmasq.sh farm
