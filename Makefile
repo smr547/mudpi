@@ -15,6 +15,8 @@ DIAGRAM_OUTPUT := generated/diagrams
 
 # --- DNS/DHCP generation and preflight ---------------------------------------
 
+PYTHON ?= python3
+REGISTRY ?= docs/reference/network-registry.yaml
 DNS_GEN ?= tools/generate_dnsmasq.py
 DHCP_GEN ?= tools/generate_dhcp_dnsmasq.py
 GEN_ROOT ?= generated/dnsmasq
@@ -95,7 +97,7 @@ preflight-dnsmasq: build-dnsmasq
 	echo >> "$$REPORT"; \
 	for site in reid farm; do \
 	  echo "## $$site" >> "$$REPORT"; \
-	  for f in zone.conf hosts.conf aliases.conf reverse.conf warnings.txt warnings_dns.txt warnings_dhcp.txt dhcp.conf leases-summary.txt summary.txt authoritative.hosts; do \
+	  for f in zone.conf hosts.conf aliases.conf reverse.conf authoritative.hosts dhcp.conf warnings.txt warnings_dns.txt warnings_dhcp.txt leases-summary.txt summary.txt; do \
 	    if [ -f "$(GEN_ROOT)/$$site/$$f" ]; then \
 	      echo "### $$f" >> "$$REPORT"; \
 	      cat "$(GEN_ROOT)/$$site/$$f" >> "$$REPORT"; \
@@ -163,8 +165,5 @@ clean:
 	@echo "Removing generated artifacts..."
 	rm -rf $(OUTPUT)
 	@echo "Clean complete."
-
-
-
 
 

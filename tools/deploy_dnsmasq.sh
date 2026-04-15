@@ -10,10 +10,13 @@ SITE="$1"
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_DIR"
 
-TARGET_BASE="/etc/dnsmasq.d/generated"
-BACKUP_BASE="/etc/dnsmasq.d/backup"
+GEN_ROOT="generated/dnsmasq"
+SITE_DIR="${GEN_ROOT}/${SITE}"
+
+TARGET_ROOT="/etc/dnsmasq.d"
+TARGET_GEN="${TARGET_ROOT}/generated"
+BACKUP_BASE="${TARGET_ROOT}/backup"
 STAMP="$(date +%Y%m%d-%H%M%S)"
-SITE_DIR="generated/dnsmasq/${SITE}"
 
 case "$SITE" in
   reid)
@@ -41,27 +44,30 @@ test -f "${SITE_DIR}/dhcp.conf"
 
 echo "==> Creating backup"
 sudo mkdir -p "$BACKUP_BASE"
-if [[ -d "$TARGET_BASE" ]]; then
-  sudo cp -a "$TARGET_BASE" "$BACKUP_BASE/generated-$STAMP"
+if [[ -d "$TARGET_ROOT" ]]; then
+  sudo mkdir -p "$BACKUP_BASE/$STAMP"
+  [[ -f "$TARGET_ROOT/${SITE}.conf" ]] && sudo cp -a "$TARGET_ROOT/${SITE}.conf" "$BACKUP_BASE/$STAMP/" || true
+  [[ -f "$TARGET_ROOT/dhcp.conf" ]] && sudo cp -a "$TARGET_ROOT/dhcp.conf" "$BACKUP_BASE/$STAMP/" || true
+  [[ -d "$TARGET_GEN/$SITE" ]] && sudo cp -a "$TARGET_GEN/$SITE" "$BACKUP_BASE/$STAMP/" || true
 fi
 
 echo "==> Preparing target directories"
-sudo mkdir -p "$TARGET_BASE" "$TARGET_BASE/$SITE"
+sudo mkdir -p "$TARGET_GEN/$SITE"
 
 echo "==> Deploying site DNS tree"
-sudo rsync -a --delete "${SITE_DIR}/" "$TARGET_BASE/$SITE/"
+sudo rsync -a --delete "${SITE_DIR}/" "$TARGET_GEN/$SITE/"
 
-echo "==> Installing active DHCP config"
-sudo cp "${SITE_DIR}/dhcp.conf" "$TARGET_BASE/dhcp.conf"
+echo "==> Installing active DHCP config at top level"
+sudo cp "${SITE_DIR}/dhcp.conf" "$TARGET_ROOT/dhcp.conf"
 
-echo "==> Writing site loader"
-sudo tee "$TARGET_BASE/${SITE}.conf" >/dev/null <<EOF
+echo "==> Writing top-level site loader"
+sudo tee "$TARGET_ROOT/${SITE}.conf" >/dev/null <<EOF
 # Generated zone loader for ${SITE} site
 conf-file=/etc/dnsmasq.d/generated/${SITE}/zone.conf
 EOF
 
-echo "==> Removing stale site loader"
-sudo rm -f "$TARGET_BASE/${STALE_SITE}.conf"
+echo "==> Removing stale top-level site loader"
+sudo rm -f "$TARGET_ROOT/${STALE_SITE}.conf"
 
 echo "==> Testing dnsmasq config"
 sudo dnsmasq --test

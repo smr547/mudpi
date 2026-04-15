@@ -1,6 +1,6 @@
 # dnsmasq preflight validation report
 # registry: docs/reference/network-registry.yaml
-# generated: 2026-04-14T09:52:31+10:00
+# generated: 2026-04-15T09:18:46+10:00
 
 ## reid
 ### zone.conf
@@ -176,74 +176,34 @@ ptr-record=50.1.1.10.in-addr.arpa,zappi.reid.home.arpa
 ptr-record=6.1.1.10.in-addr.arpa,abbhub.reid.home.arpa
 ptr-record=60.1.1.10.in-addr.arpa,printer.reid.home.arpa
 
-### warnings_dns.txt
-# generator warnings
-# Generated from: docs/reference/network-registry.yaml
+### authoritative.hosts
+# This file is generated. Edit network-registry.yaml and rerun the generator.
+# Registry: docs/reference/network-registry.yaml
 # Site filter: reid
 # Domain: reid.home.arpa
-# This file is generated. Edit network-registry.yaml instead.
 
-Host ap-01: skipped because dns.canonical is missing
-Host ap-02: skipped because dns.canonical is missing
-Host ap-03: skipped because dns.canonical is missing
-Host ubiquiti-unknown: skipped because dns.canonical is missing
-Host sonos-workshop: skipped because dns.canonical is missing
-Host sonos-mudroom: skipped because dns.canonical is missing
-Host sonos-spare: skipped because dns.canonical is missing
-Host hydrawise-workshop: skipped because dns.canonical is missing
-Host hydrawise-main: skipped because dns.canonical is missing
-Host appletv-lounge: skipped because dns.canonical is missing
-Host soundbar-lounge: skipped because dns.canonical is missing
-Host tv-french-room: skipped because dns.canonical is missing
-Host kitchen-display: skipped because dns.canonical is missing
-Host irobot-vacuum: skipped because dns.canonical is missing
-Host myplace-tablet: skipped because dns.canonical is missing
-Host energy-monitor: skipped because dns.canonical is missing
-Host weather-station: skipped because dns.canonical is missing
-Host chain-counter: skipped because dns.canonical is missing
-Host esp32-spare-1-monitor: skipped because dns.canonical is missing
-Host battery-temp: skipped because dns.canonical is missing
-Host wearable-01: skipped because dns.canonical is missing
-Host signal-generator: skipped because dns.canonical is missing
-Host dfrobot-edge101: skipped because dns.canonical is missing
-
-### warnings_dhcp.txt
-# generator warnings
-# Generated from: docs/reference/network-registry.yaml
-# Site filter: reid
-# Include unscoped hosts: no
-# This file is generated. Edit network-registry.yaml instead.
-
-Host nvr: fixed lease 10.1.1.178 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host ap-01: fixed lease 10.1.1.123 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host ap-02: fixed lease 10.1.1.117 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host ap-03: fixed lease 10.1.1.118 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host ubiquiti-unknown: fixed lease 10.1.1.113 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host stevenlaptop: fixed lease 10.1.1.134 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host irene-iphone: fixed lease 10.1.1.105 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host steven-iphone: fixed lease 10.1.1.125 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host sonos-workshop: fixed lease 10.1.1.114 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host sonos-mudroom: fixed lease 10.1.1.115 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host sonos-spare: fixed lease 10.1.1.100 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host hydrawise-workshop: fixed lease 10.1.1.124 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host hydrawise-main: fixed lease 10.1.1.130 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host appletv-lounge: fixed lease 10.1.1.116 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host soundbar-lounge: fixed lease 10.1.1.106 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host tv-french-room: fixed lease 10.1.1.131 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host kitchen-display: fixed lease 10.1.1.112 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host irobot-vacuum: fixed lease 10.1.1.107 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host myplace-tablet: fixed lease 10.1.1.109 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host energy-monitor: fixed lease 10.1.1.104 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host weather-station: fixed lease 10.1.1.111 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host speaker-switch: fixed lease 10.1.1.177 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host chain-counter: fixed lease 10.1.1.120 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host esp32-spare-1-monitor: fixed lease 10.1.1.121 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host solar-monitor: fixed lease 10.1.1.119 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host battery-temp: fixed lease 10.1.1.122 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host wearable-01: fixed lease 10.1.1.135 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host signal-generator: fixed lease 10.1.1.128 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host dfrobot-edge101: fixed lease 10.1.1.133 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host irene-macbook: fixed lease 10.1.1.110 overlaps dynamic pool 10.1.1.100-10.1.1.199
+10.1.1.1 router.reid.home.arpa router
+10.1.1.2 vdsl-modem.reid.home.arpa vdsl-modem
+10.1.1.3 mudpi.reid.home.arpa mudpi
+10.1.1.6 abbhub.reid.home.arpa abbhub
+10.1.1.20 shorepi.reid.home.arpa shorepi signalk.reid.home.arpa
+10.1.1.30 printserver.reid.home.arpa printserver 3dprintserver.reid.home.arpa
+10.1.1.41 cam-01.reid.home.arpa cam-01 cam1.reid.home.arpa
+10.1.1.42 cam-02.reid.home.arpa cam-02 cam2.reid.home.arpa
+10.1.1.43 cam-03.reid.home.arpa cam-03 cam3.reid.home.arpa
+10.1.1.44 cam-04.reid.home.arpa cam-04 cam4.reid.home.arpa
+10.1.1.45 cam-05.reid.home.arpa cam-05 cam5.reid.home.arpa
+10.1.1.46 cam-06.reid.home.arpa cam-06 cam6.reid.home.arpa
+10.1.1.47 cam-07.reid.home.arpa cam-07 cam7.reid.home.arpa
+10.1.1.50 zappi.reid.home.arpa zappi
+10.1.1.60 printer.reid.home.arpa printer
+10.1.1.105 irene-iphone.reid.home.arpa irene-iphone
+10.1.1.110 irene-macbook.reid.home.arpa irene-macbook
+10.1.1.119 solar-monitor.reid.home.arpa solar-monitor
+10.1.1.125 steven-iphone.reid.home.arpa steven-iphone
+10.1.1.134 stevenlaptop.reid.home.arpa stevenlaptop
+10.1.1.177 speaker-switch.reid.home.arpa speaker-switch
+10.1.1.178 nvr.reid.home.arpa nvr
 
 ### dhcp.conf
 # This file is generated. Edit network-registry.yaml and rerun the generator.
@@ -358,6 +318,75 @@ dhcp-host=de:ad:be:ef:fe:ed,speaker-switch,10.1.1.177
 # nvr (primary, lan, category=security)
 dhcp-host=24:52:6a:25:bd:f4,nvr,10.1.1.178
 
+### warnings_dns.txt
+# generator warnings
+# Generated from: docs/reference/network-registry.yaml
+# Site filter: reid
+# Domain: reid.home.arpa
+# This file is generated. Edit network-registry.yaml instead.
+
+Host ap-01: skipped because dns.canonical is missing
+Host ap-02: skipped because dns.canonical is missing
+Host ap-03: skipped because dns.canonical is missing
+Host ubiquiti-unknown: skipped because dns.canonical is missing
+Host sonos-workshop: skipped because dns.canonical is missing
+Host sonos-mudroom: skipped because dns.canonical is missing
+Host sonos-spare: skipped because dns.canonical is missing
+Host hydrawise-workshop: skipped because dns.canonical is missing
+Host hydrawise-main: skipped because dns.canonical is missing
+Host appletv-lounge: skipped because dns.canonical is missing
+Host soundbar-lounge: skipped because dns.canonical is missing
+Host tv-french-room: skipped because dns.canonical is missing
+Host kitchen-display: skipped because dns.canonical is missing
+Host irobot-vacuum: skipped because dns.canonical is missing
+Host myplace-tablet: skipped because dns.canonical is missing
+Host energy-monitor: skipped because dns.canonical is missing
+Host weather-station: skipped because dns.canonical is missing
+Host chain-counter: skipped because dns.canonical is missing
+Host esp32-spare-1-monitor: skipped because dns.canonical is missing
+Host battery-temp: skipped because dns.canonical is missing
+Host wearable-01: skipped because dns.canonical is missing
+Host signal-generator: skipped because dns.canonical is missing
+Host dfrobot-edge101: skipped because dns.canonical is missing
+
+### warnings_dhcp.txt
+# generator warnings
+# Generated from: docs/reference/network-registry.yaml
+# Site filter: reid
+# Include unscoped hosts: no
+# This file is generated. Edit network-registry.yaml instead.
+
+Host nvr: fixed lease 10.1.1.178 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host ap-01: fixed lease 10.1.1.123 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host ap-02: fixed lease 10.1.1.117 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host ap-03: fixed lease 10.1.1.118 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host ubiquiti-unknown: fixed lease 10.1.1.113 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host stevenlaptop: fixed lease 10.1.1.134 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host irene-iphone: fixed lease 10.1.1.105 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host steven-iphone: fixed lease 10.1.1.125 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host sonos-workshop: fixed lease 10.1.1.114 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host sonos-mudroom: fixed lease 10.1.1.115 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host sonos-spare: fixed lease 10.1.1.100 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host hydrawise-workshop: fixed lease 10.1.1.124 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host hydrawise-main: fixed lease 10.1.1.130 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host appletv-lounge: fixed lease 10.1.1.116 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host soundbar-lounge: fixed lease 10.1.1.106 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host tv-french-room: fixed lease 10.1.1.131 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host kitchen-display: fixed lease 10.1.1.112 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host irobot-vacuum: fixed lease 10.1.1.107 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host myplace-tablet: fixed lease 10.1.1.109 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host energy-monitor: fixed lease 10.1.1.104 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host weather-station: fixed lease 10.1.1.111 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host speaker-switch: fixed lease 10.1.1.177 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host chain-counter: fixed lease 10.1.1.120 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host esp32-spare-1-monitor: fixed lease 10.1.1.121 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host solar-monitor: fixed lease 10.1.1.119 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host battery-temp: fixed lease 10.1.1.122 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host wearable-01: fixed lease 10.1.1.135 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host signal-generator: fixed lease 10.1.1.128 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host dfrobot-edge101: fixed lease 10.1.1.133 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host irene-macbook: fixed lease 10.1.1.110 overlaps dynamic pool 10.1.1.100-10.1.1.199
+
 ### leases-summary.txt
 # generated lease summary
 # Registry: docs/reference/network-registry.yaml
@@ -438,35 +467,6 @@ dhcp-host=24:52:6a:25:bd:f4,nvr,10.1.1.178
 10.1.1.134       stevenlaptop.reid.home.arpa stevenlaptop
 10.1.1.177       speaker-switch.reid.home.arpa speaker-switch
 10.1.1.178       nvr.reid.home.arpa nvr
-
-### authoritative.hosts
-# This file is generated. Edit network-registry.yaml and rerun the generator.
-# Registry: docs/reference/network-registry.yaml
-# Site filter: reid
-# Domain: reid.home.arpa
-
-10.1.1.1 router.reid.home.arpa router
-10.1.1.2 vdsl-modem.reid.home.arpa vdsl-modem
-10.1.1.3 mudpi.reid.home.arpa mudpi
-10.1.1.6 abbhub.reid.home.arpa abbhub
-10.1.1.20 shorepi.reid.home.arpa shorepi signalk.reid.home.arpa
-10.1.1.30 printserver.reid.home.arpa printserver 3dprintserver.reid.home.arpa
-10.1.1.41 cam-01.reid.home.arpa cam-01 cam1.reid.home.arpa
-10.1.1.42 cam-02.reid.home.arpa cam-02 cam2.reid.home.arpa
-10.1.1.43 cam-03.reid.home.arpa cam-03 cam3.reid.home.arpa
-10.1.1.44 cam-04.reid.home.arpa cam-04 cam4.reid.home.arpa
-10.1.1.45 cam-05.reid.home.arpa cam-05 cam5.reid.home.arpa
-10.1.1.46 cam-06.reid.home.arpa cam-06 cam6.reid.home.arpa
-10.1.1.47 cam-07.reid.home.arpa cam-07 cam7.reid.home.arpa
-10.1.1.50 zappi.reid.home.arpa zappi
-10.1.1.60 printer.reid.home.arpa printer
-10.1.1.105 irene-iphone.reid.home.arpa irene-iphone
-10.1.1.110 irene-macbook.reid.home.arpa irene-macbook
-10.1.1.119 solar-monitor.reid.home.arpa solar-monitor
-10.1.1.125 steven-iphone.reid.home.arpa steven-iphone
-10.1.1.134 stevenlaptop.reid.home.arpa stevenlaptop
-10.1.1.177 speaker-switch.reid.home.arpa speaker-switch
-10.1.1.178 nvr.reid.home.arpa nvr
 
 ## farm
 ### zone.conf
@@ -559,26 +559,21 @@ ptr-record=210.0.168.192.in-addr.arpa,shedpi.farm.home.arpa
 ptr-record=223.0.168.192.in-addr.arpa,sunnyboy3.farm.home.arpa
 ptr-record=250.0.168.192.in-addr.arpa,sunnyisland.farm.home.arpa
 
-### warnings_dns.txt
-# generator warnings
-# Generated from: docs/reference/network-registry.yaml
+### authoritative.hosts
+# This file is generated. Edit network-registry.yaml and rerun the generator.
+# Registry: docs/reference/network-registry.yaml
 # Site filter: farm
 # Domain: farm.home.arpa
-# This file is generated. Edit network-registry.yaml instead.
 
-No warnings.
-
-### warnings_dhcp.txt
-# generator warnings
-# Generated from: docs/reference/network-registry.yaml
-# Site filter: farm
-# Include unscoped hosts: no
-# This file is generated. Edit network-registry.yaml instead.
-
-Host sunnyboy1: fixed lease 192.168.0.147 overlaps dynamic pool 192.168.0.100-192.168.0.199
-Host weatherstation: fixed lease 192.168.0.179 overlaps dynamic pool 192.168.0.100-192.168.0.199
-Host ap1: fixed lease 192.168.0.100 overlaps dynamic pool 192.168.0.100-192.168.0.199
-Host ap2: fixed lease 192.168.0.194 overlaps dynamic pool 192.168.0.100-192.168.0.199
+192.168.0.1 router.farm.home.arpa router
+192.168.0.100 ap1.farm.home.arpa ap1
+192.168.0.147 sunnyboy1.farm.home.arpa sunnyboy1
+192.168.0.179 weatherstation.farm.home.arpa weatherstation
+192.168.0.194 ap2.farm.home.arpa ap2
+192.168.0.206 sunnyboy2.farm.home.arpa sunnyboy2
+192.168.0.210 shedpi.farm.home.arpa shedpi
+192.168.0.223 sunnyboy3.farm.home.arpa sunnyboy3
+192.168.0.250 sunnyisland.farm.home.arpa sunnyisland
 
 ### dhcp.conf
 # This file is generated. Edit network-registry.yaml and rerun the generator.
@@ -621,6 +616,27 @@ dhcp-host=00:40:ad:af:f6:d9,sunnyboy3,192.168.0.223
 # sunnyisland (primary, lan, category=energy)
 dhcp-host=00:40:ad:b5:00:f8,sunnyisland,192.168.0.250
 
+### warnings_dns.txt
+# generator warnings
+# Generated from: docs/reference/network-registry.yaml
+# Site filter: farm
+# Domain: farm.home.arpa
+# This file is generated. Edit network-registry.yaml instead.
+
+No warnings.
+
+### warnings_dhcp.txt
+# generator warnings
+# Generated from: docs/reference/network-registry.yaml
+# Site filter: farm
+# Include unscoped hosts: no
+# This file is generated. Edit network-registry.yaml instead.
+
+Host sunnyboy1: fixed lease 192.168.0.147 overlaps dynamic pool 192.168.0.100-192.168.0.199
+Host weatherstation: fixed lease 192.168.0.179 overlaps dynamic pool 192.168.0.100-192.168.0.199
+Host ap1: fixed lease 192.168.0.100 overlaps dynamic pool 192.168.0.100-192.168.0.199
+Host ap2: fixed lease 192.168.0.194 overlaps dynamic pool 192.168.0.100-192.168.0.199
+
 ### leases-summary.txt
 # generated lease summary
 # Registry: docs/reference/network-registry.yaml
@@ -652,20 +668,4 @@ dhcp-host=00:40:ad:b5:00:f8,sunnyisland,192.168.0.250
 192.168.0.210    shedpi.farm.home.arpa shedpi
 192.168.0.223    sunnyboy3.farm.home.arpa sunnyboy3
 192.168.0.250    sunnyisland.farm.home.arpa sunnyisland
-
-### authoritative.hosts
-# This file is generated. Edit network-registry.yaml and rerun the generator.
-# Registry: docs/reference/network-registry.yaml
-# Site filter: farm
-# Domain: farm.home.arpa
-
-192.168.0.1 router.farm.home.arpa router
-192.168.0.100 ap1.farm.home.arpa ap1
-192.168.0.147 sunnyboy1.farm.home.arpa sunnyboy1
-192.168.0.179 weatherstation.farm.home.arpa weatherstation
-192.168.0.194 ap2.farm.home.arpa ap2
-192.168.0.206 sunnyboy2.farm.home.arpa sunnyboy2
-192.168.0.210 shedpi.farm.home.arpa shedpi
-192.168.0.223 sunnyboy3.farm.home.arpa sunnyboy3
-192.168.0.250 sunnyisland.farm.home.arpa sunnyisland
 
