@@ -426,6 +426,19 @@ hosts:
       patch_panel: mudroom-main
       port: "07"
 
+  
+  - name: lounge-camera
+    site: reid
+    category: unknown
+    addressing: dhcp-reservation
+    mac: "e0:22:a1:f8:04:7d"
+    addresses:
+      lan: 10.1.1.102
+    dns:
+      canonical: lounge-camera.reid.home.arpa
+      aliases:
+        - dogcam.reid.home.arpa
+    notes: NEXTECH camera in lounge room for watching dog.
 
   # --- Wi-Fi Access Points / Ubiquiti infrastructure ---
   - name: ap-01
@@ -551,7 +564,7 @@ hosts:
     site: reid
     category: media
     addressing: dhcp-reservation
-    mac: "54:2A:1B:E6:68:8E"
+    mac: "54:2A:1B:E6:65:8E"
     addresses:
       lan: 10.1.1.100
     roles: [audio, speaker]

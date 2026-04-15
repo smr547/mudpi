@@ -5,6 +5,7 @@
 # This file is generated. Edit network-registry.yaml instead.
 
 Host nvr: fixed lease 10.1.1.178 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host lounge-camera: fixed lease 10.1.1.102 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host ap-01: fixed lease 10.1.1.123 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host ap-02: fixed lease 10.1.1.117 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host ap-03: fixed lease 10.1.1.118 overlaps dynamic pool 10.1.1.100-10.1.1.199

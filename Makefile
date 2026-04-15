@@ -167,3 +167,32 @@ clean:
 	@echo "Clean complete."
 
 
+.PHONY: leases-report
+
+leases-report:
+	@python3 tools/report_dnsmasq_leases.py \
+	  --registry docs/reference/network-registry.yaml \
+	  --leases /var/lib/misc/dnsmasq.leases
+
+.PHONY: leases-report-verbose
+leases-report-verbose:
+	@python3 tools/report_dnsmasq_leases.py \
+	  --registry docs/reference/network-registry.yaml \
+	  --leases /var/lib/misc/dnsmasq.leases \
+	  --show-client-id
+
+.PHONY: leases-unknown-stubs
+
+leases-unknown-stubs:
+	@python3 tools/report_unknown_dhcp_stubs.py \
+	  --registry docs/reference/network-registry.yaml \
+	  --leases /var/lib/misc/dnsmasq.leases \
+	  --site reid
+
+.PHONY: farm-leases-unknown-stubs
+
+farm-leases-unknown-stubs:
+	@python3 tools/report_unknown_dhcp_stubs.py \
+	  --registry docs/reference/network-registry.yaml \
+	  --leases /var/lib/misc/dnsmasq.leases \
+	  --site farm
