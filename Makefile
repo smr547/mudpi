@@ -196,3 +196,9 @@ farm-leases-unknown-stubs:
 	  --registry docs/reference/network-registry.yaml \
 	  --leases /var/lib/misc/dnsmasq.leases \
 	  --site farm
+
+wg-enroll:
+	python3 tools/enroll_peer.py $(PEER)
+
+wg:
+	python3 tools/generate_wg.py
