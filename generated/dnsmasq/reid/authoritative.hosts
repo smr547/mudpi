@@ -7,6 +7,7 @@
 10.1.1.2 vdsl-modem.reid.home.arpa vdsl-modem
 10.1.1.3 mudpi.reid.home.arpa mudpi
 10.1.1.6 abbhub.reid.home.arpa abbhub
+10.1.1.10 haswell.reid.home.arpa haswell xubuntu.reid.home.arpa nas.reid.home.arpa
 10.1.1.20 shorepi.reid.home.arpa shorepi signalk.reid.home.arpa
 10.1.1.30 printserver.reid.home.arpa printserver 3dprintserver.reid.home.arpa
 10.1.1.41 cam-01.reid.home.arpa cam-01 cam1.reid.home.arpa
@@ -18,11 +19,30 @@
 10.1.1.47 cam-07.reid.home.arpa cam-07 cam7.reid.home.arpa
 10.1.1.50 zappi.reid.home.arpa zappi
 10.1.1.60 printer.reid.home.arpa printer
+10.1.1.100 sonos-spare.reid.home.arpa sonos-spare
 10.1.1.102 lounge-camera.reid.home.arpa lounge-camera dogcam.reid.home.arpa
+10.1.1.104 energy-monitor.reid.home.arpa energy-monitor
 10.1.1.105 irene-iphone.reid.home.arpa irene-iphone
+10.1.1.106 soundbar.reid.home.arpa soundbar
+10.1.1.107 irobot-vacuum.reid.home.arpa irobot-vacuum
+10.1.1.109 myplace-tablet.reid.home.arpa myplace-tablet
 10.1.1.110 irene-macbook.reid.home.arpa irene-macbook
+10.1.1.111 weather-station.reid.home.arpa weather-station
+10.1.1.112 kitchen-display.reid.home.arpa kitchen-display
+10.1.1.113 ubiquiti-unknown.reid.home.arpa ubiquiti-unknown
+10.1.1.114 sonos-workshop.reid.home.arpa sonos-workshop
+10.1.1.115 sonos-mudroom.reid.home.arpa sonos-mudroom
+10.1.1.116 appletv-lounge.reid.home.arpa appletv-lounge
+10.1.1.117 ap-02.reid.home.arpa ap-02
+10.1.1.118 ap-03.reid.home.arpa ap-03
 10.1.1.119 solar-monitor.reid.home.arpa solar-monitor
+10.1.1.122 battery-temp.reid.home.arpa battery-temp
+10.1.1.123 ap-01.reid.home.arpa ap-01
+10.1.1.124 hydrawise-workshop.reid.home.arpa hydrawise-workshop
 10.1.1.125 steven-iphone.reid.home.arpa steven-iphone
+10.1.1.130 hydrawise-main.reid.home.arpa hydrawise-main
+10.1.1.131 tv-french.reid.home.arpa tv-french
+10.1.1.133 dfrobot.reid.home.arpa dfrobot
 10.1.1.134 stevenlaptop.reid.home.arpa stevenlaptop
 10.1.1.177 speaker-switch.reid.home.arpa speaker-switch
 10.1.1.178 nvr.reid.home.arpa nvr

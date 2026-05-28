@@ -241,7 +241,9 @@ hosts:
       canonical: haswell.reid.home.arpa
       aliases:
         - xubuntu.reid.home.arpa
-    notes: Repurposed Haswell workshop machine running Xubuntu 26.04; rebuilt after inverter/power event
+        - nas.reid.home.arpa
+        - nas
+    notes: Repurposed Haswell workshop machine running Xubuntu 26.04; rebuilt after inverter/power event; prototype NAS
     diagram:
       importance: secondary
 
@@ -255,6 +257,8 @@ hosts:
     roles: [printer, appliance]
     dns:
       canonical: printer.reid.home.arpa
+      aliases:
+        - printer
     notes: Brother HL-L2460DW network printer
 
   - name: shorepi
@@ -270,6 +274,7 @@ hosts:
       canonical: shorepi.reid.home.arpa
       aliases:
         - signalk.reid.home.arpa
+        - signalk
     notes: Data services node (SignalK, Grafana, InfluxDB)
 
 
@@ -285,6 +290,8 @@ hosts:
       canonical: printserver.reid.home.arpa
       aliases:
         - 3dprintserver.reid.home.arpa
+        - 3dprintserver
+        - printserver
     notes: Raspberry Pi 4 used as 3D print server
     diagram:
       importance: secondary
@@ -299,6 +306,9 @@ hosts:
     roles: [solar-monitor, appliance]
     dns:
       canonical: abbhub.reid.home.arpa
+      aliases:
+        - abbhub
+        - solarhub
     notes: ABB solar monitor hub for RF communication with rooftop panels; queried for plant.xml to monitor solar energy production
     diagram:
       importance: secondary
@@ -313,7 +323,8 @@ hosts:
     roles: [ev-charger, energy-device]
     dns:
       canonical: zappi.reid.home.arpa
-    aliases: []
+      aliases:
+        - zappi
     notes: MyEnergi Zappi EV charger
     diagram:
       importance: secondary
@@ -329,6 +340,8 @@ hosts:
     roles: [nvr, video-recorder, security]
     dns:
       canonical: nvr.reid.home.arpa
+      aliases:
+        - nvr
     notes: VIP Vision NVR (Dahua OEM) for IP camera system
 
   # --- IP Cameras (Dahua) ---
@@ -344,6 +357,7 @@ hosts:
       canonical: cam-01.reid.home.arpa
       aliases:
         - cam1.reid.home.arpa
+        - cam1
     notes: Dahua IP camera
     physical:
       patch_panel: mudroom-main
@@ -361,6 +375,7 @@ hosts:
       canonical: cam-02.reid.home.arpa
       aliases:
         - cam2.reid.home.arpa
+        - cam2
     notes: Dahua IP camera
     physical:
       patch_panel: mudroom-main
@@ -378,6 +393,7 @@ hosts:
       canonical: cam-03.reid.home.arpa
       aliases:
         - cam3.reid.home.arpa
+        - cam3
     notes: Dahua IP camera
     physical:
       patch_panel: mudroom-main
@@ -395,6 +411,7 @@ hosts:
       canonical: cam-04.reid.home.arpa
       aliases:
         - cam4.reid.home.arpa
+        - cam4
     notes: Dahua IP camera
     physical:
       patch_panel: mudroom-main
@@ -412,6 +429,7 @@ hosts:
       canonical: cam-05.reid.home.arpa
       aliases:
         - cam5.reid.home.arpa
+        - cam5
     notes: Dahua IP camera
     physical:
       patch_panel: mudroom-main
@@ -429,6 +447,7 @@ hosts:
       canonical: cam-06.reid.home.arpa
       aliases:
         - cam6.reid.home.arpa
+        - cam6
     notes: Dahua IP camera
     physical:
       patch_panel: mudroom-main
@@ -446,6 +465,7 @@ hosts:
       canonical: cam-07.reid.home.arpa
       aliases:
         - cam7.reid.home.arpa
+        - cam7
     notes: Dahua IP camera
     physical:
       patch_panel: mudroom-main
@@ -474,6 +494,11 @@ hosts:
     addresses:
       lan: 10.1.1.123
     roles: [wifi-ap]
+    dns:
+      canonical: ap-01.reid.home.arpa
+      aliases:
+        - ap-01
+        - ap1
     notes: Ubiquiti Wi-Fi access point
     physical:
       patch_panel: mudroom-main
@@ -487,6 +512,11 @@ hosts:
     addresses:
       lan: 10.1.1.117
     roles: [wifi-ap]
+    dns:
+      canonical: ap-02.reid.home.arpa
+      aliases:
+        - ap-02
+        - ap2
     notes: Ubiquiti Wi-Fi access point
     physical:
       patch_panel: mudroom-main
@@ -500,12 +530,17 @@ hosts:
     addresses:
       lan: 10.1.1.118
     roles: [wifi-ap]
+    dns:
+      canonical: ap-03.reid.home.arpa
+      aliases:
+        - ap-03
+        - ap3
     notes: Ubiquiti Wi-Fi access point
     physical:
       patch_panel: mudroom-main
       port: "18"
 
-  - name: ubiquiti-unknown
+  - name: ap-outdoor
     site: reid
     category: network
     addressing: dhcp-reservation
@@ -513,10 +548,12 @@ hosts:
     addresses:
       lan: 10.1.1.113
     roles: [network-device]
-    notes: Ubiquiti network device; exact role not yet confirmed
-    physical:
-      patch_panel: mudroom-main
-      port: "19"
+    dns:
+      canonical: ap-outdoor.reid.home.apra
+      aliases:
+        - ap-outdoor
+        - ap4
+    notes: Ubiquiti wireless access point under workshop eve
 
 
   # --- Personal workstation (Steven's laptop) ---
@@ -548,7 +585,7 @@ hosts:
     dns:
       canonical: irene-iphone.reid.home.arpa
       aliases:
-        - irene-phone
+        - irene-iphone
 
   - name: steven-iphone
     site: reid
@@ -562,7 +599,7 @@ hosts:
     dns:
       canonical: steven-iphone.reid.home.arpa
       aliases:
-        - steven-phone
+        - steven-iphone
 
   # --- Sonos devices ---
   - name: sonos-workshop
@@ -573,6 +610,8 @@ hosts:
     addresses:
       lan: 10.1.1.114
     roles: [audio, speaker]
+    dns:
+      canonical: sonos-workshop.reid.home.arpa
     notes: Sonos device
 
   - name: sonos-mudroom
@@ -583,6 +622,8 @@ hosts:
     addresses:
       lan: 10.1.1.115
     roles: [audio, speaker]
+    dns:
+      canonical: sonos-mudroom.reid.home.arpa
     notes: Sonos device
 
   - name: sonos-spare
@@ -593,6 +634,8 @@ hosts:
     addresses:
       lan: 10.1.1.100
     roles: [audio, speaker]
+    dns:
+      canonical: sonos-spare.reid.home.arpa
     notes: Sonos device
 
   # --- Irrigation controllers (Hydrawise) ---
@@ -604,6 +647,8 @@ hosts:
     addresses:
       lan: 10.1.1.124
     roles: [irrigation-controller]
+    dns:
+      canonical: hydrawise-workshop.reid.home.arpa
     notes: Hydrawise irrigation controller in workshop (6 valves)
 
   - name: hydrawise-main
@@ -614,6 +659,8 @@ hosts:
     addresses:
       lan: 10.1.1.130
     roles: [irrigation-controller]
+    dns:
+      canonical: hydrawise-main.reid.home.arpa
     notes: Hydrawise irrigation controller next to terrace (18 valves, 24 port system)
 
   # --- Home media / appliances ---
@@ -625,10 +672,14 @@ hosts:
     addresses:
       lan: 10.1.1.116
     roles: [media-player, tv]
+    dns:
+      canonical: appletv-lounge.reid.home.arpa
+      aliases:
+        - appletv
     notes: Apple TV in lounge room
 
   # --- Audio system (JBL soundbar) ---
-  - name: soundbar-lounge
+  - name: soundbar
     site: reid
     category: media
     addressing: dhcp-reservation
@@ -636,10 +687,14 @@ hosts:
     addresses:
       lan: 10.1.1.106
     roles: [audio, soundbar, airplay]
+    dns:
+      canonical: soundbar.reid.home.arpa
+      aliases:
+        - soundbar
     notes: JBL Bar 300 soundbar (Harman / Linkplay platform)
 
   # --- Television (Samsung) ---
-  - name: tv-french-room
+  - name: tv-french
     site: reid
     category: media
     addressing: dhcp-reservation
@@ -647,6 +702,10 @@ hosts:
     addresses:
       lan: 10.1.1.131
     roles: [tv, display, smart-tv]
+    dns:
+      canonical: tv-french.reid.home.arpa
+      aliases:
+        - tv-french
     notes: Samsung television in French Room
 
   # --- Kitchen display tablet (Samsung) ---
@@ -658,6 +717,10 @@ hosts:
     addresses:
       lan: 10.1.1.112
     roles: [display, dashboard, energy-monitor]
+    dns:
+      canonical: kitchen-display.reid.home.arpa
+      aliases:
+        - kitchen
     notes: Samsung tablet in kitchen used for electricity consumption display, weather, and recipes
 
   - name: irobot-vacuum
@@ -668,6 +731,11 @@ hosts:
     addresses:
       lan: 10.1.1.107
     roles: [vacuum, robot]
+    dns:
+      canonical: irobot-vacuum.reid.home.arpa
+      aliases:
+        - irobot
+        - vacuuum
     notes: iRobot vacuum cleaner
 
   # --- Home automation tablet ---
@@ -679,6 +747,10 @@ hosts:
     addresses:
       lan: 10.1.1.109
     roles: [home-automation-ui, tablet]
+    dns:
+      canonical: myplace-tablet.reid.home.arpa
+      aliases:
+        - myplace
     notes: Samsung Android tablet mounted in mudroom running MyPlace home automation UI
 
   # --- Energy monitoring (Waveshare ESP32) ---
@@ -690,6 +762,10 @@ hosts:
     addresses:
       lan: 10.1.1.104
     roles: [energy-monitor, esp32, relay-controller]
+    dns:
+      canonical: energy-monitor.reid.home.arpa
+      aliases:
+        - energy-monitor
     notes: Waveshare ESP32 electricity monitor with 6 relay outputs (mudroom cabinet)
 
   # --- Weather station (ESP32) ---
@@ -701,6 +777,10 @@ hosts:
     addresses:
       lan: 10.1.1.111
     roles: [weather-station, esp32, sensors]
+    dns:
+      canonical: weather-station.reid.home.arpa
+      aliases:
+        - weather
     notes: ESP32-based weather station mounted outside workshop on pole
 
   # --- Custom hardware ---
@@ -714,6 +794,9 @@ hosts:
     roles: [audio-switch, custom]
     dns:
       canonical: speaker-switch.reid.home.arpa
+      aliases:
+        - speakers
+        - speaker-switch
     notes: Arduino-based 8-relay speaker switch (Ethernet shield) 
 
   # --- ESP32 devices ---
@@ -757,6 +840,8 @@ hosts:
     addresses:
       lan: 10.1.1.122
     roles: [esp32]
+    dns:
+      canonical: battery-temp.reid.home.arpa
     notes: ESP32 experimental battery monitor
 
   - name: wearable-01
@@ -787,6 +872,10 @@ hosts:
     addresses:
       lan: 10.1.1.133
     roles: [signal-generator, esp32]
+    dns:
+      canonical: dfrobot.reid.home.arpa
+      aliases:
+        - dfrobot
     notes: ESP32-based signal generator in workshop
 
   - name: irene-macbook
@@ -959,6 +1048,10 @@ hosts:
     addresses:
       lan: 192.168.98.20
     roles: [signalk]
+    dns:
+      canonical: signalk.trilogy.home.arpa
+      aliases:
+        - signalk
     aliases: []
     notes: Placeholder onboard Signal K service
     diagram:
@@ -984,6 +1077,10 @@ hosts:
     addresses:
       vpn: 10.8.1.20
     roles: [roaming-client]
+    dns:
+      canonical: laptop.reid.home.arpa
+      aliases:
+        - laptop
     aliases: []
     notes: Sten's roaming laptop
     diagram:

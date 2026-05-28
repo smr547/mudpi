@@ -19,8 +19,8 @@ Host sonos-spare: fixed lease 10.1.1.100 overlaps dynamic pool 10.1.1.100-10.1.1
 Host hydrawise-workshop: fixed lease 10.1.1.124 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host hydrawise-main: fixed lease 10.1.1.130 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host appletv-lounge: fixed lease 10.1.1.116 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host soundbar-lounge: fixed lease 10.1.1.106 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host tv-french-room: fixed lease 10.1.1.131 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host soundbar: fixed lease 10.1.1.106 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host tv-french: fixed lease 10.1.1.131 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host kitchen-display: fixed lease 10.1.1.112 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host irobot-vacuum: fixed lease 10.1.1.107 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host myplace-tablet: fixed lease 10.1.1.109 overlaps dynamic pool 10.1.1.100-10.1.1.199
