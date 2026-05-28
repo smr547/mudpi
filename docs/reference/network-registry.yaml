@@ -194,7 +194,13 @@ hosts:
     roles: [modem, bridge]
     dns:
       canonical: vdsl-modem.reid.home.arpa
-    notes: VDSL modem/bridge (Technicolor/Zyxel)
+    notes: 
+      VDSL modem/bridge (Technicolor/Zyxel)
+      VDSL modem/bridge (Technicolor/Zyxel). Advertises IPv6 link-local
+      DNS via RA/RDNSS as fe80::1213:31ff:fe57:fa00, returning bogus
+      synthetic answers such as google.com -> 198.18.1.1. Do not allow
+      clients to use this device for DNS.
+
 
   # gateway host
   #
@@ -219,6 +225,25 @@ hosts:
     diagram:
       importance: primary
 
+  #
+  # workshop haswell host - NAS
+  #
+  - name: haswell
+    site: reid
+    category: infrastructure
+    addressing: dhcp-reserved
+    macs:
+      ethernet: "FC:AA:14:5B:5A:23"
+    addresses:
+      lan: 10.1.1.10
+    roles: [workshop-host]
+    dns:
+      canonical: haswell.reid.home.arpa
+      aliases:
+        - xubuntu.reid.home.arpa
+    notes: Repurposed Haswell workshop machine running Xubuntu 26.04; rebuilt after inverter/power event
+    diagram:
+      importance: secondary
 
   - name: printer
     site: reid
@@ -1026,4 +1051,14 @@ patch_panels:
       "22": { kind: spare }
       "23": { kind: spare }
       "24": { kind: spare }
+
+
+known_issues:
+  - device: vdsl-modem
+    issue: rogue_ipv6_rdnss
+    effect: clients intermittently resolve via modem DNS
+    symptom: google.com -> 198.18.1.1
+    mitigation:
+      - disable IPv6 auto DNS on clients
+      - eventually disable RA/RDNSS on modem
 
