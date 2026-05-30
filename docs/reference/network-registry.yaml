@@ -500,7 +500,7 @@ hosts:
       aliases:
         - ap-01
         - ap1
-    notes: Ubiquiti Wi-Fi access point
+    notes: Ubiquiti Wi-Fi access point above dining room
     physical:
       patch_panel: mudroom-main
       port: "09"
@@ -518,10 +518,10 @@ hosts:
       aliases:
         - ap-02
         - ap2
-    notes: Ubiquiti Wi-Fi access point
+    notes: Ubiquiti Wi-Fi access point above hallway leading to big bedroom
     physical:
       patch_panel: mudroom-main
-      port: "17"
+      port: "10"
 
   - name: ap-03
     site: reid
@@ -536,10 +536,10 @@ hosts:
       aliases:
         - ap-03
         - ap3
-    notes: Ubiquiti Wi-Fi access point
+    notes: Ubiquiti Wi-Fi access point -- above study
     physical:
       patch_panel: mudroom-main
-      port: "18"
+      port: "11"
 
   - name: ap-outdoor
     site: reid
@@ -554,7 +554,7 @@ hosts:
       aliases:
         - ap-outdoor
         - ap4
-    notes: Ubiquiti wireless access point under workshop eve
+    notes: Ubiquiti wireless access point under workshop eve (NE corner of garage)
 
 
   # --- Personal workstation (Steven's laptop) ---
