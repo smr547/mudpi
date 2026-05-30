@@ -1,6 +1,6 @@
 # dnsmasq preflight validation report
 # registry: docs/reference/network-registry.yaml
-# generated: 2026-05-28T11:59:33+10:00
+# generated: 2026-05-28T16:37:38+10:00
 
 ## reid
 ### zone.conf
@@ -25,147 +25,145 @@ conf-file=/etc/dnsmasq.d/generated/reid/reverse.conf
 # Site filter: reid
 # Domain: reid.home.arpa
 
-# abbhub canonical (lan)
+# abbhub top-level canonical (lan)
 address=/abbhub.reid.home.arpa/10.1.1.6
-# ap-01 canonical (lan)
+# ap-01 top-level canonical (lan)
 address=/ap-01.reid.home.arpa/10.1.1.123
-# ap-02 canonical (lan)
+# ap-02 top-level canonical (lan)
 address=/ap-02.reid.home.arpa/10.1.1.117
-# ap-03 canonical (lan)
+# ap-03 top-level canonical (lan)
 address=/ap-03.reid.home.arpa/10.1.1.118
 # appletv-lounge short-name (lan)
 address=/appletv-lounge/10.1.1.116
-# appletv-lounge canonical (lan)
+# appletv-lounge top-level canonical (lan)
 address=/appletv-lounge.reid.home.arpa/10.1.1.116
 # battery-temp short-name (lan)
 address=/battery-temp/10.1.1.122
-# battery-temp canonical (lan)
+# battery-temp top-level canonical (lan)
 address=/battery-temp.reid.home.arpa/10.1.1.122
 # cam-01 short-name (lan)
 address=/cam-01/10.1.1.41
-# cam-01 canonical (lan)
+# cam-01 top-level canonical (lan)
 address=/cam-01.reid.home.arpa/10.1.1.41
 # cam-02 short-name (lan)
 address=/cam-02/10.1.1.42
-# cam-02 canonical (lan)
+# cam-02 top-level canonical (lan)
 address=/cam-02.reid.home.arpa/10.1.1.42
 # cam-03 short-name (lan)
 address=/cam-03/10.1.1.43
-# cam-03 canonical (lan)
+# cam-03 top-level canonical (lan)
 address=/cam-03.reid.home.arpa/10.1.1.43
 # cam-04 short-name (lan)
 address=/cam-04/10.1.1.44
-# cam-04 canonical (lan)
+# cam-04 top-level canonical (lan)
 address=/cam-04.reid.home.arpa/10.1.1.44
 # cam-05 short-name (lan)
 address=/cam-05/10.1.1.45
-# cam-05 canonical (lan)
+# cam-05 top-level canonical (lan)
 address=/cam-05.reid.home.arpa/10.1.1.45
 # cam-06 short-name (lan)
 address=/cam-06/10.1.1.46
-# cam-06 canonical (lan)
+# cam-06 top-level canonical (lan)
 address=/cam-06.reid.home.arpa/10.1.1.46
 # cam-07 short-name (lan)
 address=/cam-07/10.1.1.47
-# cam-07 canonical (lan)
+# cam-07 top-level canonical (lan)
 address=/cam-07.reid.home.arpa/10.1.1.47
-# dfrobot-edge101 canonical (lan)
+# dfrobot-edge101 top-level canonical (lan)
 address=/dfrobot.reid.home.arpa/10.1.1.133
-# energy-monitor canonical (lan)
+# energy-monitor top-level canonical (lan)
 address=/energy-monitor.reid.home.arpa/10.1.1.104
 # haswell short-name (lan)
 address=/haswell/10.1.1.10
-# haswell canonical (lan)
+# haswell top-level canonical (lan)
 address=/haswell.reid.home.arpa/10.1.1.10
 # hydrawise-main short-name (lan)
 address=/hydrawise-main/10.1.1.130
-# hydrawise-main canonical (lan)
+# hydrawise-main top-level canonical (lan)
 address=/hydrawise-main.reid.home.arpa/10.1.1.130
 # hydrawise-workshop short-name (lan)
 address=/hydrawise-workshop/10.1.1.124
-# hydrawise-workshop canonical (lan)
+# hydrawise-workshop top-level canonical (lan)
 address=/hydrawise-workshop.reid.home.arpa/10.1.1.124
-# irene-iphone canonical (wifi)
+# irene-iphone top-level canonical (wifi)
 address=/irene-iphone.reid.home.arpa/10.1.1.105
 # irene-macbook short-name (lan)
 address=/irene-macbook/10.1.1.110
-# irene-macbook canonical (lan)
+# irene-macbook top-level canonical (lan)
 address=/irene-macbook.reid.home.arpa/10.1.1.110
 # irobot-vacuum short-name (lan)
 address=/irobot-vacuum/10.1.1.107
-# irobot-vacuum canonical (lan)
+# irobot-vacuum top-level canonical (lan)
 address=/irobot-vacuum.reid.home.arpa/10.1.1.107
 # kitchen-display short-name (lan)
 address=/kitchen-display/10.1.1.112
-# kitchen-display canonical (lan)
+# kitchen-display top-level canonical (lan)
 address=/kitchen-display.reid.home.arpa/10.1.1.112
 # lounge-camera short-name (lan)
 address=/lounge-camera/10.1.1.102
-# lounge-camera canonical (lan)
+# lounge-camera top-level canonical (lan)
 address=/lounge-camera.reid.home.arpa/10.1.1.102
 # mudpi short-name (lan)
 address=/mudpi/10.1.1.3
-# mudpi canonical (lan)
+# mudpi top-level canonical (lan)
 address=/mudpi.reid.home.arpa/10.1.1.3
 # myplace-tablet short-name (lan)
 address=/myplace-tablet/10.1.1.109
-# myplace-tablet canonical (lan)
+# myplace-tablet top-level canonical (lan)
 address=/myplace-tablet.reid.home.arpa/10.1.1.109
-# nvr canonical (lan)
+# nvr top-level canonical (lan)
 address=/nvr.reid.home.arpa/10.1.1.178
-# printer canonical (lan)
+# printer top-level canonical (lan)
 address=/printer.reid.home.arpa/10.1.1.60
-# printserver canonical (lan)
+# printserver top-level canonical (lan)
 address=/printserver.reid.home.arpa/10.1.1.30
 # router short-name (lan)
 address=/router/10.1.1.1
-# router canonical (lan)
+# router top-level canonical (lan)
 address=/router.reid.home.arpa/10.1.1.1
-# shorepi short-name (lan)
-address=/shorepi/10.1.1.20
-# shorepi canonical (lan)
+# shorepi top-level canonical (lan)
 address=/shorepi.reid.home.arpa/10.1.1.20
 # solar-monitor short-name (lan)
 address=/solar-monitor/10.1.1.119
-# solar-monitor canonical (lan)
+# solar-monitor top-level canonical (lan)
 address=/solar-monitor.reid.home.arpa/10.1.1.119
 # sonos-mudroom short-name (lan)
 address=/sonos-mudroom/10.1.1.115
-# sonos-mudroom canonical (lan)
+# sonos-mudroom top-level canonical (lan)
 address=/sonos-mudroom.reid.home.arpa/10.1.1.115
 # sonos-spare short-name (lan)
 address=/sonos-spare/10.1.1.100
-# sonos-spare canonical (lan)
+# sonos-spare top-level canonical (lan)
 address=/sonos-spare.reid.home.arpa/10.1.1.100
 # sonos-workshop short-name (lan)
 address=/sonos-workshop/10.1.1.114
-# sonos-workshop canonical (lan)
+# sonos-workshop top-level canonical (lan)
 address=/sonos-workshop.reid.home.arpa/10.1.1.114
-# soundbar canonical (lan)
+# soundbar top-level canonical (lan)
 address=/soundbar.reid.home.arpa/10.1.1.106
-# speaker-switch canonical (lan)
+# speaker-switch top-level canonical (lan)
 address=/speaker-switch.reid.home.arpa/10.1.1.177
-# steven-iphone canonical (wifi)
+# steven-iphone top-level canonical (wifi)
 address=/steven-iphone.reid.home.arpa/10.1.1.125
 # stevenlaptop short-name (lan)
 address=/stevenlaptop/10.1.1.134
-# stevenlaptop canonical (lan)
-address=/stevenlaptop.reid.home.arpa/10.1.1.134
-# tv-french canonical (lan)
+# stevenlaptop short-name (wifi)
+address=/stevenlaptop-wifi/10.1.1.132
+# tv-french top-level canonical (lan)
 address=/tv-french.reid.home.arpa/10.1.1.131
-# ubiquiti-unknown short-name (lan)
-address=/ubiquiti-unknown/10.1.1.113
-# ubiquiti-unknown canonical (lan)
-address=/ubiquiti-unknown.reid.home.arpa/10.1.1.113
+# tv-main-room short-name (lan)
+address=/tv-main-room/10.1.1.161
+# tv-main-room top-level canonical (lan)
+address=/tv-main-room.reid.home.arpa/10.1.1.161
 # vdsl-modem short-name (lan)
 address=/vdsl-modem/10.1.1.2
-# vdsl-modem canonical (lan)
+# vdsl-modem top-level canonical (lan)
 address=/vdsl-modem.reid.home.arpa/10.1.1.2
 # weather-station short-name (lan)
 address=/weather-station/10.1.1.111
-# weather-station canonical (lan)
+# weather-station top-level canonical (lan)
 address=/weather-station.reid.home.arpa/10.1.1.111
-# zappi canonical (lan)
+# zappi top-level canonical (lan)
 address=/zappi.reid.home.arpa/10.1.1.50
 
 ### aliases.conf
@@ -174,105 +172,111 @@ address=/zappi.reid.home.arpa/10.1.1.50
 # Site filter: reid
 # Domain: reid.home.arpa
 
-# printserver alias
+# printserver alias (lan)
 address=/3dprintserver/10.1.1.30
-# printserver alias
+# printserver alias (lan)
 address=/3dprintserver.reid.home.arpa/10.1.1.30
-# abbhub alias
+# abbhub alias (lan)
 address=/abbhub/10.1.1.6
-# ap-01 alias
+# ap-01 alias (lan)
 address=/ap-01/10.1.1.123
-# ap-02 alias
+# ap-02 alias (lan)
 address=/ap-02/10.1.1.117
-# ap-03 alias
+# ap-03 alias (lan)
 address=/ap-03/10.1.1.118
-# ap-01 alias
+# ap-01 alias (lan)
 address=/ap1/10.1.1.123
-# ap-02 alias
+# ap-02 alias (lan)
 address=/ap2/10.1.1.117
-# ap-03 alias
+# ap-03 alias (lan)
 address=/ap3/10.1.1.118
-# appletv-lounge alias
+# appletv-lounge alias (lan)
 address=/appletv/10.1.1.116
-# cam-01 alias
+# cam-01 alias (lan)
 address=/cam1/10.1.1.41
-# cam-01 alias
+# cam-01 alias (lan)
 address=/cam1.reid.home.arpa/10.1.1.41
-# cam-02 alias
+# cam-02 alias (lan)
 address=/cam2/10.1.1.42
-# cam-02 alias
+# cam-02 alias (lan)
 address=/cam2.reid.home.arpa/10.1.1.42
-# cam-03 alias
+# cam-03 alias (lan)
 address=/cam3/10.1.1.43
-# cam-03 alias
+# cam-03 alias (lan)
 address=/cam3.reid.home.arpa/10.1.1.43
-# cam-04 alias
+# cam-04 alias (lan)
 address=/cam4/10.1.1.44
-# cam-04 alias
+# cam-04 alias (lan)
 address=/cam4.reid.home.arpa/10.1.1.44
-# cam-05 alias
+# cam-05 alias (lan)
 address=/cam5/10.1.1.45
-# cam-05 alias
+# cam-05 alias (lan)
 address=/cam5.reid.home.arpa/10.1.1.45
-# cam-06 alias
+# cam-06 alias (lan)
 address=/cam6/10.1.1.46
-# cam-06 alias
+# cam-06 alias (lan)
 address=/cam6.reid.home.arpa/10.1.1.46
-# cam-07 alias
+# cam-07 alias (lan)
 address=/cam7/10.1.1.47
-# cam-07 alias
+# cam-07 alias (lan)
 address=/cam7.reid.home.arpa/10.1.1.47
-# dfrobot-edge101 alias
+# dfrobot-edge101 alias (lan)
 address=/dfrobot/10.1.1.133
-# lounge-camera alias
+# lounge-camera alias (lan)
 address=/dogcam.reid.home.arpa/10.1.1.102
-# energy-monitor alias
+# energy-monitor alias (lan)
 address=/energy-monitor/10.1.1.104
-# irene-iphone alias
+# irene-iphone alias (wifi)
 address=/irene-iphone/10.1.1.105
-# irene-macbook alias
+# irene-macbook alias (lan)
 address=/irene-laptop/10.1.1.110
-# irobot-vacuum alias
+# irobot-vacuum alias (lan)
 address=/irobot/10.1.1.107
-# kitchen-display alias
+# kitchen-display alias (lan)
 address=/kitchen/10.1.1.112
-# mudpi alias
+# mudpi alias (lan)
 address=/mudpi.vpn.home.arpa/10.8.1.1
-# myplace-tablet alias
+# myplace-tablet alias (lan)
 address=/myplace/10.1.1.109
-# haswell alias
+# haswell alias (lan)
 address=/nas/10.1.1.10
-# haswell alias
+# haswell alias (lan)
 address=/nas.reid.home.arpa/10.1.1.10
-# nvr alias
+# nvr alias (lan)
 address=/nvr/10.1.1.178
-# printer alias
+# printer alias (lan)
 address=/printer/10.1.1.60
-# printserver alias
+# printserver alias (lan)
 address=/printserver/10.1.1.30
-# shorepi alias
+# shorepi alias (lan)
+address=/shorepi/10.1.1.20
+# shorepi alias (lan)
 address=/signalk/10.1.1.20
-# shorepi alias
+# shorepi alias (lan)
 address=/signalk.reid.home.arpa/10.1.1.20
-# abbhub alias
+# abbhub alias (lan)
 address=/solarhub/10.1.1.6
-# soundbar alias
+# soundbar alias (lan)
 address=/soundbar/10.1.1.106
-# speaker-switch alias
+# speaker-switch alias (lan)
 address=/speaker-switch/10.1.1.177
-# speaker-switch alias
+# speaker-switch alias (lan)
 address=/speakers/10.1.1.177
-# steven-iphone alias
+# steven-iphone alias (wifi)
 address=/steven-iphone/10.1.1.125
-# tv-french alias
+# stevenlaptop interface wifi
+address=/stevenlaptop-wifi.reid.home.arpa/10.1.1.132
+# stevenlaptop interface lan
+address=/stevenlaptop.reid.home.arpa/10.1.1.134
+# tv-french alias (lan)
 address=/tv-french/10.1.1.131
-# irobot-vacuum alias
+# irobot-vacuum alias (lan)
 address=/vacuuum/10.1.1.107
-# weather-station alias
+# weather-station alias (lan)
 address=/weather/10.1.1.111
-# haswell alias
+# haswell alias (lan)
 address=/xubuntu.reid.home.arpa/10.1.1.10
-# zappi alias
+# zappi alias (lan)
 address=/zappi/10.1.1.50
 
 ### reverse.conf
@@ -293,7 +297,6 @@ ptr-record=109.1.1.10.in-addr.arpa,myplace-tablet.reid.home.arpa
 ptr-record=110.1.1.10.in-addr.arpa,irene-macbook.reid.home.arpa
 ptr-record=111.1.1.10.in-addr.arpa,weather-station.reid.home.arpa
 ptr-record=112.1.1.10.in-addr.arpa,kitchen-display.reid.home.arpa
-ptr-record=113.1.1.10.in-addr.arpa,ubiquiti-unknown.reid.home.arpa
 ptr-record=114.1.1.10.in-addr.arpa,sonos-workshop.reid.home.arpa
 ptr-record=115.1.1.10.in-addr.arpa,sonos-mudroom.reid.home.arpa
 ptr-record=116.1.1.10.in-addr.arpa,appletv-lounge.reid.home.arpa
@@ -306,8 +309,10 @@ ptr-record=124.1.1.10.in-addr.arpa,hydrawise-workshop.reid.home.arpa
 ptr-record=125.1.1.10.in-addr.arpa,steven-iphone.reid.home.arpa
 ptr-record=130.1.1.10.in-addr.arpa,hydrawise-main.reid.home.arpa
 ptr-record=131.1.1.10.in-addr.arpa,tv-french.reid.home.arpa
+ptr-record=132.1.1.10.in-addr.arpa,stevenlaptop-wifi.reid.home.arpa
 ptr-record=133.1.1.10.in-addr.arpa,dfrobot.reid.home.arpa
 ptr-record=134.1.1.10.in-addr.arpa,stevenlaptop.reid.home.arpa
+ptr-record=161.1.1.10.in-addr.arpa,tv-main-room.reid.home.arpa
 ptr-record=177.1.1.10.in-addr.arpa,speaker-switch.reid.home.arpa
 ptr-record=178.1.1.10.in-addr.arpa,nvr.reid.home.arpa
 ptr-record=2.1.1.10.in-addr.arpa,vdsl-modem.reid.home.arpa
@@ -357,7 +362,6 @@ ptr-record=60.1.1.10.in-addr.arpa,printer.reid.home.arpa
 10.1.1.110 irene-macbook.reid.home.arpa irene-macbook
 10.1.1.111 weather-station.reid.home.arpa weather-station
 10.1.1.112 kitchen-display.reid.home.arpa kitchen-display
-10.1.1.113 ubiquiti-unknown.reid.home.arpa ubiquiti-unknown
 10.1.1.114 sonos-workshop.reid.home.arpa sonos-workshop
 10.1.1.115 sonos-mudroom.reid.home.arpa sonos-mudroom
 10.1.1.116 appletv-lounge.reid.home.arpa appletv-lounge
@@ -370,8 +374,10 @@ ptr-record=60.1.1.10.in-addr.arpa,printer.reid.home.arpa
 10.1.1.125 steven-iphone.reid.home.arpa steven-iphone
 10.1.1.130 hydrawise-main.reid.home.arpa hydrawise-main
 10.1.1.131 tv-french.reid.home.arpa tv-french
+10.1.1.132 stevenlaptop-wifi.reid.home.arpa stevenlaptop-wifi
 10.1.1.133 dfrobot.reid.home.arpa dfrobot
 10.1.1.134 stevenlaptop.reid.home.arpa stevenlaptop
+10.1.1.161 tv-main-room.reid.home.arpa tv-main-room
 10.1.1.177 speaker-switch.reid.home.arpa speaker-switch
 10.1.1.178 nvr.reid.home.arpa nvr
 
@@ -449,8 +455,8 @@ dhcp-host=b2:d1:bb:c4:23:e2,irene-macbook,10.1.1.110
 dhcp-host=ec:64:c9:96:07:b4,weather-station,10.1.1.111
 # kitchen-display (primary, lan, category=iot)
 dhcp-host=7c:91:22:41:87:d4,kitchen-display,10.1.1.112
-# ubiquiti-unknown (primary, lan, category=network)
-dhcp-host=f4:92:bf:c3:40:24,ubiquiti-unknown,10.1.1.113
+# ap-outdoor (primary, lan, category=network)
+dhcp-host=f4:92:bf:c3:40:24,ap-outdoor,10.1.1.113
 # sonos-workshop (primary, lan, category=media)
 dhcp-host=48:a6:b8:28:be:de,sonos-workshop,10.1.1.114
 # sonos-mudroom (primary, lan, category=media)
@@ -474,7 +480,7 @@ dhcp-host=74:ac:b9:69:80:42,ap-01,10.1.1.123
 # hydrawise-workshop (primary, lan, category=iot)
 dhcp-host=f8:f0:05:a7:63:f6,hydrawise-workshop,10.1.1.124
 # steven-iphone (wifi, wifi, category=personal)
-dhcp-host=8c:86:1e:c4:4e:7f,steven-iphone,10.1.1.125
+dhcp-host=66:85:3e:e5:15:ce,steven-iphone,10.1.1.125
 # signal-generator (primary, lan, category=iot)
 dhcp-host=e0:e2:e6:c0:b3:fc,signal-generator,10.1.1.128
 # hydrawise-main (primary, lan, category=iot)
@@ -487,6 +493,8 @@ dhcp-host=80:f3:da:6b:3c:74,dfrobot-edge101,10.1.1.133
 dhcp-host=80:3f:5d:f4:44:b6,stevenlaptop,10.1.1.134
 # wearable-01 (primary, lan, category=iot)
 dhcp-host=24:6f:28:b9:af:2c,wearable-01,10.1.1.135
+# tv-main-room (primary, lan, category=media)
+dhcp-host=b0:99:d7:4b:00:94,tv-main-room,10.1.1.161
 # speaker-switch (primary, lan, category=iot)
 dhcp-host=de:ad:be:ef:fe:ed,speaker-switch,10.1.1.177
 # nvr (primary, lan, category=security)
@@ -499,10 +507,11 @@ dhcp-host=24:52:6a:25:bd:f4,nvr,10.1.1.178
 # Domain: reid.home.arpa
 # This file is generated. Edit network-registry.yaml instead.
 
-Host chain-counter: skipped because dns.canonical is missing
-Host esp32-spare-1-monitor: skipped because dns.canonical is missing
-Host wearable-01: skipped because dns.canonical is missing
-Host signal-generator: skipped because dns.canonical is missing
+Host ap-outdoor: skipped ap-outdoor.reid.home.apra on lan because canonical domain reid.home.apra does not match requested domain reid.home.arpa
+Host chain-counter: skipped because dns block is missing
+Host esp32-spare-1-monitor: skipped because dns block is missing
+Host wearable-01: skipped because dns block is missing
+Host signal-generator: skipped because dns block is missing
 
 ### warnings_dhcp.txt
 # generator warnings
@@ -516,7 +525,7 @@ Host lounge-camera: fixed lease 10.1.1.102 overlaps dynamic pool 10.1.1.100-10.1
 Host ap-01: fixed lease 10.1.1.123 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host ap-02: fixed lease 10.1.1.117 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host ap-03: fixed lease 10.1.1.118 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host ubiquiti-unknown: fixed lease 10.1.1.113 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host ap-outdoor: fixed lease 10.1.1.113 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host stevenlaptop: fixed lease 10.1.1.134 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host irene-iphone: fixed lease 10.1.1.105 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host steven-iphone: fixed lease 10.1.1.125 overlaps dynamic pool 10.1.1.100-10.1.1.199
@@ -528,6 +537,7 @@ Host hydrawise-main: fixed lease 10.1.1.130 overlaps dynamic pool 10.1.1.100-10.
 Host appletv-lounge: fixed lease 10.1.1.116 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host soundbar: fixed lease 10.1.1.106 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host tv-french: fixed lease 10.1.1.131 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host tv-main-room: fixed lease 10.1.1.161 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host kitchen-display: fixed lease 10.1.1.112 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host irobot-vacuum: fixed lease 10.1.1.107 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host myplace-tablet: fixed lease 10.1.1.109 overlaps dynamic pool 10.1.1.100-10.1.1.199
@@ -575,7 +585,7 @@ Host irene-macbook: fixed lease 10.1.1.110 overlaps dynamic pool 10.1.1.100-10.1
 10.1.1.110       b2:d1:bb:c4:23:e2  irene-macbook         (irene-macbook, wifi, lan, personal)
 10.1.1.111       ec:64:c9:96:07:b4  weather-station       (weather-station, primary, lan, iot)
 10.1.1.112       7c:91:22:41:87:d4  kitchen-display       (kitchen-display, primary, lan, iot)
-10.1.1.113       f4:92:bf:c3:40:24  ubiquiti-unknown      (ubiquiti-unknown, primary, lan, network)
+10.1.1.113       f4:92:bf:c3:40:24  ap-outdoor            (ap-outdoor, primary, lan, network)
 10.1.1.114       48:a6:b8:28:be:de  sonos-workshop        (sonos-workshop, primary, lan, media)
 10.1.1.115       54:2a:1b:e6:63:03  sonos-mudroom         (sonos-mudroom, primary, lan, media)
 10.1.1.116       8c:26:aa:c4:ff:2c  appletv-lounge        (appletv-lounge, primary, lan, media)
@@ -587,13 +597,14 @@ Host irene-macbook: fixed lease 10.1.1.110 overlaps dynamic pool 10.1.1.100-10.1
 10.1.1.122       10:97:bd:d3:f6:38  battery-temp          (battery-temp, primary, lan, iot)
 10.1.1.123       74:ac:b9:69:80:42  ap-01                 (ap-01, primary, lan, network)
 10.1.1.124       f8:f0:05:a7:63:f6  hydrawise-workshop    (hydrawise-workshop, primary, lan, iot)
-10.1.1.125       8c:86:1e:c4:4e:7f  steven-iphone         (steven-iphone, wifi, wifi, personal)
+10.1.1.125       66:85:3e:e5:15:ce  steven-iphone         (steven-iphone, wifi, wifi, personal)
 10.1.1.128       e0:e2:e6:c0:b3:fc  signal-generator      (signal-generator, primary, lan, iot)
 10.1.1.130       74:d5:c6:46:36:12  hydrawise-main        (hydrawise-main, primary, lan, iot)
 10.1.1.131       84:c0:ef:63:46:08  tv-french             (tv-french, primary, lan, media)
 10.1.1.133       80:f3:da:6b:3c:74  dfrobot-edge101       (dfrobot-edge101, primary, lan, iot)
 10.1.1.134       80:3f:5d:f4:44:b6  stevenlaptop          (stevenlaptop, ethernet, lan, workstation)
 10.1.1.135       24:6f:28:b9:af:2c  wearable-01           (wearable-01, primary, lan, iot)
+10.1.1.161       b0:99:d7:4b:00:94  tv-main-room          (tv-main-room, primary, lan, media)
 10.1.1.177       de:ad:be:ef:fe:ed  speaker-switch        (speaker-switch, primary, lan, iot)
 10.1.1.178       24:52:6a:25:bd:f4  nvr                   (nvr, primary, lan, security)
 
@@ -629,7 +640,6 @@ Host irene-macbook: fixed lease 10.1.1.110 overlaps dynamic pool 10.1.1.100-10.1
 10.1.1.110       irene-macbook.reid.home.arpa irene-macbook
 10.1.1.111       weather-station.reid.home.arpa weather-station
 10.1.1.112       kitchen-display.reid.home.arpa kitchen-display
-10.1.1.113       ubiquiti-unknown.reid.home.arpa ubiquiti-unknown
 10.1.1.114       sonos-workshop.reid.home.arpa sonos-workshop
 10.1.1.115       sonos-mudroom.reid.home.arpa sonos-mudroom
 10.1.1.116       appletv-lounge.reid.home.arpa appletv-lounge
@@ -642,8 +652,10 @@ Host irene-macbook: fixed lease 10.1.1.110 overlaps dynamic pool 10.1.1.100-10.1
 10.1.1.125       steven-iphone.reid.home.arpa steven-iphone
 10.1.1.130       hydrawise-main.reid.home.arpa hydrawise-main
 10.1.1.131       tv-french.reid.home.arpa tv-french
+10.1.1.132       stevenlaptop-wifi.reid.home.arpa stevenlaptop-wifi
 10.1.1.133       dfrobot.reid.home.arpa dfrobot
 10.1.1.134       stevenlaptop.reid.home.arpa stevenlaptop
+10.1.1.161       tv-main-room.reid.home.arpa tv-main-room
 10.1.1.177       speaker-switch.reid.home.arpa speaker-switch
 10.1.1.178       nvr.reid.home.arpa nvr
 
@@ -672,37 +684,37 @@ conf-file=/etc/dnsmasq.d/generated/farm/reverse.conf
 
 # ap1 short-name (lan)
 address=/ap1/192.168.0.100
-# ap1 canonical (lan)
+# ap1 top-level canonical (lan)
 address=/ap1.farm.home.arpa/192.168.0.100
 # ap2 short-name (lan)
 address=/ap2/192.168.0.194
-# ap2 canonical (lan)
+# ap2 top-level canonical (lan)
 address=/ap2.farm.home.arpa/192.168.0.194
 # farm-router short-name (lan)
 address=/router/192.168.0.1
-# farm-router canonical (lan)
+# farm-router top-level canonical (lan)
 address=/router.farm.home.arpa/192.168.0.1
-# shedpi canonical (lan)
+# shedpi top-level canonical (lan)
 address=/shedpi.farm.home.arpa/192.168.0.210
 # sunnyboy1 short-name (lan)
 address=/sunnyboy1/192.168.0.147
-# sunnyboy1 canonical (lan)
+# sunnyboy1 top-level canonical (lan)
 address=/sunnyboy1.farm.home.arpa/192.168.0.147
 # sunnyboy2 short-name (lan)
 address=/sunnyboy2/192.168.0.206
-# sunnyboy2 canonical (lan)
+# sunnyboy2 top-level canonical (lan)
 address=/sunnyboy2.farm.home.arpa/192.168.0.206
 # sunnyboy3 short-name (lan)
 address=/sunnyboy3/192.168.0.223
-# sunnyboy3 canonical (lan)
+# sunnyboy3 top-level canonical (lan)
 address=/sunnyboy3.farm.home.arpa/192.168.0.223
 # sunnyisland short-name (lan)
 address=/sunnyisland/192.168.0.250
-# sunnyisland canonical (lan)
+# sunnyisland top-level canonical (lan)
 address=/sunnyisland.farm.home.arpa/192.168.0.250
 # weatherstation short-name (lan)
 address=/weatherstation/192.168.0.179
-# weatherstation canonical (lan)
+# weatherstation top-level canonical (lan)
 address=/weatherstation.farm.home.arpa/192.168.0.179
 
 ### aliases.conf
@@ -711,15 +723,15 @@ address=/weatherstation.farm.home.arpa/192.168.0.179
 # Site filter: farm
 # Domain: farm.home.arpa
 
-# sunnyisland alias
+# sunnyisland alias (lan)
 address=/barkingisland/192.168.0.250
-# sunnyboy1 alias
+# sunnyboy1 alias (lan)
 address=/barkingisland1/192.168.0.147
-# sunnyboy2 alias
+# sunnyboy2 alias (lan)
 address=/barkingisland2/192.168.0.206
-# sunnyboy3 alias
+# sunnyboy3 alias (lan)
 address=/barkingisland3/192.168.0.223
-# shedpi alias
+# shedpi alias (lan)
 address=/shedpi/192.168.0.210
 
 ### reverse.conf

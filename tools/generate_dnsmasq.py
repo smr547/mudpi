@@ -31,12 +31,13 @@ Global resolver (MudPi), authoritative for replicated farm.home.arpa data:
 
 Publication policy
 ------------------
-- Canonical DNS publication prefers addresses.lan
-- Falls back to addresses.wifi
-- Falls back to legacy ip/ipv4 forms if needed
-- VPN aliases (*.vpn.home.arpa) use addresses.vpn
-- PTR generation uses the same canonical publication address
-- mac / macs are inventory details only and are ignored by DNS publication
+- Interface-specific DNS publication is supported with:
+  dns.interfaces.<address-key>.canonical
+- If no interface-specific record is present, legacy publication still prefers
+  addresses.lan, then addresses.wifi, then legacy ip/ipv4 forms.
+- VPN aliases (*.vpn.home.arpa) use addresses.vpn when available.
+- PTR generation uses each published canonical name/address pair.
+- mac / macs are inventory details only and are ignored by DNS publication.
 """
 
 from __future__ import annotations
@@ -107,6 +108,89 @@ def extract_vpn_ip(host: Dict[str, Any]) -> Optional[str]:
     if isinstance(vpn_ip, str) and is_valid_ipv4(vpn_ip):
         return vpn_ip
     return None
+
+def extract_address_ip(host: Dict[str, Any], address_key: str) -> Optional[str]:
+    """Return a valid IPv4 address for addresses.<address_key>, if present."""
+    addresses = _extract_addresses_mapping(host)
+    value = addresses.get(address_key)
+    if isinstance(value, dict):
+        value = value.get("ipv4") or value.get("ip")
+    if isinstance(value, str) and is_valid_ipv4(value):
+        return value
+    return None
+
+
+def dns_domain_of(name: str) -> str:
+    """Return the DNS domain portion of a name, or empty string for a single label."""
+    normalized = name.strip().lower().rstrip(".")
+    return normalized.split(".", 1)[1] if "." in normalized else ""
+
+
+def normalize_dns_name(name: str) -> str:
+    """Lowercase and remove a trailing dot for generated dnsmasq records."""
+    return name.strip().lower().rstrip(".")
+
+
+def iter_dns_publications(host: Dict[str, Any]) -> List[Tuple[str, str, str, List[str], str]]:
+    """Return DNS publications for a host.
+
+    Each returned tuple is:
+        (ip, address_key, canonical_name, aliases, source_label)
+
+    Backward-compatible policy:
+    - If dns.interfaces.<address_key>.canonical exists, publish that address using
+      the interface-specific canonical name.
+    - If addresses.lan exists and dns.canonical exists, publish dns.canonical on lan
+      unless that same lan address has already been published via dns.interfaces.lan.
+    - If no lan address exists, retain the old fallback behaviour and publish
+      dns.canonical on addresses.wifi.
+    - If no structured address exists, retain the old legacy ip/ipv4 fallback.
+    """
+    dns = host.get("dns") if isinstance(host.get("dns"), dict) else {}
+    top_canonical = dns.get("canonical")
+    top_aliases = dns.get("aliases") if isinstance(dns.get("aliases"), list) else []
+    interfaces = dns.get("interfaces") if isinstance(dns.get("interfaces"), dict) else {}
+
+    publications: List[Tuple[str, str, str, List[str], str]] = []
+    published_keys = set()
+
+    for address_key in sorted(interfaces.keys()):
+        iface_dns = interfaces.get(address_key)
+        if not isinstance(iface_dns, dict):
+            continue
+
+        iface_canonical = iface_dns.get("canonical")
+        if not isinstance(iface_canonical, str) or not iface_canonical.strip():
+            continue
+
+        ip = extract_address_ip(host, address_key)
+        if not ip:
+            continue
+
+        iface_aliases = iface_dns.get("aliases") if isinstance(iface_dns.get("aliases"), list) else []
+        publications.append((
+            ip,
+            address_key,
+            normalize_dns_name(iface_canonical),
+            [normalize_dns_name(a) for a in iface_aliases if isinstance(a, str) and a.strip()],
+            f"interface {address_key}",
+        ))
+        published_keys.add(address_key)
+
+    if isinstance(top_canonical, str) and top_canonical.strip():
+        # Preserve the original primary publication behaviour, while avoiding a
+        # duplicate when dns.interfaces.lan already supplies the same name/address.
+        service_ip, address_kind = extract_dns_service_ip(host)
+        if service_ip and address_kind not in published_keys:
+            publications.append((
+                service_ip,
+                address_kind,
+                normalize_dns_name(top_canonical),
+                [normalize_dns_name(a) for a in top_aliases if isinstance(a, str) and a.strip()],
+                f"top-level canonical ({address_kind})",
+            ))
+
+    return publications
 
 
 def load_registry(path: Path) -> List[Dict[str, Any]]:
@@ -280,36 +364,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
         host_id = str(raw.get("id") or raw.get("name") or raw.get("hostname") or "unnamed-host")
         dns = raw.get("dns") if isinstance(raw.get("dns"), dict) else {}
-        canonical = dns.get("canonical")
-        aliases = dns.get("aliases") if isinstance(dns.get("aliases"), list) else []
-        service_ip, address_kind = extract_dns_service_ip(raw)
         vpn_ip = extract_vpn_ip(raw)
 
-        if not canonical:
-            warnings.append(f"Host {host_id}: skipped because dns.canonical is missing")
+        publications = iter_dns_publications(raw)
+
+        if not dns:
+            warnings.append(f"Host {host_id}: skipped because dns block is missing")
             continue
-        if not isinstance(canonical, str):
-            warnings.append(f"Host {host_id}: skipped because dns.canonical is not a string")
-            continue
-        if not service_ip:
+        if not publications:
             warnings.append(
-                f"Host {host_id}: skipped because neither addresses.lan nor addresses.wifi is usable for DNS publication"
+                f"Host {host_id}: skipped because no publishable DNS address was found "
+                f"(need dns.canonical plus addresses.lan/wifi, or dns.interfaces.<address-key>.canonical)"
             )
             continue
-
-        canonical_name = canonical.strip().lower()
-        canonical_domain = canonical_name.split(".", 1)[1] if "." in canonical_name else ""
-        if canonical_domain != domain:
-            warnings.append(
-                f"Host {host_id}: skipped because canonical domain {canonical_domain or '(none)'} does not match requested domain {domain}"
-            )
-            continue
-
-        short_name = normalize_label(canonical_name.split(".", 1)[0])
-        authoritative_rows.setdefault(service_ip, [])
-        for name in (canonical_name, short_name):
-            if name not in authoritative_rows[service_ip]:
-                authoritative_rows[service_ip].append(name)
 
         def add_forward(name: str, ip: str, source: str) -> None:
             existing = forward_records.get(name)
@@ -320,26 +387,38 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 return
             forward_records[name] = (ip, source)
 
-        add_forward(canonical_name, service_ip, f"{host_id} canonical ({address_kind})")
-        add_forward(short_name, service_ip, f"{host_id} short-name ({address_kind})")
-
-        for alias in aliases:
-            if not isinstance(alias, str):
+        for service_ip, address_kind, canonical_name, aliases, source_label in publications:
+            canonical_domain = dns_domain_of(canonical_name)
+            if canonical_domain != domain:
+                warnings.append(
+                    f"Host {host_id}: skipped {canonical_name} on {address_kind} because canonical domain "
+                    f"{canonical_domain or '(none)'} does not match requested domain {domain}"
+                )
                 continue
-            alias_name = alias.strip().lower()
-            alias_ip = vpn_ip if alias_name.endswith(".vpn.home.arpa") and vpn_ip else service_ip
-            add_forward(alias_name, alias_ip, f"{host_id} alias")
-            if alias_ip == service_ip and alias_name.endswith(f".{domain}"):
-                authoritative_rows.setdefault(service_ip, [])
-                if alias_name not in authoritative_rows[service_ip]:
-                    authoritative_rows[service_ip].append(alias_name)
 
-        ptr = ptr_name(service_ip)
-        existing_ptr = reverse_records.get(ptr)
-        if existing_ptr and existing_ptr != canonical_name:
-            warnings.append(f"Reverse-name conflict for {ptr}: {existing_ptr} vs {canonical_name}")
-        else:
-            reverse_records[ptr] = canonical_name
+            short_name = normalize_label(canonical_name.split(".", 1)[0])
+            authoritative_rows.setdefault(service_ip, [])
+            for name in (canonical_name, short_name):
+                if name not in authoritative_rows[service_ip]:
+                    authoritative_rows[service_ip].append(name)
+
+            add_forward(canonical_name, service_ip, f"{host_id} {source_label}")
+            add_forward(short_name, service_ip, f"{host_id} short-name ({address_kind})")
+
+            for alias_name in aliases:
+                alias_ip = vpn_ip if alias_name.endswith(".vpn.home.arpa") and vpn_ip else service_ip
+                add_forward(alias_name, alias_ip, f"{host_id} alias ({address_kind})")
+                if alias_ip == service_ip and alias_name.endswith(f".{domain}"):
+                    authoritative_rows.setdefault(service_ip, [])
+                    if alias_name not in authoritative_rows[service_ip]:
+                        authoritative_rows[service_ip].append(alias_name)
+
+            ptr = ptr_name(service_ip)
+            existing_ptr = reverse_records.get(ptr)
+            if existing_ptr and existing_ptr != canonical_name:
+                warnings.append(f"Reverse-name conflict for {ptr}: {existing_ptr} vs {canonical_name}")
+            else:
+                reverse_records[ptr] = canonical_name
 
     for name in sorted(forward_records.keys()):
         ip, source = forward_records[name]
@@ -403,3 +482,4 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

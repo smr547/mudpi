@@ -4,7 +4,8 @@
 # Domain: reid.home.arpa
 # This file is generated. Edit network-registry.yaml instead.
 
-Host chain-counter: skipped because dns.canonical is missing
-Host esp32-spare-1-monitor: skipped because dns.canonical is missing
-Host wearable-01: skipped because dns.canonical is missing
-Host signal-generator: skipped because dns.canonical is missing
+Host ap-outdoor: skipped ap-outdoor.reid.home.apra on lan because canonical domain reid.home.apra does not match requested domain reid.home.arpa
+Host chain-counter: skipped because dns block is missing
+Host esp32-spare-1-monitor: skipped because dns block is missing
+Host wearable-01: skipped because dns block is missing
+Host signal-generator: skipped because dns block is missing

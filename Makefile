@@ -138,11 +138,14 @@ help:
 	@echo "MudPi Infrastructure Makefile"
 	@echo ""
 	@echo "Available targets:"
-	@echo "  make network   Generate DNS/DHCP/docs artifacts from YAML registry"
-	@echo "  make diagram   Generate overview and full network diagrams"
-	@echo "  make all       Generate both docs/config artifacts and diagrams"
-	@echo "  make validate  Run generator with validation reporting"
-	@echo "  make clean     Remove generated artifacts"
+	@echo "  make network        Generate DNS/DHCP/docs artifacts from YAML registry"
+	@echo "  make diagram        Generate overview and full network diagrams"
+	@echo "  make all            Generate both docs/config artifacts and diagrams"
+	@echo "  make validate       Run generator with validation reporting"
+	@echo "  make clean          Remove generated artifacts"
+	@echo "  make arp-report     List all devices alive on network"
+	@echo "  make unifi-clients  List all wireless clients as reported by UniFi"
+	@echo "  make network-census List all devices on the network"
 	@echo ""
 
 network:
@@ -181,6 +184,10 @@ leases-report-verbose:
 	  --leases /var/lib/misc/dnsmasq.leases \
 	  --show-client-id
 
+.PHONY: arp-report
+arp-report:
+	./tools/arp-report.sh
+
 .PHONY: leases-unknown-stubs
 
 leases-unknown-stubs:
@@ -196,6 +203,15 @@ farm-leases-unknown-stubs:
 	  --registry docs/reference/network-registry.yaml \
 	  --leases /var/lib/misc/dnsmasq.leases \
 	  --site farm
+
+.PHONY: unifi-clients
+unifi-clients:
+	./tools/unifi_clients_dns.py
+
+.PHONY: network-census
+network-census:
+	./tools/network_census.py
+
 
 wg-enroll:
 	python3 tools/enroll_peer.py $(PEER)

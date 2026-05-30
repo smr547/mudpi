@@ -1,132 +1,235 @@
-/*
-STATUS: Draft
-
-This schema is not yet authoritative.
-
-The Python validator (validate_registry.py) is the source of truth
-for registry validation. The schema is being developed to eventually
-provide structural linting and editor support.
-
-Do not rely on this schema for enforcement until it is aligned with
-the live registry format and generator model.
-*/
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://southsky.example/schemas/network-registry.schema.json",
   "title": "Network Registry",
+  "description": "MudPi network registry schema (draft, evolving)",
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "meta": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "defaults": {
+      "type": "object",
+      "additionalProperties": true
+    },
     "sites": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/site" }
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/site"
+      }
     },
     "hosts": {
       "type": "array",
-      "items": { "$ref": "#/$defs/host" }
+      "items": {
+        "$ref": "#/$defs/host"
+      }
+    },
+    "forwarding": {
+      "type": "object",
+      "additionalProperties": true
     },
     "reverse_dns": {
       "type": "array",
-      "items": { "$ref": "#/$defs/reverseDnsEntry" }
+      "items": {
+        "$ref": "#/$defs/reverseDnsEntry"
+      }
+    },
+    "patch_panels": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "known_issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
     }
   },
-  "required": ["hosts"],
-
+  "required": [
+    "hosts"
+  ],
   "$defs": {
     "nonEmptyString": {
       "type": "string",
       "minLength": 1
     },
-
-    "fqdn": {
-      "type": "string",
-      "pattern": "^(?=.{1,253}$)(?!-)[A-Za-z0-9-]+(\\.(?!-)[A-Za-z0-9-]+)+\\.?$"
-    },
-
     "hostnameLabel": {
       "type": "string",
       "pattern": "^(?!-)[a-z0-9-]{1,63}(?<!-)$"
     },
-
+    "fqdn": {
+      "type": "string",
+      "pattern": "^(?=.{1,253}$)(?!-)[A-Za-z0-9-]+(\\.(?!-)[A-Za-z0-9-]+)+\\.?$"
+    },
+    "dnsName": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/fqdn"
+        },
+        {
+          "$ref": "#/$defs/hostnameLabel"
+        }
+      ]
+    },
     "macAddress": {
       "type": "string",
       "pattern": "^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$"
     },
-
     "ipv4Address": {
       "type": "string",
       "format": "ipv4"
     },
-
     "site": {
       "type": "object",
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
-        "id": { "$ref": "#/$defs/hostnameLabel" },
-        "name": { "$ref": "#/$defs/nonEmptyString" },
-        "domain": { "$ref": "#/$defs/fqdn" }
-      },
-      "required": ["id"]
+        "zone": {
+          "$ref": "#/$defs/fqdn"
+        },
+        "description": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
     },
-
-    "dnsConfig": {
+    "dnsInterfaceConfig": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "canonical": { "$ref": "#/$defs/fqdn" },
+        "canonical": {
+          "$ref": "#/$defs/fqdn"
+        },
         "aliases": {
           "type": "array",
-          "items": { "$ref": "#/$defs/fqdn" },
+          "items": {
+            "$ref": "#/$defs/dnsName"
+          },
           "uniqueItems": true,
           "default": []
         }
       },
-      "required": ["canonical"]
+      "required": [
+        "canonical"
+      ]
     },
-
+    "dnsConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "canonical": {
+          "$ref": "#/$defs/fqdn"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dnsName"
+          },
+          "uniqueItems": true,
+          "default": []
+        },
+        "interfaces": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/dnsInterfaceConfig"
+          }
+        }
+      }
+    },
     "hostAddresses": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "lan": { "$ref": "#/$defs/ipv4Address" },
-        "vpn": { "$ref": "#/$defs/ipv4Address" },
-        "wlan": { "$ref": "#/$defs/ipv4Address" },
-        "management": { "$ref": "#/$defs/ipv4Address" }
+        "lan": {
+          "$ref": "#/$defs/ipv4Address"
+        },
+        "wifi": {
+          "$ref": "#/$defs/ipv4Address"
+        },
+        "vpn": {
+          "$ref": "#/$defs/ipv4Address"
+        },
+        "management": {
+          "$ref": "#/$defs/ipv4Address"
+        }
       }
     },
-
+    "hostMacs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ethernet": {
+          "$ref": "#/$defs/macAddress"
+        },
+        "wifi": {
+          "$ref": "#/$defs/macAddress"
+        },
+        "management": {
+          "$ref": "#/$defs/macAddress"
+        }
+      }
+    },
     "host": {
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "name": { "$ref": "#/$defs/hostnameLabel" },
-        "hostname": { "$ref": "#/$defs/hostnameLabel" },
-        "site": { "$ref": "#/$defs/hostnameLabel" },
-        "category": { "$ref": "#/$defs/nonEmptyString" },
-        "mac": { "$ref": "#/$defs/macAddress" },
-        "addresses": { "$ref": "#/$defs/hostAddresses" },
-        "dns": { "$ref": "#/$defs/dnsConfig" }
-      },
-      "required": ["site"],
-      "allOf": [
-        {
-          "anyOf": [
-            { "required": ["name"] },
-            { "required": ["hostname"] }
-          ]
+        "name": {
+          "$ref": "#/$defs/hostnameLabel"
+        },
+        "site": {
+          "$ref": "#/$defs/hostnameLabel"
+        },
+        "category": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "addressing": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "mac": {
+          "$ref": "#/$defs/macAddress"
+        },
+        "macs": {
+          "$ref": "#/$defs/hostMacs"
+        },
+        "addresses": {
+          "$ref": "#/$defs/hostAddresses"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "dns": {
+          "$ref": "#/$defs/dnsConfig"
+        },
+        "notes": {
+          "$ref": "#/$defs/nonEmptyString"
         }
+      },
+      "required": [
+        "name",
+        "site"
       ]
     },
-
     "reverseDnsEntry": {
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "network": { "$ref": "#/$defs/nonEmptyString" },
-        "authority": { "$ref": "#/$defs/fqdn" },
-        "zone": { "$ref": "#/$defs/nonEmptyString" }
+        "cidr": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "zone": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "authority": {
+          "$ref": "#/$defs/fqdn"
+        }
       },
-      "required": ["authority"]
+      "required": [
+        "authority"
+      ]
     }
   }
 }

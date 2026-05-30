@@ -275,6 +275,7 @@ hosts:
       aliases:
         - signalk.reid.home.arpa
         - signalk
+        - shorepi
     notes: Data services node (SignalK, Grafana, InfluxDB)
 
 
@@ -570,6 +571,11 @@ hosts:
     roles: [workstation, admin]
     dns:
       canonical: stevenlaptop.reid.home.arpa
+      interfaces:
+        lan:
+          canonical: stevenlaptop.reid.home.arpa
+        wifi:
+          canonical: stevenlaptop-wifi.reid.home.arpa
     notes: Steven's Lenovo Yoga laptop (Kubuntu); dual-homed Ethernet + WiFi
 
 
@@ -593,7 +599,7 @@ hosts:
     category: personal
     roles: [mobile]
     macs:
-      wifi: "8C:86:1E:C4:4E:7F"
+      wifi: "66:85:3E:E5:15:CE"
     addresses:
       wifi: 10.1.1.125
     dns:
@@ -707,6 +713,18 @@ hosts:
       aliases:
         - tv-french
     notes: Samsung television in French Room
+
+  - name: tv-main-room
+    site: reid
+    category: media
+    addressing: dhcp-reservation
+    mac: "B0:99:D7:4B:00:94"
+    addresses:
+      lan: 10.1.1.161
+    roles: [tv, display, smart-tv]
+    dns:
+      canonical: tv-main-room.reid.home.arpa
+    notes: Samsung television in main room; responds to ARP in standby but blocks ping/ports until powered on
 
   # --- Kitchen display tablet (Samsung) ---
   - name: kitchen-display

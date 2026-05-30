@@ -9,7 +9,7 @@ Host lounge-camera: fixed lease 10.1.1.102 overlaps dynamic pool 10.1.1.100-10.1
 Host ap-01: fixed lease 10.1.1.123 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host ap-02: fixed lease 10.1.1.117 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host ap-03: fixed lease 10.1.1.118 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host ubiquiti-unknown: fixed lease 10.1.1.113 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host ap-outdoor: fixed lease 10.1.1.113 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host stevenlaptop: fixed lease 10.1.1.134 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host irene-iphone: fixed lease 10.1.1.105 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host steven-iphone: fixed lease 10.1.1.125 overlaps dynamic pool 10.1.1.100-10.1.1.199
@@ -21,6 +21,7 @@ Host hydrawise-main: fixed lease 10.1.1.130 overlaps dynamic pool 10.1.1.100-10.
 Host appletv-lounge: fixed lease 10.1.1.116 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host soundbar: fixed lease 10.1.1.106 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host tv-french: fixed lease 10.1.1.131 overlaps dynamic pool 10.1.1.100-10.1.1.199
+Host tv-main-room: fixed lease 10.1.1.161 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host kitchen-display: fixed lease 10.1.1.112 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host irobot-vacuum: fixed lease 10.1.1.107 overlaps dynamic pool 10.1.1.100-10.1.1.199
 Host myplace-tablet: fixed lease 10.1.1.109 overlaps dynamic pool 10.1.1.100-10.1.1.199
