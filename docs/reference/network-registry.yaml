@@ -54,8 +54,8 @@ sites:
       ranges:
         static_infrastructure: 10.1.1.2-10.1.1.49
         reserved_appliances: 10.1.1.50-10.1.1.69
-        dynamic_pool: 10.1.1.100-10.1.1.199
-        temporary_manual: 10.1.1.200-10.1.1.239
+        dynamic_pool: 10.1.1.200-10.1.1.249
+        temporary_manual: 10.1.1.250-10.1.1.254
         admin_reserve: 10.1.1.240-10.1.1.254
     dns:
       mode: local-authoritative
@@ -70,8 +70,8 @@ sites:
       dns_servers:
         - 10.1.1.3
       dynamic_pool:
-        start: 10.1.1.100
-        end: 10.1.1.199
+        start: 10.1.1.200
+        end: 10.1.1.249
 
   farm:
     zone: farm.home.arpa
@@ -82,8 +82,8 @@ sites:
       ranges:
         static_infrastructure: 192.168.0.2-192.168.0.49
         reserved_appliances: 192.168.0.50-192.168.0.69
-        dynamic_pool: 192.168.0.100-192.168.0.199
-        temporary_manual: 192.168.0.200-192.168.0.239
+        dynamic_pool: 192.168.0.230-192.168.0.249
+        temporary_manual: 192.168.0.250-192.168.0.254
         admin_reserve: 192.168.0.240-192.168.0.254
     dns:
       mode: local-authoritative
@@ -98,8 +98,8 @@ sites:
       dns_servers:
         - 192.168.0.210
       dynamic_pool:
-        start: 192.168.0.100
-        end: 192.168.0.199
+        start: 192.168.0.230
+        end: 192.168.0.249
 
   trilogy:
     zone: trilogy.home.arpa
@@ -568,6 +568,7 @@ hosts:
     addresses:
       lan: 10.1.1.134
       wifi: 10.1.1.132
+      vpn: 10.8.1.20
     roles: [workstation, admin]
     dns:
       canonical: stevenlaptop.reid.home.arpa
@@ -576,6 +577,11 @@ hosts:
           canonical: stevenlaptop.reid.home.arpa
         wifi:
           canonical: stevenlaptop-wifi.reid.home.arpa
+        vpn:
+          canonical: stevenlaptop-vpn.reid.home.arpa
+      aliases:
+        - laptop
+        - stevenlaptop.vpn.home.arpa
     notes: Steven's Lenovo Yoga laptop (Kubuntu); dual-homed Ethernet + WiFi
 
 
@@ -583,6 +589,7 @@ hosts:
     site: reid
     description: Irene's iPhone
     category: personal
+    addressing: dhcp-reserved
     roles: [mobile]
     macs:
       wifi: "f0:d7:93:32:00:69"
@@ -597,6 +604,7 @@ hosts:
     site: reid
     description: Stens's iPhone
     category: personal
+    addressing: dhcp-reserved
     roles: [mobile]
     macs:
       wifi: "66:85:3E:E5:15:CE"
@@ -912,6 +920,7 @@ hosts:
     site: reid
     description: Irene's MacBook Pro
     category: personal
+    addressing: dhcp-reserved
     roles: [laptop]
     macs:
       wifi: "b2:d1:bb:c4:23:e2"
@@ -1071,7 +1080,7 @@ hosts:
     diagram:
       importance: primary
 
-  - name: signalk
+  - name: trilogypi
     site: trilogy
     category: server
     addressing: static-on-host
@@ -1079,9 +1088,7 @@ hosts:
       lan: 192.168.98.20
     roles: [signalk]
     dns:
-      canonical: signalk.trilogy.home.arpa
-      aliases:
-        - signalk
+      canonical: trilogypi.trilogy.home.arpa
     aliases: []
     notes: Placeholder onboard Signal K service
     diagram:
@@ -1099,24 +1106,6 @@ hosts:
     notes: Placeholder lab DNS/DHCP host
     diagram:
       importance: primary
-
-  - name: laptop
-    site: vpn
-    category: client
-    addressing: wireguard-static
-    addresses:
-      vpn: 10.8.1.20
-    roles: [roaming-client]
-    dns:
-      canonical: laptop.reid.home.arpa
-      aliases:
-        - laptop
-    aliases: []
-    notes: Sten's roaming laptop
-    diagram:
-      importance: secondary
-
-
 
 forwarding:
   mudpi:
