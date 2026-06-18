@@ -761,7 +761,7 @@ hosts:
     site: reid
     category: iot
     addressing: dhcp-reservation
-    mac: "B6:29:43:61:D4:B6"
+    mac: "00:22:6D:9C:C8:5D"
     addresses:
       lan: 10.1.1.109
     roles: [home-automation-ui, tablet]
