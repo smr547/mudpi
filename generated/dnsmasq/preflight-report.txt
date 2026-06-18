@@ -1,6 +1,6 @@
 # dnsmasq preflight validation report
 # registry: docs/reference/network-registry.yaml
-# generated: 2026-05-28T16:37:38+10:00
+# generated: 2026-06-18T13:06:33+10:00
 
 ## reid
 ### zone.conf
@@ -33,6 +33,8 @@ address=/ap-01.reid.home.arpa/10.1.1.123
 address=/ap-02.reid.home.arpa/10.1.1.117
 # ap-03 top-level canonical (lan)
 address=/ap-03.reid.home.arpa/10.1.1.118
+# ap-outdoor top-level canonical (lan)
+address=/ap-outdoor.reid.home.arpa/10.1.1.113
 # appletv-lounge short-name (lan)
 address=/appletv-lounge/10.1.1.116
 # appletv-lounge top-level canonical (lan)
@@ -69,10 +71,16 @@ address=/cam-06.reid.home.arpa/10.1.1.46
 address=/cam-07/10.1.1.47
 # cam-07 top-level canonical (lan)
 address=/cam-07.reid.home.arpa/10.1.1.47
+# chain-counter top-level canonical (lan)
+address=/chain-counter.reid.home.arpa/10.1.1.120
 # dfrobot-edge101 top-level canonical (lan)
 address=/dfrobot.reid.home.arpa/10.1.1.133
 # energy-monitor top-level canonical (lan)
 address=/energy-monitor.reid.home.arpa/10.1.1.104
+# esp32-spare-1-monitor short-name (lan)
+address=/esp32-spare-1-monitor/10.1.1.121
+# esp32-spare-1-monitor top-level canonical (lan)
+address=/esp32-spare-1-monitor.reid.home.arpa/10.1.1.121
 # haswell short-name (lan)
 address=/haswell/10.1.1.10
 # haswell top-level canonical (lan)
@@ -123,6 +131,8 @@ address=/router/10.1.1.1
 address=/router.reid.home.arpa/10.1.1.1
 # shorepi top-level canonical (lan)
 address=/shorepi.reid.home.arpa/10.1.1.20
+# signal-generator top-level canonical (lan)
+address=/signal-generator.reid.home.arpa/10.1.1.128
 # solar-monitor short-name (lan)
 address=/solar-monitor/10.1.1.119
 # solar-monitor top-level canonical (lan)
@@ -159,6 +169,10 @@ address=/tv-main-room.reid.home.arpa/10.1.1.161
 address=/vdsl-modem/10.1.1.2
 # vdsl-modem top-level canonical (lan)
 address=/vdsl-modem.reid.home.arpa/10.1.1.2
+# wearable-01 short-name (lan)
+address=/wearable-01/10.1.1.135
+# wearable-01 top-level canonical (lan)
+address=/wearable-01.reid.home.arpa/10.1.1.135
 # weather-station short-name (lan)
 address=/weather-station/10.1.1.111
 # weather-station top-level canonical (lan)
@@ -184,12 +198,16 @@ address=/ap-01/10.1.1.123
 address=/ap-02/10.1.1.117
 # ap-03 alias (lan)
 address=/ap-03/10.1.1.118
+# ap-outdoor alias (lan)
+address=/ap-outdoor/10.1.1.113
 # ap-01 alias (lan)
 address=/ap1/10.1.1.123
 # ap-02 alias (lan)
 address=/ap2/10.1.1.117
 # ap-03 alias (lan)
 address=/ap3/10.1.1.118
+# ap-outdoor alias (lan)
+address=/ap4/10.1.1.113
 # appletv-lounge alias (lan)
 address=/appletv/10.1.1.116
 # cam-01 alias (lan)
@@ -220,6 +238,8 @@ address=/cam6.reid.home.arpa/10.1.1.46
 address=/cam7/10.1.1.47
 # cam-07 alias (lan)
 address=/cam7.reid.home.arpa/10.1.1.47
+# chain-counter alias (lan)
+address=/chain-counter/10.1.1.120
 # dfrobot-edge101 alias (lan)
 address=/dfrobot/10.1.1.133
 # lounge-camera alias (lan)
@@ -250,6 +270,8 @@ address=/printer/10.1.1.60
 address=/printserver/10.1.1.30
 # shorepi alias (lan)
 address=/shorepi/10.1.1.20
+# signal-generator alias (lan)
+address=/signal-generator/10.1.1.128
 # shorepi alias (lan)
 address=/signalk/10.1.1.20
 # shorepi alias (lan)
@@ -297,21 +319,26 @@ ptr-record=109.1.1.10.in-addr.arpa,myplace-tablet.reid.home.arpa
 ptr-record=110.1.1.10.in-addr.arpa,irene-macbook.reid.home.arpa
 ptr-record=111.1.1.10.in-addr.arpa,weather-station.reid.home.arpa
 ptr-record=112.1.1.10.in-addr.arpa,kitchen-display.reid.home.arpa
+ptr-record=113.1.1.10.in-addr.arpa,ap-outdoor.reid.home.arpa
 ptr-record=114.1.1.10.in-addr.arpa,sonos-workshop.reid.home.arpa
 ptr-record=115.1.1.10.in-addr.arpa,sonos-mudroom.reid.home.arpa
 ptr-record=116.1.1.10.in-addr.arpa,appletv-lounge.reid.home.arpa
 ptr-record=117.1.1.10.in-addr.arpa,ap-02.reid.home.arpa
 ptr-record=118.1.1.10.in-addr.arpa,ap-03.reid.home.arpa
 ptr-record=119.1.1.10.in-addr.arpa,solar-monitor.reid.home.arpa
+ptr-record=120.1.1.10.in-addr.arpa,chain-counter.reid.home.arpa
+ptr-record=121.1.1.10.in-addr.arpa,esp32-spare-1-monitor.reid.home.arpa
 ptr-record=122.1.1.10.in-addr.arpa,battery-temp.reid.home.arpa
 ptr-record=123.1.1.10.in-addr.arpa,ap-01.reid.home.arpa
 ptr-record=124.1.1.10.in-addr.arpa,hydrawise-workshop.reid.home.arpa
 ptr-record=125.1.1.10.in-addr.arpa,steven-iphone.reid.home.arpa
+ptr-record=128.1.1.10.in-addr.arpa,signal-generator.reid.home.arpa
 ptr-record=130.1.1.10.in-addr.arpa,hydrawise-main.reid.home.arpa
 ptr-record=131.1.1.10.in-addr.arpa,tv-french.reid.home.arpa
 ptr-record=132.1.1.10.in-addr.arpa,stevenlaptop-wifi.reid.home.arpa
 ptr-record=133.1.1.10.in-addr.arpa,dfrobot.reid.home.arpa
 ptr-record=134.1.1.10.in-addr.arpa,stevenlaptop.reid.home.arpa
+ptr-record=135.1.1.10.in-addr.arpa,wearable-01.reid.home.arpa
 ptr-record=161.1.1.10.in-addr.arpa,tv-main-room.reid.home.arpa
 ptr-record=177.1.1.10.in-addr.arpa,speaker-switch.reid.home.arpa
 ptr-record=178.1.1.10.in-addr.arpa,nvr.reid.home.arpa
@@ -362,21 +389,26 @@ ptr-record=60.1.1.10.in-addr.arpa,printer.reid.home.arpa
 10.1.1.110 irene-macbook.reid.home.arpa irene-macbook
 10.1.1.111 weather-station.reid.home.arpa weather-station
 10.1.1.112 kitchen-display.reid.home.arpa kitchen-display
+10.1.1.113 ap-outdoor.reid.home.arpa ap-outdoor
 10.1.1.114 sonos-workshop.reid.home.arpa sonos-workshop
 10.1.1.115 sonos-mudroom.reid.home.arpa sonos-mudroom
 10.1.1.116 appletv-lounge.reid.home.arpa appletv-lounge
 10.1.1.117 ap-02.reid.home.arpa ap-02
 10.1.1.118 ap-03.reid.home.arpa ap-03
 10.1.1.119 solar-monitor.reid.home.arpa solar-monitor
+10.1.1.120 chain-counter.reid.home.arpa chain-counter
+10.1.1.121 esp32-spare-1-monitor.reid.home.arpa esp32-spare-1-monitor
 10.1.1.122 battery-temp.reid.home.arpa battery-temp
 10.1.1.123 ap-01.reid.home.arpa ap-01
 10.1.1.124 hydrawise-workshop.reid.home.arpa hydrawise-workshop
 10.1.1.125 steven-iphone.reid.home.arpa steven-iphone
+10.1.1.128 signal-generator.reid.home.arpa signal-generator
 10.1.1.130 hydrawise-main.reid.home.arpa hydrawise-main
 10.1.1.131 tv-french.reid.home.arpa tv-french
 10.1.1.132 stevenlaptop-wifi.reid.home.arpa stevenlaptop-wifi
 10.1.1.133 dfrobot.reid.home.arpa dfrobot
 10.1.1.134 stevenlaptop.reid.home.arpa stevenlaptop
+10.1.1.135 wearable-01.reid.home.arpa wearable-01
 10.1.1.161 tv-main-room.reid.home.arpa tv-main-room
 10.1.1.177 speaker-switch.reid.home.arpa speaker-switch
 10.1.1.178 nvr.reid.home.arpa nvr
@@ -396,7 +428,7 @@ interface=eth0
 bind-interfaces
 dhcp-authoritative
 
-dhcp-range=10.1.1.100,10.1.1.199,255.255.255.0,12h
+dhcp-range=10.1.1.200,10.1.1.249,255.255.255.0,12h
 dhcp-option=option:router,10.1.1.1
 dhcp-option=option:dns-server,10.1.1.3
 dhcp-option=option:domain-search,reid.home.arpa
@@ -448,7 +480,7 @@ dhcp-host=a8:16:9d:3d:b3:0d,soundbar,10.1.1.106
 # irobot-vacuum (primary, lan, category=iot)
 dhcp-host=50:14:79:fa:2c:a4,irobot-vacuum,10.1.1.107
 # myplace-tablet (primary, lan, category=iot)
-dhcp-host=b6:29:43:61:d4:b6,myplace-tablet,10.1.1.109
+dhcp-host=00:22:6d:9c:c8:5d,myplace-tablet,10.1.1.109
 # irene-macbook (wifi, lan, category=personal)
 dhcp-host=b2:d1:bb:c4:23:e2,irene-macbook,10.1.1.110
 # weather-station (primary, lan, category=iot)
@@ -507,11 +539,7 @@ dhcp-host=24:52:6a:25:bd:f4,nvr,10.1.1.178
 # Domain: reid.home.arpa
 # This file is generated. Edit network-registry.yaml instead.
 
-Host ap-outdoor: skipped ap-outdoor.reid.home.apra on lan because canonical domain reid.home.apra does not match requested domain reid.home.arpa
-Host chain-counter: skipped because dns block is missing
-Host esp32-spare-1-monitor: skipped because dns block is missing
-Host wearable-01: skipped because dns block is missing
-Host signal-generator: skipped because dns block is missing
+No warnings.
 
 ### warnings_dhcp.txt
 # generator warnings
@@ -520,38 +548,7 @@ Host signal-generator: skipped because dns block is missing
 # Include unscoped hosts: no
 # This file is generated. Edit network-registry.yaml instead.
 
-Host nvr: fixed lease 10.1.1.178 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host lounge-camera: fixed lease 10.1.1.102 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host ap-01: fixed lease 10.1.1.123 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host ap-02: fixed lease 10.1.1.117 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host ap-03: fixed lease 10.1.1.118 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host ap-outdoor: fixed lease 10.1.1.113 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host stevenlaptop: fixed lease 10.1.1.134 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host irene-iphone: fixed lease 10.1.1.105 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host steven-iphone: fixed lease 10.1.1.125 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host sonos-workshop: fixed lease 10.1.1.114 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host sonos-mudroom: fixed lease 10.1.1.115 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host sonos-spare: fixed lease 10.1.1.100 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host hydrawise-workshop: fixed lease 10.1.1.124 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host hydrawise-main: fixed lease 10.1.1.130 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host appletv-lounge: fixed lease 10.1.1.116 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host soundbar: fixed lease 10.1.1.106 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host tv-french: fixed lease 10.1.1.131 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host tv-main-room: fixed lease 10.1.1.161 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host kitchen-display: fixed lease 10.1.1.112 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host irobot-vacuum: fixed lease 10.1.1.107 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host myplace-tablet: fixed lease 10.1.1.109 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host energy-monitor: fixed lease 10.1.1.104 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host weather-station: fixed lease 10.1.1.111 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host speaker-switch: fixed lease 10.1.1.177 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host chain-counter: fixed lease 10.1.1.120 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host esp32-spare-1-monitor: fixed lease 10.1.1.121 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host solar-monitor: fixed lease 10.1.1.119 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host battery-temp: fixed lease 10.1.1.122 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host wearable-01: fixed lease 10.1.1.135 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host signal-generator: fixed lease 10.1.1.128 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host dfrobot-edge101: fixed lease 10.1.1.133 overlaps dynamic pool 10.1.1.100-10.1.1.199
-Host irene-macbook: fixed lease 10.1.1.110 overlaps dynamic pool 10.1.1.100-10.1.1.199
+No warnings.
 
 ### leases-summary.txt
 # generated lease summary
@@ -581,7 +578,7 @@ Host irene-macbook: fixed lease 10.1.1.110 overlaps dynamic pool 10.1.1.100-10.1
 10.1.1.105       f0:d7:93:32:00:69  irene-iphone          (irene-iphone, wifi, wifi, personal)
 10.1.1.106       a8:16:9d:3d:b3:0d  soundbar              (soundbar, primary, lan, media)
 10.1.1.107       50:14:79:fa:2c:a4  irobot-vacuum         (irobot-vacuum, primary, lan, iot)
-10.1.1.109       b6:29:43:61:d4:b6  myplace-tablet        (myplace-tablet, primary, lan, iot)
+10.1.1.109       00:22:6d:9c:c8:5d  myplace-tablet        (myplace-tablet, primary, lan, iot)
 10.1.1.110       b2:d1:bb:c4:23:e2  irene-macbook         (irene-macbook, wifi, lan, personal)
 10.1.1.111       ec:64:c9:96:07:b4  weather-station       (weather-station, primary, lan, iot)
 10.1.1.112       7c:91:22:41:87:d4  kitchen-display       (kitchen-display, primary, lan, iot)
@@ -640,21 +637,26 @@ Host irene-macbook: fixed lease 10.1.1.110 overlaps dynamic pool 10.1.1.100-10.1
 10.1.1.110       irene-macbook.reid.home.arpa irene-macbook
 10.1.1.111       weather-station.reid.home.arpa weather-station
 10.1.1.112       kitchen-display.reid.home.arpa kitchen-display
+10.1.1.113       ap-outdoor.reid.home.arpa ap-outdoor
 10.1.1.114       sonos-workshop.reid.home.arpa sonos-workshop
 10.1.1.115       sonos-mudroom.reid.home.arpa sonos-mudroom
 10.1.1.116       appletv-lounge.reid.home.arpa appletv-lounge
 10.1.1.117       ap-02.reid.home.arpa ap-02
 10.1.1.118       ap-03.reid.home.arpa ap-03
 10.1.1.119       solar-monitor.reid.home.arpa solar-monitor
+10.1.1.120       chain-counter.reid.home.arpa chain-counter
+10.1.1.121       esp32-spare-1-monitor.reid.home.arpa esp32-spare-1-monitor
 10.1.1.122       battery-temp.reid.home.arpa battery-temp
 10.1.1.123       ap-01.reid.home.arpa ap-01
 10.1.1.124       hydrawise-workshop.reid.home.arpa hydrawise-workshop
 10.1.1.125       steven-iphone.reid.home.arpa steven-iphone
+10.1.1.128       signal-generator.reid.home.arpa signal-generator
 10.1.1.130       hydrawise-main.reid.home.arpa hydrawise-main
 10.1.1.131       tv-french.reid.home.arpa tv-french
 10.1.1.132       stevenlaptop-wifi.reid.home.arpa stevenlaptop-wifi
 10.1.1.133       dfrobot.reid.home.arpa dfrobot
 10.1.1.134       stevenlaptop.reid.home.arpa stevenlaptop
+10.1.1.135       wearable-01.reid.home.arpa wearable-01
 10.1.1.161       tv-main-room.reid.home.arpa tv-main-room
 10.1.1.177       speaker-switch.reid.home.arpa speaker-switch
 10.1.1.178       nvr.reid.home.arpa nvr
@@ -781,7 +783,7 @@ interface=eth0
 bind-interfaces
 dhcp-authoritative
 
-dhcp-range=192.168.0.100,192.168.0.199,255.255.255.0,12h
+dhcp-range=192.168.0.230,192.168.0.249,255.255.255.0,12h
 dhcp-option=option:router,192.168.0.1
 dhcp-option=option:dns-server,192.168.0.210
 dhcp-option=option:domain-search,farm.home.arpa
@@ -823,10 +825,7 @@ No warnings.
 # Include unscoped hosts: no
 # This file is generated. Edit network-registry.yaml instead.
 
-Host sunnyboy1: fixed lease 192.168.0.147 overlaps dynamic pool 192.168.0.100-192.168.0.199
-Host weatherstation: fixed lease 192.168.0.179 overlaps dynamic pool 192.168.0.100-192.168.0.199
-Host ap1: fixed lease 192.168.0.100 overlaps dynamic pool 192.168.0.100-192.168.0.199
-Host ap2: fixed lease 192.168.0.194 overlaps dynamic pool 192.168.0.100-192.168.0.199
+No warnings.
 
 ### leases-summary.txt
 # generated lease summary

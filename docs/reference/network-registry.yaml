@@ -550,7 +550,7 @@ hosts:
       lan: 10.1.1.113
     roles: [network-device]
     dns:
-      canonical: ap-outdoor.reid.home.apra
+      canonical: ap-outdoor.reid.home.arpa
       aliases:
         - ap-outdoor
         - ap4
@@ -826,6 +826,10 @@ hosts:
     addresses:
       lan: 10.1.1.120
     roles: [esp32]
+    dns:
+      canonical: chain-counter.reid.home.arpa
+      aliases:
+        - chain-counter
     notes: Experimental chain counter based on ESP32 
 
   - name: esp32-spare-1-monitor
@@ -836,6 +840,8 @@ hosts:
     addresses:
       lan: 10.1.1.121
     roles: [esp32]
+    dns:
+      canonical: esp32-spare-1-monitor.reid.home.arpa
     notes: ESP32 dev module
 
   - name: solar-monitor
@@ -870,6 +876,8 @@ hosts:
     addresses:
       lan: 10.1.1.135
     roles: [esp32]
+    dns:
+      canonical: wearable-01.reid.home.arpa
     notes: ESP32 wearable - currently not in use
 
   - name: signal-generator
@@ -880,6 +888,10 @@ hosts:
     addresses:
       lan: 10.1.1.128
     roles: [signal-generator, esp32]
+    dns:
+      canonical: signal-generator.reid.home.arpa
+      aliases:
+        - signal-generator
     notes: ESP32-based signal generator in workshop
 
   - name: dfrobot-edge101 
