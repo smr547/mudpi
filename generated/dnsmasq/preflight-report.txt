@@ -1,6 +1,6 @@
 # dnsmasq preflight validation report
 # registry: docs/reference/network-registry.yaml
-# generated: 2026-06-18T13:06:33+10:00
+# generated: 2026-06-18T13:58:59+10:00
 
 ## reid
 ### zone.conf
@@ -103,10 +103,10 @@ address=/irene-macbook.reid.home.arpa/10.1.1.110
 address=/irobot-vacuum/10.1.1.107
 # irobot-vacuum top-level canonical (lan)
 address=/irobot-vacuum.reid.home.arpa/10.1.1.107
-# kitchen-display short-name (lan)
-address=/kitchen-display/10.1.1.112
-# kitchen-display top-level canonical (lan)
-address=/kitchen-display.reid.home.arpa/10.1.1.112
+# kitchen-tablet short-name (lan)
+address=/kitchen-tablet/10.1.1.112
+# kitchen-tablet top-level canonical (lan)
+address=/kitchen-tablet.reid.home.arpa/10.1.1.112
 # lounge-camera short-name (lan)
 address=/lounge-camera/10.1.1.102
 # lounge-camera top-level canonical (lan)
@@ -252,7 +252,7 @@ address=/irene-iphone/10.1.1.105
 address=/irene-laptop/10.1.1.110
 # irobot-vacuum alias (lan)
 address=/irobot/10.1.1.107
-# kitchen-display alias (lan)
+# kitchen-tablet alias (lan)
 address=/kitchen/10.1.1.112
 # mudpi alias (lan)
 address=/mudpi.vpn.home.arpa/10.8.1.1
@@ -318,7 +318,7 @@ ptr-record=107.1.1.10.in-addr.arpa,irobot-vacuum.reid.home.arpa
 ptr-record=109.1.1.10.in-addr.arpa,myplace-tablet.reid.home.arpa
 ptr-record=110.1.1.10.in-addr.arpa,irene-macbook.reid.home.arpa
 ptr-record=111.1.1.10.in-addr.arpa,weather-station.reid.home.arpa
-ptr-record=112.1.1.10.in-addr.arpa,kitchen-display.reid.home.arpa
+ptr-record=112.1.1.10.in-addr.arpa,kitchen-tablet.reid.home.arpa
 ptr-record=113.1.1.10.in-addr.arpa,ap-outdoor.reid.home.arpa
 ptr-record=114.1.1.10.in-addr.arpa,sonos-workshop.reid.home.arpa
 ptr-record=115.1.1.10.in-addr.arpa,sonos-mudroom.reid.home.arpa
@@ -388,7 +388,7 @@ ptr-record=60.1.1.10.in-addr.arpa,printer.reid.home.arpa
 10.1.1.109 myplace-tablet.reid.home.arpa myplace-tablet
 10.1.1.110 irene-macbook.reid.home.arpa irene-macbook
 10.1.1.111 weather-station.reid.home.arpa weather-station
-10.1.1.112 kitchen-display.reid.home.arpa kitchen-display
+10.1.1.112 kitchen-tablet.reid.home.arpa kitchen-tablet
 10.1.1.113 ap-outdoor.reid.home.arpa ap-outdoor
 10.1.1.114 sonos-workshop.reid.home.arpa sonos-workshop
 10.1.1.115 sonos-mudroom.reid.home.arpa sonos-mudroom
@@ -480,13 +480,13 @@ dhcp-host=a8:16:9d:3d:b3:0d,soundbar,10.1.1.106
 # irobot-vacuum (primary, lan, category=iot)
 dhcp-host=50:14:79:fa:2c:a4,irobot-vacuum,10.1.1.107
 # myplace-tablet (primary, lan, category=iot)
-dhcp-host=00:22:6d:9c:c8:5d,myplace-tablet,10.1.1.109
+dhcp-host=00:22:6d:9c:e8:5d,myplace-tablet,10.1.1.109
 # irene-macbook (wifi, lan, category=personal)
 dhcp-host=b2:d1:bb:c4:23:e2,irene-macbook,10.1.1.110
 # weather-station (primary, lan, category=iot)
 dhcp-host=ec:64:c9:96:07:b4,weather-station,10.1.1.111
-# kitchen-display (primary, lan, category=iot)
-dhcp-host=7c:91:22:41:87:d4,kitchen-display,10.1.1.112
+# kitchen-tablet (primary, lan, category=iot)
+dhcp-host=7c:91:22:41:87:d4,kitchen-tablet,10.1.1.112
 # ap-outdoor (primary, lan, category=network)
 dhcp-host=f4:92:bf:c3:40:24,ap-outdoor,10.1.1.113
 # sonos-workshop (primary, lan, category=media)
@@ -578,10 +578,10 @@ No warnings.
 10.1.1.105       f0:d7:93:32:00:69  irene-iphone          (irene-iphone, wifi, wifi, personal)
 10.1.1.106       a8:16:9d:3d:b3:0d  soundbar              (soundbar, primary, lan, media)
 10.1.1.107       50:14:79:fa:2c:a4  irobot-vacuum         (irobot-vacuum, primary, lan, iot)
-10.1.1.109       00:22:6d:9c:c8:5d  myplace-tablet        (myplace-tablet, primary, lan, iot)
+10.1.1.109       00:22:6d:9c:e8:5d  myplace-tablet        (myplace-tablet, primary, lan, iot)
 10.1.1.110       b2:d1:bb:c4:23:e2  irene-macbook         (irene-macbook, wifi, lan, personal)
 10.1.1.111       ec:64:c9:96:07:b4  weather-station       (weather-station, primary, lan, iot)
-10.1.1.112       7c:91:22:41:87:d4  kitchen-display       (kitchen-display, primary, lan, iot)
+10.1.1.112       7c:91:22:41:87:d4  kitchen-tablet        (kitchen-tablet, primary, lan, iot)
 10.1.1.113       f4:92:bf:c3:40:24  ap-outdoor            (ap-outdoor, primary, lan, network)
 10.1.1.114       48:a6:b8:28:be:de  sonos-workshop        (sonos-workshop, primary, lan, media)
 10.1.1.115       54:2a:1b:e6:63:03  sonos-mudroom         (sonos-mudroom, primary, lan, media)
@@ -636,7 +636,7 @@ No warnings.
 10.1.1.109       myplace-tablet.reid.home.arpa myplace-tablet
 10.1.1.110       irene-macbook.reid.home.arpa irene-macbook
 10.1.1.111       weather-station.reid.home.arpa weather-station
-10.1.1.112       kitchen-display.reid.home.arpa kitchen-display
+10.1.1.112       kitchen-tablet.reid.home.arpa kitchen-tablet
 10.1.1.113       ap-outdoor.reid.home.arpa ap-outdoor
 10.1.1.114       sonos-workshop.reid.home.arpa sonos-workshop
 10.1.1.115       sonos-mudroom.reid.home.arpa sonos-mudroom

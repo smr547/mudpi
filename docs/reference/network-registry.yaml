@@ -727,7 +727,7 @@ hosts:
     notes: Samsung television in main room; responds to ARP in standby but blocks ping/ports until powered on
 
   # --- Kitchen display tablet (Samsung) ---
-  - name: kitchen-display
+  - name: kitchen-tablet
     site: reid
     category: iot
     addressing: dhcp-reservation
@@ -736,7 +736,7 @@ hosts:
       lan: 10.1.1.112
     roles: [display, dashboard, energy-monitor]
     dns:
-      canonical: kitchen-display.reid.home.arpa
+      canonical: kitchen-tablet.reid.home.arpa
       aliases:
         - kitchen
     notes: Samsung tablet in kitchen used for electricity consumption display, weather, and recipes
@@ -761,7 +761,7 @@ hosts:
     site: reid
     category: iot
     addressing: dhcp-reservation
-    mac: "00:22:6D:9C:C8:5D"
+    mac: "00:22:6D:9C:E8:5D"
     addresses:
       lan: 10.1.1.109
     roles: [home-automation-ui, tablet]
