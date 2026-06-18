@@ -1,0 +1,64 @@
+$ORIGIN reid.home.arpa.
+$TTL 300
+
+@   IN SOA mudpi.reid.home.arpa. admin.home.arpa. (
+        2026032201
+        1h
+        15m
+        1w
+        300
+    )
+
+    IN NS mudpi.reid.home.arpa.
+
+abbhub               IN A 10.1.1.6
+ap-01                IN A 10.1.1.123
+ap-02                IN A 10.1.1.117
+ap-03                IN A 10.1.1.118
+ap-outdoor           IN A 10.1.1.113
+appletv-lounge       IN A 10.1.1.116
+battery-temp         IN A 10.1.1.122
+cam-01               IN A 10.1.1.41
+cam-02               IN A 10.1.1.42
+cam-03               IN A 10.1.1.43
+cam-04               IN A 10.1.1.44
+cam-05               IN A 10.1.1.45
+cam-06               IN A 10.1.1.46
+cam-07               IN A 10.1.1.47
+chain-counter        IN A 10.1.1.120
+dfrobot-edge101      IN A 10.1.1.133
+energy-monitor       IN A 10.1.1.104
+esp32-spare-1-monitor IN A 10.1.1.121
+haswell              IN A 10.1.1.10
+hydrawise-main       IN A 10.1.1.130
+hydrawise-workshop   IN A 10.1.1.124
+irene-macbook        IN A 10.1.1.110
+irobot-vacuum        IN A 10.1.1.107
+kitchen-display      IN A 10.1.1.112
+lounge-camera        IN A 10.1.1.102
+mudpi                IN A 10.1.1.3
+myplace-tablet       IN A 10.1.1.109
+nvr                  IN A 10.1.1.178
+printer              IN A 10.1.1.60
+printserver          IN A 10.1.1.30
+router               IN A 10.1.1.1
+shorepi              IN A 10.1.1.20
+signal-generator     IN A 10.1.1.128
+solar-monitor        IN A 10.1.1.119
+sonos-mudroom        IN A 10.1.1.115
+sonos-spare          IN A 10.1.1.100
+sonos-workshop       IN A 10.1.1.114
+soundbar             IN A 10.1.1.106
+speaker-switch       IN A 10.1.1.177
+stevenlaptop         IN A 10.1.1.134
+tv-french            IN A 10.1.1.131
+tv-main-room         IN A 10.1.1.161
+vdsl-modem           IN A 10.1.1.2
+wearable-01          IN A 10.1.1.135
+weather-station      IN A 10.1.1.111
+zappi                IN A 10.1.1.50
+
+; Notes
+; - This is a preview artifact generated from the registry.
+; - Dynamic DHCP clients are not included unless they have explicit fixed addresses.
+; - The dnsmasq runtime configuration remains the operational source for active DNS service.

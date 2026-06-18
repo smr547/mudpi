@@ -1,0 +1,27 @@
+$ORIGIN farm.home.arpa.
+$TTL 300
+
+@   IN SOA ns1.farm.home.arpa. admin.home.arpa. (
+        2026032201
+        1h
+        15m
+        1w
+        300
+    )
+
+    IN NS shedpi.farm.home.arpa.
+
+ap1                  IN A 192.168.0.100
+ap2                  IN A 192.168.0.194
+farm-router          IN A 192.168.0.1
+shedpi               IN A 192.168.0.210
+sunnyboy1            IN A 192.168.0.147
+sunnyboy2            IN A 192.168.0.206
+sunnyboy3            IN A 192.168.0.223
+sunnyisland          IN A 192.168.0.250
+weatherstation       IN A 192.168.0.179
+
+; Notes
+; - This is a preview artifact generated from the registry.
+; - Dynamic DHCP clients are not included unless they have explicit fixed addresses.
+; - The dnsmasq runtime configuration remains the operational source for active DNS service.

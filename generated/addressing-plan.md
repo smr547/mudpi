@@ -27,8 +27,8 @@ Generated from `docs/reference/network-registry.yaml`.
 
 | Site | Zone | CIDR | Gateway/Hub | DNS Server | DHCP Authority | Search Domain |
 | --- | --- | --- | --- | --- | --- | --- |
-| reid | reid.home.arpa | 10.1.1.0/24 | 10.1.1.1 | 10.1.1.10 | mudpi | reid.home.arpa |
-| barkingowl | barkingowl.home.arpa | 192.168.0.0/24 | 192.168.0.1 | 192.168.0.10 | shedpi | barkingowl.home.arpa |
+| reid | reid.home.arpa | 10.1.1.0/24 | 10.1.1.1 | 10.1.1.3 | mudpi | reid.home.arpa |
+| farm | farm.home.arpa | 192.168.0.0/24 | 192.168.0.1 | 192.168.0.210 | shedpi | farm.home.arpa |
 | trilogy | trilogy.home.arpa | 192.168.98.0/24 | 192.168.98.1 | 192.168.98.10 | boatdns | trilogy.home.arpa |
 | testboat | testboat.home.arpa | 192.168.97.0/24 | 192.168.97.1 | 192.168.97.10 | labdns | testboat.home.arpa |
 | vpn | vpn.home.arpa | 10.8.1.0/24 | 10.8.1.1 | 10.8.1.1 | — | — |
