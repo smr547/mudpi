@@ -1,12 +1,16 @@
-If I were prioritising:
+# To Do list
 
-v3.1
-Statistics summary
-Generated DNS collision detection
-v3.2
---explain-host
-Site inventory report
-v4
+## Further validation
+
+Check validate-registry.py to include new architectural rule:
+
+```
+FQDN uniqueness is global.
+Short-name uniqueness is site-local.
+Reverse DNS must always resolve to a globally unique FQDN.
+```
+
+## Site inventory report
 Cross-check generated dnsmasq output against registry
 
 That last one is the "Ferrari" version. It validates not just the registry, but the entire:
@@ -19,14 +23,14 @@ dnsmasq configuration
 
 pipeline. For a system that has become your source of truth, that's where I'd eventually like to get to.
 
-Validator v3.5
+## Validator v3.5
 
 - DNS alias collisions are site-scoped.
 - FQDN collisions remain globally scoped.
 - Reverse DNS authorities must resolve to globally unique FQDNs.
 
 
-Makefile targets for 
+## Makefile targets for 
 
 - python3 tools/validate_registry_v3_1_full.py --stats
 - python3 tools/validate_registry_v3_1_full.py --site-report
