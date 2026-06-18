@@ -1,7 +1,7 @@
 # MudPi
 
 MudPi is a **Raspberry Pi 5 infrastructure server** located in the mudroom communications cabinet
-at the Canberra home of the Ring family.
+at the Canberra home of the Ring family.  It's a work in progress -- see the [TODO-list](./todo.md).
 
 MudPi provides the **core network infrastructure services** for the home network and acts as the
 secure hub connecting:
