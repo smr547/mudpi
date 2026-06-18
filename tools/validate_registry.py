@@ -1,38 +1,17 @@
 #!/usr/bin/env python3
 """
-validate_registry.py
+validate_registry_v3_1.py
 
 Validator for the MudPi network registry.
 
-This version tracks the current MudPi registry schema used by the DNS/DHCP
-generation workflow.
+v3.1 features
+-------------
+- Current-schema validation from v2
+- Registry statistics summary
+- Generated/emitted DNS collision detection
+- Cleaner output suitable for Makefile integration
 
-The validator checks:
-
-- top-level structure
-- site definitions and zones
-- LAN CIDRs and DHCP dynamic pools
-- host names and site membership
-- addressing mode values
-- IPv4 address syntax
-- LAN/Wi-Fi addresses inside the site's LAN CIDR
-- duplicate IP addresses
-- MAC address syntax
-- duplicate MAC addresses
-- DNS canonical names and aliases
-- duplicate DNS names across different hosts
-- reverse DNS authority references
-- DHCP reservation preconditions
-- DHCP reservation overlap with the registry's dynamic pool
-
-Notes:
-
-- Short aliases and FQDN aliases are treated as distinct emitted DNS forms.
-  For example, `nas` and `nas.reid.home.arpa` are intentionally allowed on
-  the same host because the dnsmasq generator emits both.
-- Duplicate DNS names within the same host are ignored unless they are exact
-  duplicates of the same emitted form.
-- The registry is the source of truth. Generated files should not be edited.
+The registry is the source of truth. Generated files should not be edited.
 """
 
 from __future__ import annotations
@@ -41,7 +20,8 @@ import argparse
 import ipaddress
 import re
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, DefaultDict, Dict, Iterable, List, Optional, Set, Tuple
 
@@ -62,7 +42,7 @@ ALLOWED_ADDRESSING = {
     "static",
     "static-on-host",
     "dhcp-reservation",
-    "dhcp-reserved",      # legacy synonym currently present in registry
+    "dhcp-reserved",
     "dynamic",
     "manual",
     "unknown",
@@ -75,6 +55,12 @@ DHCP_RESERVATION_MODES = {
     "dhcp-reserved",
 }
 
+STATIC_MODES = {
+    "static",
+    "static-on-host",
+    "wireguard-static",
+}
+
 ADDRESS_KEYS = {
     "lan",
     "wifi",
@@ -82,10 +68,20 @@ ADDRESS_KEYS = {
 }
 
 
+@dataclass(frozen=True)
+class DnsEmission:
+    name: str
+    owner_host: str
+    source: str
+    site: str
+    kind: str
+
+
 class Reporter:
     def __init__(self) -> None:
         self.errors: List[str] = []
         self.warnings: List[str] = []
+        self.info: List[str] = []
 
     def error(self, msg: str) -> None:
         self.errors.append(msg)
@@ -93,11 +89,17 @@ class Reporter:
     def warning(self, msg: str) -> None:
         self.warnings.append(msg)
 
-    def print(self) -> None:
+    def add_info(self, msg: str) -> None:
+        self.info.append(msg)
+
+    def print(self, *, show_info: bool = False) -> None:
         for e in self.errors:
             print(f"ERROR: {e}")
         for w in self.warnings:
             print(f"WARNING: {w}")
+        if show_info:
+            for i in self.info:
+                print(f"INFO: {i}")
         print()
         print(f"Summary: {len(self.errors)} error(s), {len(self.warnings)} warning(s)")
 
@@ -156,11 +158,18 @@ def parse_network(value: Any) -> Optional[ipaddress.IPv4Network]:
     return net if isinstance(net, ipaddress.IPv4Network) else None
 
 
-def site_zone(site_name: str, site: Dict[str, Any], private_root: str) -> str:
+def private_root(registry: Dict[str, Any]) -> str:
+    value = registry.get("meta", {}).get("private_root", "home.arpa")
+    if not isinstance(value, str) or not value.strip():
+        return "home.arpa"
+    return norm_fqdn(value)
+
+
+def site_zone(site_name: str, site: Dict[str, Any], root: str) -> str:
     zone = site.get("zone")
     if isinstance(zone, str) and zone.strip():
         return norm_fqdn(zone)
-    return f"{site_name}.{private_root}".lower()
+    return f"{site_name}.{root}".lower()
 
 
 def site_lan_cidr(site: Dict[str, Any]) -> Optional[str]:
@@ -190,19 +199,10 @@ def site_has_no_dhcp(site: Dict[str, Any]) -> bool:
 def dhcp_pool(site: Dict[str, Any]) -> Tuple[Optional[ipaddress.IPv4Address], Optional[ipaddress.IPv4Address]]:
     dhcp = site_dhcp_config(site)
 
-    # Current registry schema:
-    #
-    # dhcp:
-    #   dynamic_pool:
-    #     start: ...
-    #     end: ...
     dynamic_pool = dhcp.get("dynamic_pool")
     if isinstance(dynamic_pool, dict):
-        start = dynamic_pool.get("start")
-        end = dynamic_pool.get("end")
-        return parse_ip(start), parse_ip(end)
+        return parse_ip(dynamic_pool.get("start")), parse_ip(dynamic_pool.get("end"))
 
-    # Older / alternate forms accepted for compatibility.
     start = (
         dhcp.get("range_start")
         or dhcp.get("range-start")
@@ -241,7 +241,6 @@ def host_addresses(host: Dict[str, Any]) -> Dict[str, str]:
             if isinstance(value, str) and value.strip():
                 out[str(key)] = value.strip()
 
-    # Legacy compatibility
     for legacy_key in ("ip", "ipv4"):
         value = host.get(legacy_key)
         if isinstance(value, str) and value.strip() and "lan" not in out:
@@ -267,13 +266,6 @@ def host_macs(host: Dict[str, Any]) -> Dict[str, str]:
 
 
 def emitted_dns_name(alias_or_fqdn: str) -> str:
-    """
-    Return the actual dnsmasq-emitted name identity.
-
-    Important: short names and FQDNs are distinct emitted names.
-    We therefore do NOT expand a short alias into the site zone for duplicate
-    detection.
-    """
     value = alias_or_fqdn.strip().lower()
     if "." in value:
         return norm_fqdn(value)
@@ -281,11 +273,6 @@ def emitted_dns_name(alias_or_fqdn: str) -> str:
 
 
 def host_explicit_dns_names(host: Dict[str, Any]) -> List[Tuple[str, str]]:
-    """
-    Return explicit DNS names as (emitted_name_key, source_label).
-
-    This intentionally does not derive legacy host.site.home.arpa names.
-    """
     names: List[Tuple[str, str]] = []
 
     dns = host.get("dns")
@@ -302,6 +289,20 @@ def host_explicit_dns_names(host: Dict[str, Any]) -> List[Tuple[str, str]]:
             if isinstance(alias, str) and alias.strip():
                 names.append((emitted_dns_name(alias), f"dns.aliases[{i}]"))
 
+    interfaces = dns.get("interfaces")
+    if isinstance(interfaces, dict):
+        for ifname, ifdns in interfaces.items():
+            if not isinstance(ifdns, dict):
+                continue
+            if_canonical = ifdns.get("canonical")
+            if isinstance(if_canonical, str) and if_canonical.strip():
+                names.append((emitted_dns_name(if_canonical), f"dns.interfaces.{ifname}.canonical"))
+            if_aliases = ifdns.get("aliases")
+            if isinstance(if_aliases, list):
+                for j, alias in enumerate(if_aliases):
+                    if isinstance(alias, str) and alias.strip():
+                        names.append((emitted_dns_name(alias), f"dns.interfaces.{ifname}.aliases[{j}]"))
+
     return names
 
 
@@ -309,34 +310,40 @@ def host_known_fqdns(
     host: Dict[str, Any],
     site_name: str,
     site: Dict[str, Any],
-    private_root: str,
+    root: str,
 ) -> Set[str]:
-    """
-    Return FQDNs associated with a host for reverse DNS authority matching.
-
-    Short aliases are expanded into the local zone here because an authority
-    must be an FQDN.
-    """
     names: Set[str] = set()
-    zone = site_zone(site_name, site, private_root)
+    zone = site_zone(site_name, site, root)
 
     dns = host.get("dns")
     dns = dns if isinstance(dns, dict) else {}
 
-    canonical = dns.get("canonical")
-    if isinstance(canonical, str) and canonical.strip() and "." in canonical:
-        names.add(norm_fqdn(canonical))
+    def add_name(value: Any) -> None:
+        if not isinstance(value, str) or not value.strip():
+            return
+        value = value.strip()
+        if "." in value:
+            names.add(norm_fqdn(value))
+        else:
+            names.add(f"{value.lower()}.{zone}")
+
+    add_name(dns.get("canonical"))
 
     aliases = dns.get("aliases")
     if isinstance(aliases, list):
         for alias in aliases:
-            if not isinstance(alias, str) or not alias.strip():
+            add_name(alias)
+
+    interfaces = dns.get("interfaces")
+    if isinstance(interfaces, dict):
+        for ifdns in interfaces.values():
+            if not isinstance(ifdns, dict):
                 continue
-            alias = alias.strip()
-            if "." in alias:
-                names.add(norm_fqdn(alias))
-            else:
-                names.add(f"{alias.lower()}.{zone}")
+            add_name(ifdns.get("canonical"))
+            if_aliases = ifdns.get("aliases")
+            if isinstance(if_aliases, list):
+                for alias in if_aliases:
+                    add_name(alias)
 
     if not names:
         name = host.get("name")
@@ -344,6 +351,91 @@ def host_known_fqdns(
             names.add(f"{name.lower()}.{zone}")
 
     return names
+
+
+def collect_emitted_dns_names(
+    registry: Dict[str, Any],
+    sites: Dict[str, Dict[str, Any]],
+) -> List[DnsEmission]:
+    """
+    Approximate the generated DNS namespace.
+
+    This catches cases such as:
+
+      host name: printer
+      alias: printer
+
+    which would both emit the short name `printer`.
+
+    The generator may emit both short names and FQDNs; this validator models the
+    important collision cases without depending on generated files.
+    """
+    root = private_root(registry)
+    emissions: List[DnsEmission] = []
+
+    for idx, host in iter_hosts(registry):
+        label = host_label(host, idx)
+        site_name = host.get("site")
+        if not isinstance(site_name, str) or site_name not in sites:
+            continue
+
+        site = sites[site_name]
+        zone = site_zone(site_name, site, root)
+
+        addrs = host_addresses(host)
+        dns = host.get("dns")
+        dns = dns if isinstance(dns, dict) else {}
+
+        def emit(name: str, source: str, kind: str) -> None:
+            emissions.append(
+                DnsEmission(
+                    name=emitted_dns_name(name),
+                    owner_host=label,
+                    source=source,
+                    site=site_name,
+                    kind=kind,
+                )
+            )
+
+        # Top-level canonical.
+        canonical = dns.get("canonical")
+        if isinstance(canonical, str) and canonical.strip():
+            emit(canonical, "dns.canonical", "canonical")
+        else:
+            host_name = host.get("name")
+            if isinstance(host_name, str) and host_name.strip():
+                emit(f"{host_name}.{zone}", "derived canonical", "canonical")
+
+        # Generator-style short names for local convenience where explicit
+        # address material exists.
+        host_name = host.get("name")
+        if isinstance(host_name, str) and host_name.strip():
+            if "lan" in addrs or "wifi" in addrs:
+                emit(host_name, "derived short name", "short-name")
+
+        # Interface-specific canonical names.
+        interfaces = dns.get("interfaces")
+        if isinstance(interfaces, dict):
+            for ifname, ifdns in interfaces.items():
+                if not isinstance(ifdns, dict):
+                    continue
+                if_canonical = ifdns.get("canonical")
+                if isinstance(if_canonical, str) and if_canonical.strip():
+                    emit(if_canonical, f"dns.interfaces.{ifname}.canonical", "interface-canonical")
+                if_aliases = ifdns.get("aliases")
+                if isinstance(if_aliases, list):
+                    for j, alias in enumerate(if_aliases):
+                        if isinstance(alias, str) and alias.strip():
+                            emit(alias, f"dns.interfaces.{ifname}.aliases[{j}]", "interface-alias")
+
+        # Explicit aliases.
+        aliases = dns.get("aliases")
+        if isinstance(aliases, list):
+            for j, alias in enumerate(aliases):
+                if isinstance(alias, str) and alias.strip():
+                    emit(alias, f"dns.aliases[{j}]", "alias")
+
+    return emissions
 
 
 def validate_top_level(registry: Dict[str, Any], r: Reporter) -> None:
@@ -365,9 +457,7 @@ def validate_sites(registry: Dict[str, Any], r: Reporter) -> Dict[str, Dict[str,
     if not isinstance(sites_raw, dict):
         return sites
 
-    private_root = registry.get("meta", {}).get("private_root", "home.arpa")
-    if not isinstance(private_root, str) or not private_root.strip():
-        private_root = "home.arpa"
+    root = private_root(registry)
 
     for site_name, site in sites_raw.items():
         if not isinstance(site_name, str):
@@ -380,12 +470,11 @@ def validate_sites(registry: Dict[str, Any], r: Reporter) -> Dict[str, Dict[str,
 
         sites[site_name] = site
 
-        zone = site_zone(site_name, site, private_root)
+        zone = site_zone(site_name, site, root)
         if not is_fqdn(zone):
             r.error(f"sites.{site_name}.zone: invalid zone '{zone}'")
 
         if site_name == "vpn" and site.get("overlay"):
-            # VPN-only site does not necessarily have a LAN CIDR.
             pass
         else:
             cidr = site_lan_cidr(site)
@@ -408,9 +497,7 @@ def validate_sites(registry: Dict[str, Any], r: Reporter) -> Dict[str, Dict[str,
 
 
 def validate_hosts(registry: Dict[str, Any], sites: Dict[str, Dict[str, Any]], r: Reporter) -> None:
-    private_root = registry.get("meta", {}).get("private_root", "home.arpa")
-    if not isinstance(private_root, str) or not private_root.strip():
-        private_root = "home.arpa"
+    root = private_root(registry)
 
     seen_host_names: DefaultDict[str, List[str]] = defaultdict(list)
     seen_ips: DefaultDict[str, List[str]] = defaultdict(list)
@@ -447,8 +534,6 @@ def validate_hosts(registry: Dict[str, Any], sites: Dict[str, Dict[str, Any]], r
                     f"{label}.addressing: unsupported value '{addressing}' "
                     f"(allowed: {sorted(ALLOWED_ADDRESSING)})"
                 )
-        else:
-            r.warning(f"{label}: missing addressing")
 
         addrs = host_addresses(host)
         if not addrs:
@@ -465,8 +550,6 @@ def validate_hosts(registry: Dict[str, Any], sites: Dict[str, Dict[str, Any]], r
                 r.error(f"{label}.addresses.{addr_key}: invalid IPv4 address '{value}'")
                 continue
 
-            # A host may have the same value in legacy ip and addresses.lan;
-            # host_addresses() already collapses that to one entry.
             seen_ips[str(ip)].append(f"{label}.addresses.{addr_key}")
 
             if addr_key not in ADDRESS_KEYS:
@@ -496,7 +579,7 @@ def validate_hosts(registry: Dict[str, Any], sites: Dict[str, Dict[str, Any]], r
                     r.error(f"{label}.dns.canonical: invalid FQDN '{canonical}'")
                 elif site and isinstance(site_name, str):
                     canonical_key = norm_fqdn(canonical)
-                    zone = site_zone(site_name, site, private_root)
+                    zone = site_zone(site_name, site, root)
                     if not canonical_key.endswith("." + zone) and canonical_key != zone:
                         r.warning(
                             f"{label}.dns.canonical: '{canonical}' is outside site zone '{zone}'"
@@ -529,13 +612,23 @@ def validate_hosts(registry: Dict[str, Any], sites: Dict[str, Dict[str, Any]], r
                         )
                     exact_aliases_seen.add(emitted)
 
-            # Only explicit emitted names are checked globally.
-            # Duplicates within the same host are allowed; duplicates across
-            # different hosts are errors.
+            interfaces = dns.get("interfaces")
+            if interfaces is not None and not isinstance(interfaces, dict):
+                r.error(f"{label}.dns.interfaces: must be a mapping")
+            elif isinstance(interfaces, dict):
+                for ifname, ifdns in interfaces.items():
+                    if not isinstance(ifdns, dict):
+                        r.error(f"{label}.dns.interfaces.{ifname}: must be a mapping")
+                        continue
+                    if_canonical = ifdns.get("canonical")
+                    if if_canonical is not None and not is_fqdn(if_canonical):
+                        r.error(
+                            f"{label}.dns.interfaces.{ifname}.canonical: invalid FQDN '{if_canonical}'"
+                        )
+
             for emitted, source in host_explicit_dns_names(host):
                 seen_dns[emitted].append(f"{label}.{source}")
 
-        # DHCP reservation checks.
         if addressing in DHCP_RESERVATION_MODES:
             if not addrs.get("lan") and not addrs.get("wifi"):
                 r.error(f"{label}: {addressing} requires addresses.lan or addresses.wifi")
@@ -576,17 +669,40 @@ def validate_hosts(registry: Dict[str, Any], sites: Dict[str, Dict[str, Any]], r
             r.error(f"dns: duplicate explicit name '{dns_name}' across hosts: {flattened}")
 
 
-def collect_known_fqdns(registry: Dict[str, Any], sites: Dict[str, Dict[str, Any]]) -> Set[str]:
-    private_root = registry.get("meta", {}).get("private_root", "home.arpa")
-    if not isinstance(private_root, str) or not private_root.strip():
-        private_root = "home.arpa"
+def validate_generated_dns_collisions(
+    registry: Dict[str, Any],
+    sites: Dict[str, Dict[str, Any]],
+    r: Reporter,
+) -> None:
+    emissions = collect_emitted_dns_names(registry, sites)
 
+    owners_by_name: DefaultDict[str, Dict[str, List[DnsEmission]]] = defaultdict(lambda: defaultdict(list))
+    for emission in emissions:
+        owners_by_name[emission.name][emission.owner_host].append(emission)
+
+    for name, host_map in sorted(owners_by_name.items()):
+        if len(host_map) <= 1:
+            continue
+
+        detail_parts: List[str] = []
+        for host, items in sorted(host_map.items()):
+            sources = ", ".join(sorted({f"{i.source} ({i.kind})" for i in items}))
+            detail_parts.append(f"{host}: {sources}")
+
+        r.error(
+            "dns: generated name collision "
+            f"'{name}' is emitted by multiple hosts: " + "; ".join(detail_parts)
+        )
+
+
+def collect_known_fqdns(registry: Dict[str, Any], sites: Dict[str, Dict[str, Any]]) -> Set[str]:
+    root = private_root(registry)
     known: Set[str] = set()
 
     for idx, host in iter_hosts(registry):
         site_name = host.get("site")
         if isinstance(site_name, str) and site_name in sites:
-            known.update(host_known_fqdns(host, site_name, sites[site_name], private_root))
+            known.update(host_known_fqdns(host, site_name, sites[site_name], root))
 
     return known
 
@@ -635,10 +751,103 @@ def validate_reverse_dns(registry: Dict[str, Any], sites: Dict[str, Dict[str, An
                 )
 
 
+def registry_statistics(registry: Dict[str, Any], sites: Dict[str, Dict[str, Any]]) -> Dict[str, int]:
+    stats: Counter[str] = Counter()
+
+    stats["sites"] = len(sites)
+
+    emissions = collect_emitted_dns_names(registry, sites)
+    stats["generated_dns_names"] = len({e.name for e in emissions})
+
+    for idx, host in iter_hosts(registry):
+        stats["hosts"] += 1
+
+        dns = host.get("dns")
+        if isinstance(dns, dict):
+            if isinstance(dns.get("canonical"), str):
+                stats["dns_canonicals"] += 1
+            aliases = dns.get("aliases")
+            if isinstance(aliases, list):
+                stats["dns_aliases"] += sum(1 for a in aliases if isinstance(a, str) and a.strip())
+
+            interfaces = dns.get("interfaces")
+            if isinstance(interfaces, dict):
+                for ifdns in interfaces.values():
+                    if isinstance(ifdns, dict) and isinstance(ifdns.get("canonical"), str):
+                        stats["interface_canonicals"] += 1
+
+        addressing = host.get("addressing")
+        if addressing in DHCP_RESERVATION_MODES:
+            stats["dhcp_reservations"] += 1
+        if addressing in STATIC_MODES:
+            stats["static_hosts"] += 1
+
+        addrs = host_addresses(host)
+        if "vpn" in addrs:
+            stats["hosts_with_vpn_address"] += 1
+
+        roles = host.get("roles")
+        if isinstance(roles, list) and any("wireguard" in str(role) or "vpn" in str(role) for role in roles):
+            stats["wireguard_or_vpn_role_hosts"] += 1
+
+    return dict(stats)
+
+
+def print_statistics(registry: Dict[str, Any], sites: Dict[str, Dict[str, Any]]) -> None:
+    stats = registry_statistics(registry, sites)
+
+    print("Registry Statistics")
+    print("-------------------")
+    print(f"Sites:                       {stats.get('sites', 0)}")
+    print(f"Hosts:                       {stats.get('hosts', 0)}")
+    print(f"DNS canonicals:              {stats.get('dns_canonicals', 0)}")
+    print(f"DNS aliases:                 {stats.get('dns_aliases', 0)}")
+    print(f"Interface canonicals:        {stats.get('interface_canonicals', 0)}")
+    print(f"Generated DNS names:         {stats.get('generated_dns_names', 0)}")
+    print(f"DHCP reservations:           {stats.get('dhcp_reservations', 0)}")
+    print(f"Static hosts:                {stats.get('static_hosts', 0)}")
+    print(f"Hosts with VPN address:      {stats.get('hosts_with_vpn_address', 0)}")
+    print(f"WireGuard/VPN role hosts:    {stats.get('wireguard_or_vpn_role_hosts', 0)}")
+    print()
+
+
+def print_site_report(registry: Dict[str, Any], sites: Dict[str, Dict[str, Any]]) -> None:
+    emissions = collect_emitted_dns_names(registry, sites)
+    dns_by_site: DefaultDict[str, Set[str]] = defaultdict(set)
+    for e in emissions:
+        dns_by_site[e.site].add(e.name)
+
+    rows: List[Tuple[str, int, int, int, int, str]] = []
+
+    for site_name, site in sites.items():
+        host_count = 0
+        dhcp_count = 0
+        static_count = 0
+
+        for _, host in iter_hosts(registry):
+            if host.get("site") != site_name:
+                continue
+            host_count += 1
+            if host.get("addressing") in DHCP_RESERVATION_MODES:
+                dhcp_count += 1
+            if host.get("addressing") in STATIC_MODES:
+                static_count += 1
+
+        pool_start, pool_end = dhcp_pool(site)
+        pool = f"{pool_start}-{pool_end}" if pool_start and pool_end else "-"
+
+        rows.append((site_name, host_count, len(dns_by_site[site_name]), dhcp_count, static_count, pool))
+
+    print("Site Report")
+    print("-----------")
+    print(f"{'Site':12} {'Hosts':>5} {'DNS':>5} {'DHCP':>5} {'Static':>6} {'Dynamic pool'}")
+    for site_name, host_count, dns_count, dhcp_count, static_count, pool in sorted(rows):
+        print(f"{site_name:12} {host_count:5} {dns_count:5} {dhcp_count:5} {static_count:6} {pool}")
+    print()
+
+
 def explain_fqdns(registry: Dict[str, Any], sites: Dict[str, Dict[str, Any]]) -> None:
-    private_root = registry.get("meta", {}).get("private_root", "home.arpa")
-    if not isinstance(private_root, str) or not private_root.strip():
-        private_root = "home.arpa"
+    root = private_root(registry)
 
     for idx, host in iter_hosts(registry):
         label = host_label(host, idx)
@@ -646,7 +855,7 @@ def explain_fqdns(registry: Dict[str, Any], sites: Dict[str, Dict[str, Any]]) ->
         print(label)
 
         if isinstance(site_name, str) and site_name in sites:
-            names = sorted(host_known_fqdns(host, site_name, sites[site_name], private_root))
+            names = sorted(host_known_fqdns(host, site_name, sites[site_name], root))
             for name in names:
                 print(f"  - {name}")
         else:
@@ -683,6 +892,53 @@ def explain_dhcp(registry: Dict[str, Any], sites: Dict[str, Dict[str, Any]]) -> 
         print()
 
 
+def explain_host(registry: Dict[str, Any], sites: Dict[str, Dict[str, Any]], host_name: str) -> int:
+    root = private_root(registry)
+    found = False
+
+    for idx, host in iter_hosts(registry):
+        if host.get("name") != host_name:
+            continue
+
+        found = True
+        label = host_label(host, idx)
+        site_name = host.get("site")
+        print(f"Host: {label}")
+        print(f"Site: {site_name}")
+        print(f"Category: {host.get('category', '-')}")
+        print(f"Addressing: {host.get('addressing', '-')}")
+        print()
+
+        print("Addresses:")
+        for key, value in sorted(host_addresses(host).items()):
+            print(f"  {key}: {value}")
+        print()
+
+        print("MACs:")
+        for key, value in sorted(host_macs(host).items()):
+            print(f"  {key}: {value}")
+        print()
+
+        print("DNS:")
+        if isinstance(site_name, str) and site_name in sites:
+            for name in sorted(host_known_fqdns(host, site_name, sites[site_name], root)):
+                print(f"  - {name}")
+        print()
+
+        roles = host.get("roles")
+        print("Roles:")
+        if isinstance(roles, list):
+            for role in roles:
+                print(f"  - {role}")
+        print()
+
+    if not found:
+        print(f"Host not found: {host_name}", file=sys.stderr)
+        return 1
+
+    return 0
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Validate MudPi network registry")
     parser.add_argument(
@@ -701,6 +957,26 @@ def main() -> None:
         action="store_true",
         help="Print DHCP reservations and dynamic pools and exit",
     )
+    parser.add_argument(
+        "--explain-host",
+        metavar="HOST",
+        help="Print details for a single host and exit",
+    )
+    parser.add_argument(
+        "--stats",
+        action="store_true",
+        help="Print registry statistics",
+    )
+    parser.add_argument(
+        "--site-report",
+        action="store_true",
+        help="Print per-site inventory report",
+    )
+    parser.add_argument(
+        "--info",
+        action="store_true",
+        help="Print INFO lines as well as warnings and errors",
+    )
     args = parser.parse_args()
 
     registry = load_yaml(Path(args.yaml_file))
@@ -717,10 +993,23 @@ def main() -> None:
         explain_dhcp(registry, sites)
         return
 
+    if args.explain_host:
+        sys.exit(explain_host(registry, sites, args.explain_host))
+
+    if args.stats:
+        print_statistics(registry, sites)
+
+    if args.site_report:
+        print_site_report(registry, sites)
+
     validate_hosts(registry, sites, reporter)
+    validate_generated_dns_collisions(registry, sites, reporter)
     validate_reverse_dns(registry, sites, reporter)
 
-    reporter.print()
+    if not args.stats and not args.site_report:
+        print_statistics(registry, sites)
+
+    reporter.print(show_info=args.info)
 
     if reporter.errors:
         sys.exit(1)

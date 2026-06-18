@@ -11,6 +11,7 @@ GEN_ROOT ?= generated/dnsmasq
 
 DNS_GEN ?= tools/generate_dnsmasq.py
 DHCP_GEN ?= tools/generate_dhcp_dnsmasq.py
+VALIDATOR ?= tools/validate_registry.py
 DIAGRAM_GENERATOR ?= tools/generate-network-diagram.py
 
 # Reid / home site
@@ -217,10 +218,25 @@ network:
 	@echo "DISABLED: tools/generate-network-docs.py is outdated relative to current YAML schema."
 	@false
 
-validate:
-	@echo "DISABLED: tools/validate_registry.py is outdated relative to current YAML schema."
-	@false
+#
+# Registry validation
+#
 
+validate:
+	python3 $(VALIDATOR)
+
+validate-stats:
+	python3 $(VALIDATOR) --stats
+
+validate-sites:
+	python3 $(VALIDATOR) --site-report
+
+validate-host:
+	@if [ -z "$(HOST)" ]; then \
+		echo "Usage: make validate-host HOST=stevenlaptop"; \
+		exit 1; \
+	fi
+	python3 $(VALIDATOR) --explain-host $(HOST)
 # ---------------------------------------------------------------------------
 # WireGuard is deliberately parked for now.
 # ---------------------------------------------------------------------------
